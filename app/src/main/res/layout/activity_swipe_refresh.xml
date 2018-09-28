@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <demo.li.opal.uidemo.swipe.FeedsSwipeRefreshLayout
+        android:id="@+id/refresh_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <!-- 为了配合 CameraDragLayout 的使用，这个单独的根节点不能移除，需要多套一层，期待后续的优化 -->
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/main_feeds_title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="10dp"
+                    android:gravity="center"
+                    android:text="最热玩法"
+                    android:textColor="@android:color/black"
+                    android:textSize="25sp" />
+
+                <demo.li.opal.uidemo.CustomArcView
+                    android:id="@+id/arc_view"
+                    android:layout_width="match_parent"
+                    android:layout_height="500dp"
+                    android:gravity="center" />
+            </LinearLayout>
+        </ScrollView>
+    </demo.li.opal.uidemo.swipe.FeedsSwipeRefreshLayout>
+
+</FrameLayout>
