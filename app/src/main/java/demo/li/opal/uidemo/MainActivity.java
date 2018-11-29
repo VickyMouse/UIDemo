@@ -8,11 +8,13 @@ import android.view.View.OnClickListener;
 
 import demo.li.opal.uidemo.nestedRecycler.NestedRecyclerActivity;
 import demo.li.opal.uidemo.swipe.SwipeRefreshActivity;
+import demo.li.opal.uidemo.swipecard.SwipeCardActivity;
 
 public class MainActivity extends AppCompatActivity implements OnClickListener {
 
     private View btn2SwipeRefresh;
     private View btn2NestedRecycler;
+    private View btn2CardDeck;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -24,6 +26,9 @@ public class MainActivity extends AppCompatActivity implements OnClickListener {
 
         btn2NestedRecycler = findViewById(R.id.nested_recycler);
         btn2NestedRecycler.setOnClickListener(this);
+
+        btn2CardDeck = findViewById(R.id.card_deck);
+        btn2CardDeck.setOnClickListener(this);
     }
 
     @Override
@@ -38,8 +43,8 @@ public class MainActivity extends AppCompatActivity implements OnClickListener {
                 startActivity(iNR);
                 break;
             case R.id.card_deck:
-//                Intent iCD = new Intent(MainActivity.this, CardDeckActivity.class);
-//                startActivity(iCD);
+                Intent iCD = new Intent(MainActivity.this, SwipeCardActivity.class);
+                startActivity(iCD);
                 break;
         }
     }

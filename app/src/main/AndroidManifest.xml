@@ -33,6 +33,11 @@
             android:theme="@style/Demo.NoActionBar"
             android:exported="false"
             android:screenOrientation="portrait" />
+        <activity
+            android:name=".swipecard.SwipeCardActivity"
+            android:theme="@style/Demo.NoActionBar"
+            android:exported="false"
+            android:screenOrientation="portrait" />
     </application>
 
 </manifest>
