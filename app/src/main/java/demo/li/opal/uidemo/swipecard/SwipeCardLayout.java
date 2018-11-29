@@ -19,6 +19,7 @@ import android.widget.RelativeLayout;
 import java.util.Queue;
 
 import demo.li.opal.uidemo.R;
+import demo.li.opal.uidemo.Utils.Utils;
 
 
 /**
@@ -88,12 +89,11 @@ public class SwipeCardLayout extends RelativeLayout {
         paint_s = new Paint();
         paint_s.setColor(getResources().getColor(R.color.black_alpha_40));
         paint_s.setStyle(Paint.Style.STROKE);
-        paint_s.setStrokeWidth(2);
+        paint_s.setStrokeWidth(Utils.dip2px(getContext(), 1));
         paint_s.setAntiAlias(true);
         rect = new RectF();
         round = density * 8;
     }
-
 
     public interface OnSwipeListener {
         void onSwipe(int type);
@@ -236,6 +236,11 @@ public class SwipeCardLayout extends RelativeLayout {
                 return true;
             }
             // 防止第二张卡片也触发触控事件（会存在：第一张 hold 住了，第二张卡片先被划走；显露出第三第四张卡片等问题）
+            // 最后一张不能划走
+//            if (((RelativeLayout) getParent()).getChildAt(FRONT_INDEX) != this) {
+//                return true;
+//            }
+            // 最后一张可以划走
             if (((RelativeLayout) getParent()).getChildCount() > 1 &&   // 不是最后一张卡片
                     ((RelativeLayout) getParent()).getChildAt(FRONT_INDEX) != this) {   // 触碰的不是第一张卡片
                 return true;
