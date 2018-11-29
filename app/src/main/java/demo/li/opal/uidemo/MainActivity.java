@@ -1,13 +1,12 @@
 package demo.li.opal.uidemo;
 
 import android.content.Intent;
-import android.support.v4.widget.NestedScrollView;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
 
-import demo.li.opal.uidemo.swipe.FeedsSwipeRefreshLayout;
+import demo.li.opal.uidemo.nestedRecycler.NestedRecyclerActivity;
 import demo.li.opal.uidemo.swipe.SwipeRefreshActivity;
 
 public class MainActivity extends AppCompatActivity implements OnClickListener {
@@ -37,6 +36,10 @@ public class MainActivity extends AppCompatActivity implements OnClickListener {
             case R.id.nested_recycler:
                 Intent iNR = new Intent(MainActivity.this, NestedRecyclerActivity.class);
                 startActivity(iNR);
+                break;
+            case R.id.card_deck:
+//                Intent iCD = new Intent(MainActivity.this, CardDeckActivity.class);
+//                startActivity(iCD);
                 break;
         }
     }

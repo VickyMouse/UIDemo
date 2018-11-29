@@ -1,3 +1,33 @@
 <resources>
     <string name="app_name">UIDemo</string>
+
+
+    <!-- Feeds 模块 -->
+    <string name="feeds_update_success">内容已更新</string>
+    <string name="feeds_update_no_more">已更至最新</string>
+    <string name="feeds_hot_title">最热玩法</string>
+    <string name="feeds_ad_go_to">立即使用</string>
+    <string name="feeds_login_hint">立即登录</string>
+    <string name="feeds_tag_count">%1$s 篇文章</string>
+    <string name="feeds_reading_count">%1$s阅读</string>
+    <string name="feeds_error_no_login">登录后可查看收藏的文章</string>
+    <string name="feeds_error_network">无网络连接，请检查网络设置</string>
+    <string name="feeds_error_network_permission">请检查网络访问开关是否打开</string>
+    <string name="feeds_error_feed_empty">暂无内容</string>
+    <string name="feeds_footer_hint">没有更多内容了</string>
+
+    <!-- 首页中间的功能入口每个item项的title -->
+    <!-- item的结构：title#identify id#priority-->
+    <string name="main_func_ops_title_1">装饰美化#TTPTBEAUTIFY#1200</string>
+    <!--<string name="main_func_ops_title_2">美颜自拍#TTPTCAMERA#1100</string>-->
+    <string name="main_func_ops_title_3">美容美妆#TTPTFACE#1000</string>
+    <string name="main_func_ops_title_4">疯狂变脸#TTPTCOSFUN#900</string>
+    <string name="main_func_ops_title_5">故事拼图#TTPTCOLLAGE#800</string>
+    <string name="main_func_ops_title_6">魔法抠图#TTPTBUCKLE#700</string>
+    <string name="main_func_ops_title_7">动感MV#TTPTVIDEOEDIT#600</string>
+    <string name="main_func_ops_title_8">萌偶#TTPTEMOJI#500</string>
+    <string name="main_func_ops_title_9">趣味多图#TTPTBATCH#400</string>
+    <string name="main_func_ops_title_10">大头贴#TTPTPLAYSTICKER#300</string>
+    <string name="main_func_ops_title_11">表情包#TTPTGIF#200</string>
+    <string name="main_func_ops_title_12">素材中心#TTPTMATERIALS#100</string>
 </resources>

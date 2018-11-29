@@ -1,0 +1,9 @@
+<resources>
+
+    <dimen name="feeds_tag_banner_height">192dp</dimen>
+    <dimen name="feeds_my_profile_height">260dp</dimen>
+    <dimen name="feeds_top_bar_height">50dp</dimen>
+
+    <dimen name="camera_bottom_button_text_btm_margin">12dp</dimen>
+
+</resources>

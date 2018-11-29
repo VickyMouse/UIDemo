@@ -4,5 +4,62 @@
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
 
+    <color name="transparent">#00000000</color>
+    <color name="white_smoke">#f3f3f3</color>
+    <color name="white">#ffffff</color>
+    <color name="black">#ff000000</color>
+    <color name="light_gray">#e5e5e5</color>
+
     <color name="main_color">#fff90051</color>
+    <color name="pink">#f90051</color>
+
+    <color name="black_alpha_5">#0D000000</color>
+    <color name="black_alpha_8">#14000000</color>
+    <color name="black_alpha_15">#26000000</color>
+    <color name="black_alpha_20">#33000000</color>
+    <color name="black_alpha_30">#4c000000</color>
+    <color name="black_alpha_35">#59000000</color>
+    <color name="black_alpha_40">#66000000</color>
+    <color name="black_alpha_50">#80000000</color>
+    <color name="black_alpha_60">#9A000000</color>
+    <color name="black_alpha_70">#B2000000</color>
+    <color name="black_alpha_80">#cc000000</color>
+
+    <color name="white_alpha_20">#33ffffff</color>
+    <color name="white_alpha_35">#5Affffff</color>
+    <color name="white_alpha_50">#80ffffff</color>
+    <color name="white_alpha_60">#9Affffff</color>
+    <color name="white_alpha_80">#ccffffff</color>
+    <color name="white_alpha_90">#e6ffffff</color>
+    <color name="white_alpha_93">#edffffff</color>
+
+    <!-- Feeds List -->
+    <color name="feeds_list_bg">#f6f8fa</color>
+    <color name="feed_item_placeholder">#e9edf0</color>
+
+    <!-- 首页中间的功能入口每个 item 项的颜色 -->
+    <color name="ops_title_color_ttptbeautify">#018be2</color>
+    <color name="ops_subtitle_color_ttptbeautify">#64baf3</color>
+    <color name="ops_title_color_ttptcamera">#ed620e</color>
+    <color name="ops_subtitle_color_ttptcamera">#f8a676</color>
+    <color name="ops_title_color_ttptface">#ff4095</color>
+    <color name="ops_subtitle_color_ttptface">#ff92bd</color>
+    <color name="ops_title_color_ttptcosfun">#965bd2</color>
+    <color name="ops_subtitle_color_ttptcosfun">#cb9ced</color>
+    <color name="ops_title_color_ttptcollage">#f15119</color>
+    <color name="ops_subtitle_color_ttptcollage">#f99d7d</color>
+    <color name="ops_title_color_ttptbuckle">#dd6e01</color>
+    <color name="ops_subtitle_color_ttptbuckle">#f1b76c</color>
+    <color name="ops_title_color_ttptvideoedit">#5366E0</color>
+    <color name="ops_subtitle_color_ttptvideoedit">#95A3F3</color>
+    <color name="ops_title_color_ttptemoji">#ed620e</color>
+    <color name="ops_subtitle_color_ttptemoji">#f8a676</color>
+    <color name="ops_title_color_ttptbatch">#3672ee</color>
+    <color name="ops_subtitle_color_ttptbatch">#83a9f8</color>
+    <color name="ops_title_color_ttptplaysticker">#ff4095</color>
+    <color name="ops_subtitle_color_ttptplaysticker">#ff92bd</color>
+    <color name="ops_title_color_ttptgif">#dd6e01</color>
+    <color name="ops_subtitle_color_ttptgif">#f1b76c</color>
+    <color name="ops_title_color_ttptmaterials">#965bd2</color>
+    <color name="ops_subtitle_color_ttptmaterials">#cb9cec</color>
 </resources>

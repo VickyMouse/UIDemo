@@ -1,40 +1,188 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+
+<demo.li.opal.uidemo.swipe.FeedsSwipeRefreshLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/refresh_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
-
-    <demo.li.opal.uidemo.swipe.FeedsSwipeRefreshLayout
-        android:id="@+id/refresh_layout"
+    <!-- 为了配合 CameraDragLayout 的使用，这个单独的根节点不能移除，需要多套一层，期待后续的优化 -->
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-        <!-- 为了配合 CameraDragLayout 的使用，这个单独的根节点不能移除，需要多套一层，期待后续的优化 -->
-        <ScrollView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
 
-            <LinearLayout
+        <android.support.v4.widget.NestedScrollView
+            android:id="@+id/scroll_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <RelativeLayout
+                    android:id="@+id/main_header"
+                    android:layout_alignParentTop="true"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/white">
+
+                    <RelativeLayout
+                        android:id="@+id/main_empty_container"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <ImageView
+                            android:id="@+id/main_empty_bottom"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:focusable="false"
+                            android:scaleType="fitXY" />
+
+                        <FrameLayout
+                            android:id="@+id/main_empty_top_root"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content">
+
+                            <ImageView
+                                android:id="@+id/main_empty_top"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:focusable="false"
+                                android:scaleType="fitXY" />
+
+                            <demo.li.opal.uidemo.Views.IndicatorLinearLayout
+                                android:id="@+id/main_empty_indicator"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                app:selected="@drawable/main_banner_selected"
+                                app:unselected="@drawable/main_banner_unselected"
+                                android:layout_gravity="bottom|center_horizontal"
+                                android:layout_marginBottom="5dp"
+                                android:orientation="horizontal" />
+                        </FrameLayout>
+
+                        <android.support.v7.widget.RecyclerView
+                            android:id="@+id/main_center_ops"
+                            android:layout_width="match_parent"
+                            android:layout_height="300dp"
+                            android:layout_below="@id/main_empty_top_root"
+                            android:layout_marginTop="13dp" />
+
+                        <demo.li.opal.uidemo.Views.IndicatorLinearLayout
+                            android:id="@+id/main_center_indicator"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_below="@id/main_center_ops"
+                            android:layout_gravity="bottom|center_horizontal"
+                            android:layout_marginTop="15dp"
+                            app:selected="@drawable/main_fun_selected"
+                            app:unselected="@drawable/main_fun_unselected"
+                            android:orientation="horizontal" />
+
+                    </RelativeLayout>
+
+                    <com.facebook.drawee.view.SimpleDraweeView
+                        android:id="@+id/btn_scroll_avatar"
+                        android:layout_width="35dp"
+                        android:layout_height="35dp"
+                        android:layout_alignParentRight="true"
+                        android:layout_alignParentTop="true"
+                        android:layout_margin="16dp"
+                        android:scaleType="centerInside"
+                        app:placeholderImage="@drawable/ic_main_avatar"
+                        app:roundedCornerRadius="17dp" />
+
+                    <RelativeLayout
+                        android:id="@+id/main_feeds_title_container"
+                        android:layout_width="match_parent"
+                        android:layout_height="31dp"
+                        android:layout_below="@id/main_empty_container"
+                        android:layout_marginBottom="21dp"
+                        android:layout_marginTop="30dp"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:id="@+id/main_feeds_title"
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:layout_marginLeft="15dp"
+                            android:gravity="center"
+                            android:includeFontPadding="false"
+                            android:text="@string/feeds_hot_title"
+                            android:textColor="@color/black"
+                            android:textSize="25sp" />
+                    </RelativeLayout>
+
+                    <android.support.v7.widget.RecyclerView
+                        android:id="@+id/hot_tags"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/main_feeds_title_container"
+                        android:clipToPadding="false"
+                        android:paddingBottom="12dp"
+                        android:paddingLeft="15dp" />
+                </RelativeLayout>
+
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/feeds_list"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_below="@id/main_header"/>
+
+            </RelativeLayout>
+        </android.support.v4.widget.NestedScrollView>
+
+        <!-- 顶部按钮 -->
+        <RelativeLayout
+            android:id="@+id/top_bar"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_alignParentTop="true"
+            android:clickable="true"
+            android:visibility="invisible">
+
+            <TextView
+                android:id="@+id/top_title"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:orientation="vertical">
+                android:layout_above="@id/divider"
+                android:layout_centerVertical="true"
+                android:background="@color/white"
+                android:gravity="left|center_vertical"
+                android:includeFontPadding="false"
+                android:paddingLeft="17dp"
+                android:text="@string/feeds_hot_title"
+                android:textColor="@color/black"
+                android:textSize="17sp" />
 
-                <TextView
-                    android:id="@+id/main_feeds_title"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="10dp"
-                    android:gravity="center"
-                    android:text="最热玩法"
-                    android:textColor="@android:color/black"
-                    android:textSize="25sp" />
+            <com.facebook.drawee.view.SimpleDraweeView
+                android:id="@+id/btn_avatar"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:layout_marginRight="19dp"
+                android:scaleType="centerInside"
+                app:placeholderImage="@drawable/ic_main_avatar"
+                app:roundedCornerRadius="15dp" />
 
-                <demo.li.opal.uidemo.CustomArcView
-                    android:id="@+id/arc_view"
-                    android:layout_width="match_parent"
-                    android:layout_height="500dp"
-                    android:gravity="center" />
-            </LinearLayout>
-        </ScrollView>
-    </demo.li.opal.uidemo.swipe.FeedsSwipeRefreshLayout>
+            <View
+                android:id="@+id/divider"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_alignParentBottom="true"
+                android:background="@color/black_alpha_8" />
+        </RelativeLayout>
 
-</FrameLayout>
+        <ImageView
+            android:id="@+id/main_camera"
+            android:scaleType="centerCrop"
+            android:src="@drawable/main_camera"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="30dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+    </RelativeLayout>
+</demo.li.opal.uidemo.swipe.FeedsSwipeRefreshLayout>

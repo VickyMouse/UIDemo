@@ -1,0 +1,184 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="200dp"
+    android:clipChildren="false">
+
+    <ImageView
+        android:id="@+id/right_decor"
+        android:layout_width="61dp"
+        android:layout_height="82dp"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentRight="true"
+        android:visibility="gone"
+        android:layout_marginTop="18dp"
+        android:src="@drawable/feed_decor_right" />
+
+    <ImageView
+        android:id="@+id/left_decor"
+        android:layout_width="22dp"
+        android:layout_height="82dp"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:visibility="gone"
+        android:layout_marginTop="20dp"
+        android:src="@drawable/feed_decor_left" />
+
+    <FrameLayout
+        android:id="@+id/cover_container"
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:layout_marginLeft="12dp"
+        android:layout_marginRight="12dp"
+        >
+
+        <com.facebook.drawee.view.SimpleDraweeView
+            android:id="@+id/feed_thumb"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:placeholderImage="@color/feed_item_placeholder"
+            android:layout_gravity="center"
+            android:scaleType="centerCrop"/>
+
+        <!--<demo.li.opal.uidemo.media.FeedsCropVideoView-->
+            <!--android:id="@+id/video_player"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="match_parent"-->
+            <!--android:layout_gravity="center"/>-->
+
+        <ImageView
+            android:id="@+id/btn_is_video"
+            android:layout_width="23dp"
+            android:layout_height="23dp"
+            android:layout_marginRight="6dp"
+            android:layout_marginTop="6dp"
+            android:layout_gravity="right|top"
+            android:src="@drawable/ic_feed_play_indicator"
+            android:visibility="gone"/>
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@drawable/feed_cover_round"/>
+    </FrameLayout>
+
+
+    <!--<com.tencent.ttpic.common.widget.HorizontalListView-->
+        <!--android:id="@+id/feed_tags"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="@dimen/dp25"-->
+        <!--android:layout_alignBottom="@id/cover_container"-->
+        <!--android:layout_alignParentLeft="true"-->
+        <!--android:layout_gravity="left|bottom"-->
+        <!--android:layout_marginBottom="9dp"-->
+        <!--android:layout_marginLeft="14dp"-->
+        <!--android:layout_marginRight="14dp" />-->
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="12dp"
+        android:layout_marginRight="12dp"
+        android:orientation="vertical"
+        android:layout_below="@id/cover_container"
+        android:background="@drawable/feed_card_white_bg"
+        android:layout_marginBottom="30dp"
+        android:clipChildren="false">
+
+        <TextView
+            android:id="@+id/feed_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"
+            android:layout_marginTop="11dp"
+            android:maxLines="2"
+            android:ellipsize="end"
+            android:text="TitleTitle"
+            android:textColor="@color/black"
+            android:textSize="18sp" />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="16dp"
+            android:layout_marginTop="16dp"
+            android:src="@drawable/ic_feed_numbers_divider" />
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="17dp"
+            android:layout_marginBottom="4dp"
+            android:clipChildren="false">
+
+            <TextView
+                android:id="@+id/read_count"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_centerVertical="true"
+                android:singleLine="true"
+                android:text="@string/feeds_reading_count"
+                android:textColor="#bbbbbb"
+                android:textSize="12sp" />
+
+            <!--<TextView-->
+                <!--android:id="@+id/share_count"-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:layout_alignParentRight="true"-->
+                <!--android:layout_centerVertical="true"-->
+                <!--android:singleLine="true"-->
+                <!--android:text="0"-->
+                <!--android:textColor="@color/black"-->
+                <!--android:textSize="12sp" />-->
+
+            <!--<com.facebook.drawee.view.SimpleDraweeView-->
+                <!--android:id="@+id/share_img"-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:layout_centerVertical="true"-->
+                <!--android:layout_marginRight="2dp"-->
+                <!--android:layout_toLeftOf="@id/share_count"-->
+                <!--android:background="@drawable/ic_share_count" />-->
+
+            <FrameLayout
+                android:id="@+id/fav_container"
+                android:layout_width="wrap_content"
+                android:layout_height="36dp"
+                android:clipChildren="false"
+                android:layout_alignParentRight="true">
+
+                <ImageView
+                    android:id="@+id/add_fav_flash"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:layout_gravity="left|center_vertical"
+                    android:background="@drawable/ic_feed_favored"
+                    android:visibility="invisible" />
+
+                <com.facebook.drawee.view.SimpleDraweeView
+                    android:id="@+id/fav_img"
+                    android:layout_width="22dp"
+                    android:layout_height="22dp"
+                    android:layout_gravity="left|center_vertical"
+                    android:layout_marginLeft="14dp"
+                    android:src="@drawable/ic_feed_fav_count" />
+
+                <TextView
+                    android:id="@+id/fav_count"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="left|center_vertical"
+                    android:layout_marginLeft="38dp"
+                    android:singleLine="true"
+                    android:text="0"
+                    android:textColor="@color/black"
+                    android:textSize="11sp" />
+            </FrameLayout>
+        </RelativeLayout>
+    </LinearLayout>
+</RelativeLayout>

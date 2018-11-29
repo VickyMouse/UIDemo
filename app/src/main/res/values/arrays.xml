@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- 首页中间的功能入口titles -->
+    <string-array name="main_func_ops_titles">
+        <item>@string/main_func_ops_title_1</item>
+        <!--<item>@string/main_func_ops_title_2</item>-->
+        <item>@string/main_func_ops_title_3</item>
+        <item>@string/main_func_ops_title_4</item>
+        <item>@string/main_func_ops_title_5</item>
+        <item>@string/main_func_ops_title_6</item>
+        <item>@string/main_func_ops_title_7</item>
+        <item>@string/main_func_ops_title_8</item>
+        <item>@string/main_func_ops_title_9</item>
+        <item>@string/main_func_ops_title_10</item>
+        <item>@string/main_func_ops_title_11</item>
+        <item>@string/main_func_ops_title_12</item>
+    </string-array>
+</resources>

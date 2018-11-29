@@ -1,4 +1,4 @@
-package demo.li.opal.uidemo;
+package demo.li.opal.uidemo.Views;
 
 import android.content.Context;
 import android.graphics.Canvas;

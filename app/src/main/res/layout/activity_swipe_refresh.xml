@@ -28,7 +28,7 @@
                     android:textColor="@android:color/black"
                     android:textSize="25sp" />
 
-                <demo.li.opal.uidemo.CustomArcView
+                <demo.li.opal.uidemo.Views.CustomArcView
                     android:id="@+id/arc_view"
                     android:layout_width="match_parent"
                     android:layout_height="500dp"
