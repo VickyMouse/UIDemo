@@ -40,7 +40,6 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".cardDeck.CardDeckActivity"
-            android:theme="@style/Demo.NoActionBar"
             android:exported="false"
             android:screenOrientation="portrait" />
     </application>

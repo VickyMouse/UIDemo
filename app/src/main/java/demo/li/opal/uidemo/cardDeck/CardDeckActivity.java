@@ -22,18 +22,18 @@ public class CardDeckActivity extends FragmentActivity {
     private CardSlidePanel.CardSwitchListener cardSwitchListener;
 
     private String imagePaths[] = {
-            "file:///android_asset/wall01.jpg",
-            "file:///android_asset/wall02.jpg",
-            "file:///android_asset/wall03.jpg",
-            "file:///android_asset/wall04.jpg",
-            "file:///android_asset/wall05.jpg",
-            "file:///android_asset/wall06.jpg",
-            "file:///android_asset/wall07.jpg",
-            "file:///android_asset/wall08.jpg",
-            "file:///android_asset/wall09.jpg",
-            "file:///android_asset/wall10.jpg",
-            "file:///android_asset/wall11.jpg",
-            "file:///android_asset/wall12.jpg"
+            "file:///android_asset/cards/wall01.jpg",
+            "file:///android_asset/cards/wall02.jpg",
+            "file:///android_asset/cards/wall03.jpg",
+            "file:///android_asset/cards/wall04.jpg",
+            "file:///android_asset/cards/wall05.jpg",
+            "file:///android_asset/cards/wall06.jpg",
+            "file:///android_asset/cards/wall07.jpg",
+            "file:///android_asset/cards/wall08.jpg",
+            "file:///android_asset/cards/wall09.jpg",
+            "file:///android_asset/cards/wall10.jpg",
+            "file:///android_asset/cards/wall11.jpg",
+            "file:///android_asset/cards/wall12.jpg"
     }; // 12 个图片资源
 
     private String names[] = {"郭富城", "刘德华", "张学友", "李连杰", "成龙", "谢霆锋",
