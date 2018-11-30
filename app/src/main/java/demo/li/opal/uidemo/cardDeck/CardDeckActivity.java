@@ -4,7 +4,6 @@ import android.graphics.Rect;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.FragmentActivity;
-import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.widget.ImageView;
@@ -16,6 +15,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import demo.li.opal.uidemo.R;
+import demo.li.opal.uidemo.Utils.LogUtils;
 
 public class CardDeckActivity extends FragmentActivity {
 
@@ -51,19 +51,19 @@ public class CardDeckActivity extends FragmentActivity {
     }
 
     private void initView() {
-        final CardSlidePanel slidePanel = (CardSlidePanel) findViewById(R.id.image_slide_panel);
+        final CardSlidePanel slidePanel = findViewById(R.id.image_slide_panel);
 
         // 1. 左右滑动监听
         cardSwitchListener = new CardSlidePanel.CardSwitchListener() {
 
             @Override
             public void onShow(int index) {
-                Log.d("Card", "正在显示-" + dataList.get(index).userName);
+                LogUtils.d("Card", "正在显示-" + dataList.get(index).userName);
             }
 
             @Override
             public void onCardVanish(int index, int type) {
-                Log.d("Card", "正在消失-" + dataList.get(index).userName + " 消失type=" + type);
+                LogUtils.d("Card", "正在消失-" + dataList.get(index).userName + " 消失type=" + type);
             }
         };
         slidePanel.setCardSwitchListener(cardSwitchListener);

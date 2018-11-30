@@ -3,7 +3,8 @@ package demo.li.opal.uidemo.viewanimator;
 import android.graphics.Path;
 import android.support.annotation.Nullable;
 import android.support.annotation.WorkerThread;
-import android.util.Log;
+
+import demo.li.opal.uidemo.Utils.LogUtils;
 
 public class SvgPathParser {
 
@@ -19,7 +20,7 @@ public class SvgPathParser {
         try {
             return parsePath(dAttributeOfPath);
         } catch (Exception e) {
-            Log.e(null, "parse svg path error", e);
+            LogUtils.e(null, "parse svg path error", e);
         }
         return null;
     }
@@ -95,7 +96,7 @@ public class SvgPathParser {
                 case 'm': {
                     float x = helper.nextFloat();
                     float y = helper.nextFloat();
-                    Log.d(null, String.format("move to: [%s,%s]", x, y));
+                    LogUtils.d(null, String.format("move to: [%s,%s]", x, y));
                     if (cmd == 'm') {
                         subPathStartX += x;
                         subPathStartY += y;
@@ -113,7 +114,7 @@ public class SvgPathParser {
                 }
                 case 'Z':
                 case 'z': {
-                    Log.d(null, String.format("close, move to: [%s,%s]", subPathStartX, subPathStartY));
+                    LogUtils.d(null, String.format("close, move to: [%s,%s]", subPathStartX, subPathStartY));
                     path.close();
                     path.moveTo(subPathStartX, subPathStartY);
                     lastX = subPathStartX;
@@ -127,7 +128,7 @@ public class SvgPathParser {
                 case 'l': {
                     float x = helper.nextFloat();
                     float y = helper.nextFloat();
-                    Log.d(null, String.format("line to: [%s,%s]", x, y));
+                    LogUtils.d(null, String.format("line to: [%s,%s]", x, y));
                     if (cmd == 'l') {
                         path.rLineTo(x, y);
                         lastX += x;
@@ -142,7 +143,7 @@ public class SvgPathParser {
                 case 'H':
                 case 'h': {
                     float x = helper.nextFloat();
-                    Log.d(null, String.format("horizontal line to: [%s]", x));
+                    LogUtils.d(null, String.format("horizontal line to: [%s]", x));
                     if (cmd == 'h') {
                         path.rLineTo(x, 0);
                         lastX += x;
@@ -155,7 +156,7 @@ public class SvgPathParser {
                 case 'V':
                 case 'v': {
                     float y = helper.nextFloat();
-                    Log.d(null, String.format("vertical line to: [%s]", y));
+                    LogUtils.d(null, String.format("vertical line to: [%s]", y));
                     if (cmd == 'v') {
                         path.rLineTo(0, y);
                         lastY += y;
@@ -174,7 +175,7 @@ public class SvgPathParser {
                     float y2 = helper.nextFloat();
                     float x = helper.nextFloat();
                     float y = helper.nextFloat();
-                    Log.d(null, String.format("cubic to: [%s,%s][%s,%s][%s,%s]", x1, y1, x2, y2, x, y));
+                    LogUtils.d(null, String.format("cubic to: [%s,%s][%s,%s][%s,%s]", x1, y1, x2, y2, x, y));
                     if (cmd == 'c') {
                         x1 += lastX;
                         x2 += lastX;
@@ -197,7 +198,7 @@ public class SvgPathParser {
                     float y2 = helper.nextFloat();
                     float x = helper.nextFloat();
                     float y = helper.nextFloat();
-                    Log.d(null, String.format("cubic to: [%s,%s][%s,%s]", x2, y2, x, y));
+                    LogUtils.d(null, String.format("cubic to: [%s,%s][%s,%s]", x2, y2, x, y));
                     if (cmd == 's') {
                         x2 += lastX;
                         x += lastX;
@@ -222,7 +223,7 @@ public class SvgPathParser {
                     int sweepArc = (int) helper.nextFloat();
                     float x = helper.nextFloat();
                     float y = helper.nextFloat();
-                    Log.d(null, String.format("arc to: [%s,%s][%s][%s,%s][%s,%s]", rx, ry, theta, largeArc, sweepArc, x, y));
+                    LogUtils.d(null, String.format("arc to: [%s,%s][%s][%s,%s][%s,%s]", rx, ry, theta, largeArc, sweepArc, x, y));
                     drawArc(path, lastX, lastY, x, y, rx, ry, theta, largeArc, sweepArc);
                     lastX = x;
                     lastY = y;

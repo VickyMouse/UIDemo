@@ -190,23 +190,23 @@ public class NestedRecyclerActivity extends AppCompatActivity implements FeedsSw
         mScrollView.setOnScrollChangeListener(new NestedScrollView.OnScrollChangeListener() {
             @Override
             public void onScrollChange(NestedScrollView v, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
-//                Log.i(TAG, "NestedScrollView 滑动");
+//                LogUtils.i(TAG, "NestedScrollView 滑动");
                 if (scrollY <= 0) {
                     // 滑到顶部
-                    Log.i(TAG, "NestedScrollView 滑到顶部");
+                    LogUtils.i(TAG, "NestedScrollView 滑到顶部");
                     mRefreshLayout.setEnabled(true);
                     checkTopBarVisibility();
                     mCamera.setAlpha(1f);
                 } else {
                     if (oldScrollY <= 0) {
-                        Log.i(TAG, "NestedScrollView 从顶部滑开");
+                        LogUtils.i(TAG, "NestedScrollView 从顶部滑开");
                         mRefreshLayout.setEnabled(false);
                     }
                 }
-//                Log.i(TAG, "NestedScrollView(" + scrollY + ", " + v.getChildAt(0).getMeasuredHeight() + ", " + v.getMeasuredHeight() + ", " + (v.getChildAt(0).getMeasuredHeight() - v.getMeasuredHeight()) + ")");
+//                LogUtils.i(TAG, "NestedScrollView(" + scrollY + ", " + v.getChildAt(0).getMeasuredHeight() + ", " + v.getMeasuredHeight() + ", " + (v.getChildAt(0).getMeasuredHeight() - v.getMeasuredHeight()) + ")");
                 if (scrollY == (v.getChildAt(0).getMeasuredHeight() - v.getMeasuredHeight())) {
                     // 滑到底部
-                    Log.i(TAG, "NestedScrollView 滑到底部");
+                    LogUtils.i(TAG, "NestedScrollView 滑到底部");
                     if (mFeedsListController != null) {
                         mFeedsListController.onScrollToBottom();
                     }
@@ -268,7 +268,7 @@ public class NestedRecyclerActivity extends AppCompatActivity implements FeedsSw
     public void checkTopBarVisibility() {
         int[] location = new int[2];
         mFeedsTitle.getLocationInWindow(location);
-        Log.i(TAG, "[onFeedListScroll] top = " + location[1] + ", isAnimate = " + isTopBarAnimating);
+        LogUtils.i(TAG, "[onFeedListScroll] top = " + location[1] + ", isAnimate = " + isTopBarAnimating);
         if (location[1] >= 0 && !isTopBarAnimating && mTopBar.getVisibility() == View.VISIBLE) {
             showTopBarAnim(false);
         } else if (location[1] < 0 && !isTopBarAnimating && mTopBar.getVisibility() != View.VISIBLE) {
@@ -280,7 +280,7 @@ public class NestedRecyclerActivity extends AppCompatActivity implements FeedsSw
     }
 
     private void showTopBarAnim(boolean show) {
-        Log.i(TAG, "show()");
+        LogUtils.i(TAG, "show()");
         isTopBarAnimating = true;
         if (show) {
             mTopBar.setVisibility(View.VISIBLE);

@@ -29,7 +29,6 @@ import android.support.v4.view.NestedScrollingParentHelper;
 import android.support.v4.view.ViewCompat;
 import android.util.AttributeSet;
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewConfiguration;
@@ -39,6 +38,8 @@ import android.view.animation.Animation.AnimationListener;
 import android.view.animation.DecelerateInterpolator;
 import android.view.animation.Transformation;
 import android.widget.AbsListView;
+
+import demo.li.opal.uidemo.Utils.LogUtils;
 
 /**
  * The SwipeRefreshLayout should be used whenever the user can refresh the
@@ -129,8 +130,8 @@ public class FeedsSwipeRefreshLayout extends ViewGroup implements NestedScrollin
     // refresh was triggered.
     private boolean mReturningToStart;
     private final DecelerateInterpolator mDecelerateInterpolator;
-    private static final int[] LAYOUT_ATTRS = new int[] {
-        android.R.attr.enabled
+    private static final int[] LAYOUT_ATTRS = new int[]{
+            android.R.attr.enabled
     };
 
     private CircleImageView mCircleView;
@@ -225,12 +226,12 @@ public class FeedsSwipeRefreshLayout extends ViewGroup implements NestedScrollin
      * there is a toolbar or actionbar present.
      *
      * @param scale Set to true if there is no view at a higher z-order than
-     *            where the progress spinner is set to appear.
+     *              where the progress spinner is set to appear.
      * @param start The offset in pixels from the top of this view at which the
-     *            progress spinner should appear.
-     * @param end The offset in pixels from the top of this view at which the
-     *            progress spinner should come to rest after a successful swipe
-     *            gesture.
+     *              progress spinner should appear.
+     * @param end   The offset in pixels from the top of this view at which the
+     *              progress spinner should come to rest after a successful swipe
+     *              gesture.
      */
     public void setProgressViewOffset(boolean scale, int start, int end) {
         mScale = scale;
@@ -248,10 +249,10 @@ public class FeedsSwipeRefreshLayout extends ViewGroup implements NestedScrollin
      * toolbar or actionbar present.
      *
      * @param scale Set to true if there is no view at a higher z-order than
-     *            where the progress spinner is set to appear.
-     * @param end The offset in pixels from the top of this view at which the
-     *            progress spinner should come to rest after a successful swipe
-     *            gesture.
+     *              where the progress spinner is set to appear.
+     * @param end   The offset in pixels from the top of this view at which the
+     *              progress spinner should come to rest after a successful swipe
+     *              gesture.
      */
     public void setProgressViewEndTarget(boolean scale, int end) {
         mSpinnerFinalOffset = end;
@@ -341,7 +342,7 @@ public class FeedsSwipeRefreshLayout extends ViewGroup implements NestedScrollin
     }
 
     private void createProgressView() {
-        mCircleView = new CircleImageView(getContext(), CIRCLE_BG_LIGHT, CIRCLE_DIAMETER/2);
+        mCircleView = new CircleImageView(getContext(), CIRCLE_BG_LIGHT, CIRCLE_DIAMETER / 2);
         mProgress = new FeedsMaterialProgressDrawable(getContext(), this);
         mProgress.setBackgroundColor(CIRCLE_BG_LIGHT);
         mCircleView.setImageDrawable(mProgress);
@@ -413,6 +414,7 @@ public class FeedsSwipeRefreshLayout extends ViewGroup implements NestedScrollin
 
     /**
      * Pre API 11, this does an alpha animation.
+     *
      * @param progress
      */
     private void setAnimationProgress(float progress) {
@@ -451,12 +453,12 @@ public class FeedsSwipeRefreshLayout extends ViewGroup implements NestedScrollin
     }
 
     private void startProgressAlphaStartAnimation() {
-        Log.i("startProgressAlphaAnim", "START");
+        LogUtils.i("startProgressAlphaAnim", "START");
         mAlphaStartAnimation = startAlphaAnimation(mProgress.getAlpha(), STARTING_PROGRESS_ALPHA);
     }
 
     private void startProgressAlphaMaxAnimation() {
-        Log.i("startProgressAMaxAnim", "START");
+        LogUtils.i("startProgressAMaxAnim", "START");
         mAlphaMaxAnimation = startAlphaAnimation(mProgress.getAlpha(), MAX_ALPHA);
     }
 
@@ -470,7 +472,7 @@ public class FeedsSwipeRefreshLayout extends ViewGroup implements NestedScrollin
             @Override
             public void applyTransformation(float interpolatedTime, Transformation t) {
                 mProgress
-                        .setAlpha((int) (startingAlpha+ ((endingAlpha - startingAlpha)
+                        .setAlpha((int) (startingAlpha + ((endingAlpha - startingAlpha)
                                 * interpolatedTime)));
             }
         };
@@ -548,7 +550,7 @@ public class FeedsSwipeRefreshLayout extends ViewGroup implements NestedScrollin
 
     /**
      * @return Whether the SwipeRefreshWidget is actively showing refresh
-     *         progress.
+     * progress.
      */
     public boolean isRefreshing() {
         return mRefreshing;
@@ -639,12 +641,12 @@ public class FeedsSwipeRefreshLayout extends ViewGroup implements NestedScrollin
      * @return Diameter in pixels of the progress circle view.
      */
     public int getProgressCircleDiameter() {
-        return mCircleView != null ?mCircleView.getMeasuredHeight() : 0;
+        return mCircleView != null ? mCircleView.getMeasuredHeight() : 0;
     }
 
     /**
      * @return Whether it is possible for the child view of this layout to
-     *         scroll up. Override this if the child view is a custom view.
+     * scroll up. Override this if the child view is a custom view.
      */
     public boolean canChildScrollUp() {
         if (android.os.Build.VERSION.SDK_INT < 14) {
@@ -652,7 +654,7 @@ public class FeedsSwipeRefreshLayout extends ViewGroup implements NestedScrollin
                 final AbsListView absListView = (AbsListView) mTarget;
                 return absListView.getChildCount() > 0
                         && (absListView.getFirstVisiblePosition() > 0 || absListView.getChildAt(0)
-                                .getTop() < absListView.getPaddingTop());
+                        .getTop() < absListView.getPaddingTop());
             } else {
                 return ViewCompat.canScrollVertically(mTarget, -1) || mTarget.getScrollY() > 0;
             }
@@ -691,7 +693,7 @@ public class FeedsSwipeRefreshLayout extends ViewGroup implements NestedScrollin
 
             case MotionEvent.ACTION_MOVE:
                 if (mActivePointerId == INVALID_POINTER) {
-                    Log.e(LOG_TAG, "Got ACTION_MOVE event but don't have an active pointer id.");
+                    LogUtils.e(LOG_TAG, "Got ACTION_MOVE event but don't have an active pointer id.");
                     return false;
                 }
 
@@ -814,7 +816,7 @@ public class FeedsSwipeRefreshLayout extends ViewGroup implements NestedScrollin
 
     @Override
     public void onNestedScroll(final View target, final int dxConsumed, final int dyConsumed,
-            final int dxUnconsumed, final int dyUnconsumed) {
+                               final int dxUnconsumed, final int dyUnconsumed) {
         // Dispatch up to the nested parent first
         dispatchNestedScroll(dxConsumed, dyConsumed, dxUnconsumed, dyUnconsumed,
                 mParentOffsetInWindow);
@@ -860,7 +862,7 @@ public class FeedsSwipeRefreshLayout extends ViewGroup implements NestedScrollin
 
     @Override
     public boolean dispatchNestedScroll(int dxConsumed, int dyConsumed, int dxUnconsumed,
-            int dyUnconsumed, int[] offsetInWindow) {
+                                        int dyUnconsumed, int[] offsetInWindow) {
         return mNestedScrollingChildHelper.dispatchNestedScroll(dxConsumed, dyConsumed,
                 dxUnconsumed, dyUnconsumed, offsetInWindow);
     }
@@ -872,13 +874,13 @@ public class FeedsSwipeRefreshLayout extends ViewGroup implements NestedScrollin
 
     @Override
     public boolean onNestedPreFling(View target, float velocityX,
-            float velocityY) {
+                                    float velocityY) {
         return dispatchNestedPreFling(velocityX, velocityY);
     }
 
     @Override
     public boolean onNestedFling(View target, float velocityX, float velocityY,
-            boolean consumed) {
+                                 boolean consumed) {
         return dispatchNestedFling(velocityX, velocityY, consumed);
     }
 
@@ -925,14 +927,14 @@ public class FeedsSwipeRefreshLayout extends ViewGroup implements NestedScrollin
             setAnimationProgress(Math.min(1f, overscrollTop / mTotalDragDistance));
         }
         if (overscrollTop < mTotalDragDistance) {
-            Log.i("moveSpinner()", "overscrollTop < mTotalDragDistance");
+            LogUtils.i("moveSpinner()", "overscrollTop < mTotalDragDistance");
             if (mProgress.getAlpha() > STARTING_PROGRESS_ALPHA
                     && !isAnimationRunning(mAlphaStartAnimation)) {
                 // Animate the alpha
                 startProgressAlphaStartAnimation();
             }
         } else {
-            Log.i("moveSpinner()", "overscrollTop >= mTotalDragDistance");
+            LogUtils.i("moveSpinner()", "overscrollTop >= mTotalDragDistance");
             if (mProgress.getAlpha() < MAX_ALPHA && !isAnimationRunning(mAlphaMaxAnimation)) {
                 // Animate the alpha
                 startProgressAlphaMaxAnimation();
@@ -1003,7 +1005,7 @@ public class FeedsSwipeRefreshLayout extends ViewGroup implements NestedScrollin
             case MotionEvent.ACTION_MOVE: {
                 pointerIndex = MotionEventCompat.findPointerIndex(ev, mActivePointerId);
                 if (pointerIndex < 0) {
-                    Log.e(LOG_TAG, "Got ACTION_MOVE event but have an invalid active pointer id.");
+                    LogUtils.e(LOG_TAG, "Got ACTION_MOVE event but have an invalid active pointer id.");
                     return false;
                 }
 
@@ -1021,7 +1023,7 @@ public class FeedsSwipeRefreshLayout extends ViewGroup implements NestedScrollin
             case MotionEventCompat.ACTION_POINTER_DOWN: {
                 pointerIndex = MotionEventCompat.getActionIndex(ev);
                 if (pointerIndex < 0) {
-                    Log.e(LOG_TAG, "Got ACTION_POINTER_DOWN event but have an invalid action index.");
+                    LogUtils.e(LOG_TAG, "Got ACTION_POINTER_DOWN event but have an invalid action index.");
                     return false;
                 }
                 mActivePointerId = MotionEventCompat.getPointerId(ev, pointerIndex);
@@ -1035,7 +1037,7 @@ public class FeedsSwipeRefreshLayout extends ViewGroup implements NestedScrollin
             case MotionEvent.ACTION_UP: {
                 pointerIndex = MotionEventCompat.findPointerIndex(ev, mActivePointerId);
                 if (pointerIndex < 0) {
-                    Log.e(LOG_TAG, "Got ACTION_UP event but don't have an active pointer id.");
+                    LogUtils.e(LOG_TAG, "Got ACTION_UP event but don't have an active pointer id.");
                     return false;
                 }
 
@@ -1114,7 +1116,7 @@ public class FeedsSwipeRefreshLayout extends ViewGroup implements NestedScrollin
     };
 
     private void startScaleDownReturnToStartAnimation(int from,
-            AnimationListener listener) {
+                                                      AnimationListener listener) {
         mFrom = from;
         if (isAlphaUsedForScale()) {
             mStartingScale = mProgress.getAlpha();
@@ -1124,7 +1126,7 @@ public class FeedsSwipeRefreshLayout extends ViewGroup implements NestedScrollin
         mScaleDownToStartAnimation = new Animation() {
             @Override
             public void applyTransformation(float interpolatedTime, Transformation t) {
-                float targetScale = (mStartingScale + (-mStartingScale  * interpolatedTime));
+                float targetScale = (mStartingScale + (-mStartingScale * interpolatedTime));
                 setAnimationProgress(targetScale);
                 moveToStart(interpolatedTime);
             }

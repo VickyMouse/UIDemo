@@ -31,11 +31,11 @@ public class NotchInScreenUtils {
             Method hasNotchInScreenMethod = HwNotchSizeUtilClass.getMethod("hasNotchInScreen");
             ret = (boolean) hasNotchInScreenMethod.invoke(HwNotchSizeUtilClass);
         } catch (ClassNotFoundException e) {
-            Log.e(TAG, e.getMessage());
+            LogUtils.e(TAG, e.getMessage());
         } catch (NoSuchMethodException e) {
-            Log.e(TAG, e.getMessage());
+            LogUtils.e(TAG, e.getMessage());
         } catch (Exception e) {
-            Log.e(TAG, e.getMessage());
+            LogUtils.e(TAG, e.getMessage());
         }
         return ret;
     }
@@ -51,11 +51,11 @@ public class NotchInScreenUtils {
             Method getNotchSizeMethod = HwNotchSizeUtilClass.getMethod("getNotchSize");
             ret = (int[]) getNotchSizeMethod.invoke(HwNotchSizeUtilClass);
         } catch (ClassNotFoundException e) {
-            Log.e(TAG, e.getMessage());
+            LogUtils.e(TAG, e.getMessage());
         } catch (NoSuchMethodException e) {
-            Log.e(TAG, e.getMessage());
+            LogUtils.e(TAG, e.getMessage());
         } catch (Exception e) {
-            Log.e(TAG, e.getMessage());
+            LogUtils.e(TAG, e.getMessage());
         }
         return ret[1];
     }
@@ -94,11 +94,11 @@ public class NotchInScreenUtils {
             Method get = FtFeature.getMethod("isFeatureSupport", int.class);
             ret = (boolean) get.invoke(FtFeature, NOTCH_IN_SCREEN_VIVO);
         } catch (ClassNotFoundException e) {
-            Log.e(TAG, e.getMessage());
+            LogUtils.e(TAG, e.getMessage());
         } catch (NoSuchMethodException e) {
-            Log.e(TAG, e.getMessage());
+            LogUtils.e(TAG, e.getMessage());
         } catch (Exception e) {
-            Log.e(TAG, e.getMessage());
+            LogUtils.e(TAG, e.getMessage());
         } finally {
             return ret;
         }
@@ -117,7 +117,7 @@ public class NotchInScreenUtils {
         try {
             ret = Integer.parseInt(property);
         } catch (NumberFormatException e) {
-            Log.e(TAG, e.getMessage());
+            LogUtils.e(TAG, e.getMessage());
         }
         return ret == 1;
     }

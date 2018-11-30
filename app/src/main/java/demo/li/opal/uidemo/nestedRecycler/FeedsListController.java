@@ -152,7 +152,7 @@ public class FeedsListController {
     }
 
     public void onScrollToBottom() {
-        Log.i(TAG, "NestedScrollView 滑到底部 - RV.onScrollToBottom()");
+        LogUtils.i(TAG, "NestedScrollView 滑到底部 - RV.onScrollToBottom()");
         if (mRecyclerView == null || mFinished) {
             return;
         }

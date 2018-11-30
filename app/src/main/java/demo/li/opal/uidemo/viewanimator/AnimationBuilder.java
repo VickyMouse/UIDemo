@@ -8,7 +8,6 @@ import android.graphics.Path;
 import android.graphics.PathMeasure;
 import android.support.annotation.IntRange;
 import android.support.v4.view.ViewCompat;
-import android.util.Log;
 import android.view.View;
 import android.view.animation.AccelerateInterpolator;
 import android.view.animation.CycleInterpolator;
@@ -18,6 +17,8 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import demo.li.opal.uidemo.Utils.LogUtils;
 
 public class AnimationBuilder {
     private final ViewAnimator viewAnimator;
@@ -693,7 +694,7 @@ public class AnimationBuilder {
      *
      * @param path the path
      * @return the animation builder
-     * @link http://blog.csdn.net/tianjian4592/article/details/47067161
+     * @link http://bLogUtils.csdn.net/tianjian4592/article/details/47067161
      */
     public AnimationBuilder path(Path path) {
         if (path == null) {
@@ -709,7 +710,7 @@ public class AnimationBuilder {
                 final float y = currentPosition[1];
                 ViewCompat.setX(view, x);
                 ViewCompat.setY(view, y);
-                Log.d(null, "path: value=" + value + ", x=" + x + ", y=" + y);
+                LogUtils.d(null, "path: value=" + value + ", x=" + x + ", y=" + y);
             }
         }, 0, pathMeasure.getLength());
     }

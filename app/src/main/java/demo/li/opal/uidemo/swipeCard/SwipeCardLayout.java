@@ -9,7 +9,6 @@ import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.RectF;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.animation.OvershootInterpolator;
@@ -20,6 +19,7 @@ import java.util.Queue;
 
 import demo.li.opal.uidemo.R;
 import demo.li.opal.uidemo.Utils.DeviceUtils;
+import demo.li.opal.uidemo.Utils.LogUtils;
 
 
 /**
@@ -117,7 +117,7 @@ public class SwipeCardLayout extends RelativeLayout {
         View bindLayout2 = adapter.bindLayout(); // 并不和 adapter 绑定，只是返回一个 cardView
         swipeLayout2.addView(bindLayout2);    // SwipeLayout 加入卡片内容
         addView(swipeLayout2);   // 卡堆加入一张卡片(第二张)，addView 的先后会影响卡片的 child Index 的，并且先加入的会被后加入的遮挡
-        Log.d("SwipeCardLayout", "setAdapter() - addView2(" + swipeLayout2.toString() + ")");
+        LogUtils.d("SwipeCardLayout", "setAdapter() - addView2(" + swipeLayout2.toString() + ")");
 
         SwipeLayout swipeLayout1 = new SwipeLayout(getContext());
         LayoutParams params1 = new LayoutParams(mWidth, mHeight);
@@ -126,7 +126,7 @@ public class SwipeCardLayout extends RelativeLayout {
         View bindLayout1 = adapter.bindLayout();
         swipeLayout1.addView(bindLayout1);      // 生成第一张 SwipeLayout 左右划 ViewGroup，并加入卡堆
         addView(swipeLayout1);
-        Log.d("SwipeCardLayout", "setAdapter() - addView1(" + swipeLayout1.toString() + ")");
+        LogUtils.d("SwipeCardLayout", "setAdapter() - addView1(" + swipeLayout1.toString() + ")");
 
         adapter.bindData(adapter.tQueue.poll(), bindLayout1);    // 第一条数据和第一张卡片绑定了
         adapter.bindData(adapter.tQueue.poll(), bindLayout2);    // 第二条数据和第二张卡片绑定了
@@ -136,7 +136,7 @@ public class SwipeCardLayout extends RelativeLayout {
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
-//        Log.i(TAG, "onDraw: " + x + " " + y);
+//        LogUtils.i(TAG, "onDraw: " + x + " " + y);
         float width = getWidth() / 2.0f;
         float height = getHeight() / 2.0f;
         View childAt = getChildAt(BACK_INDEX);   // 第二张
@@ -245,8 +245,8 @@ public class SwipeCardLayout extends RelativeLayout {
                     ((RelativeLayout) getParent()).getChildAt(FRONT_INDEX) != this) {   // 触碰的不是第一张卡片
                 return true;
             }
-            Log.d("SwipeLayout", "onTouchEvent() - this(" + this.toString() + ")");
-            Log.d("SwipeLayout", "onTouchEvent() - childAt0(" + ((RelativeLayout) getParent()).getChildAt(0).toString() + ")");
+            LogUtils.d("SwipeLayout", "onTouchEvent() - this(" + this.toString() + ")");
+            LogUtils.d("SwipeLayout", "onTouchEvent() - childAt0(" + ((RelativeLayout) getParent()).getChildAt(0).toString() + ")");
 
             switch (event.getAction()) {
                 case MotionEvent.ACTION_DOWN:
@@ -304,8 +304,8 @@ public class SwipeCardLayout extends RelativeLayout {
                                 if (adapter.tQueue.size() >= 0) {   // 还有数据，要有伪装的卡片(第三第四张)
                                     // childAt(0) 和 childAt(1) 进行了交换
                                     parent.getChildAt(BACK_INDEX).bringToFront();
-                                    Log.d("SwipeLayout", "onTouchEvent(2front) - this(" + this.toString() + ")");
-                                    Log.d("SwipeLayout", "onTouchEvent(2front) - childAt0(" + ((RelativeLayout) getParent()).getChildAt(0).toString() + ")");
+                                    LogUtils.d("SwipeLayout", "onTouchEvent(2front) - this(" + this.toString() + ")");
+                                    LogUtils.d("SwipeLayout", "onTouchEvent(2front) - childAt0(" + ((RelativeLayout) getParent()).getChildAt(0).toString() + ")");
                                     setRotation(0);
                                     setTranslationX(0);
 

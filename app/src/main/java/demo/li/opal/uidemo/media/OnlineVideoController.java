@@ -178,13 +178,13 @@ public class OnlineVideoController {
             prepare(path);
         } catch (IOException e) {
             LogUtils.i(TAG, "video edit: bind - prepared IOException");
-            Log.d(TAG, e.getMessage());
+            LogUtils.d(TAG, e.getMessage());
         } catch (IllegalStateException e) {
             LogUtils.i(TAG, "IllegalStateException - " + e.getMessage());
-            Log.d(TAG, e.getMessage());
+            LogUtils.d(TAG, e.getMessage());
         } catch (Exception e) {
             LogUtils.i(TAG, "Exception - " + e.getMessage());
-            Log.d(TAG, e.getMessage());
+            LogUtils.d(TAG, e.getMessage());
         }
 //            }
 //        });
@@ -202,7 +202,7 @@ public class OnlineVideoController {
             mIsDataSourceSet = true;
             prepare();
         } catch (IOException e) {
-            Log.d(TAG, e.getMessage());
+            LogUtils.d(TAG, e.getMessage());
         }
     }
 
@@ -219,7 +219,7 @@ public class OnlineVideoController {
 //            mIsDataSourceSet = true;
 //            prepare();
 //        } catch (IOException e) {
-//            Log.d(TAG, e.getMessage());
+//            LogUtils.d(TAG, e.getMessage());
 //        }
 //    }
     private void prepare() {
@@ -230,13 +230,13 @@ public class OnlineVideoController {
             mMediaPlayer.prepareAsync();
         } catch (IllegalArgumentException e) {
             LogUtils.i(TAG, "video edit: prepare IllegalArgumentException");
-            Log.d(TAG, e.getMessage());
+            LogUtils.d(TAG, e.getMessage());
         } catch (SecurityException e) {
             LogUtils.i(TAG, "video edit: prepare SecurityException");
-            Log.d(TAG, e.getMessage());
+            LogUtils.d(TAG, e.getMessage());
         } catch (IllegalStateException e) {
             LogUtils.i(TAG, "video edit: prepare IllegalStateException");
-            Log.d(TAG, e.toString());
+            LogUtils.d(TAG, e.toString());
         }
     }
 
@@ -247,13 +247,13 @@ public class OnlineVideoController {
             mMediaPlayer.prepareAsync();
         } catch (IllegalArgumentException e) {
             LogUtils.i(TAG, "video edit: bind - prepare IllegalArgumentException");
-            Log.d(TAG, e.getMessage());
+            LogUtils.d(TAG, e.getMessage());
         } catch (SecurityException e) {
             LogUtils.i(TAG, "video edit: bind - prepare SecurityException");
-            Log.d(TAG, e.getMessage());
+            LogUtils.d(TAG, e.getMessage());
         } catch (IllegalStateException e) {
             LogUtils.i(TAG, "video edit: bind - prepare IllegalStateException");
-            Log.d(TAG, e.toString());
+            LogUtils.d(TAG, e.toString());
             // don't know why, but sometimes prepare will throw IllegalStateException,
             // in that case,recreate the media player.
             mMediaPlayer.release();

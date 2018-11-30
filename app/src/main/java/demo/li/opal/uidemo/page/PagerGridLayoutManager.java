@@ -29,10 +29,11 @@ import android.support.annotation.IntDef;
 import android.support.annotation.IntRange;
 import android.support.v7.widget.LinearSmoothScroller;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.util.SparseArray;
 import android.view.View;
 import android.view.ViewGroup;
+
+import demo.li.opal.uidemo.Utils.LogUtils;
 
 import static android.support.v7.widget.RecyclerView.SCROLL_STATE_IDLE;
 import static android.view.View.MeasureSpec.EXACTLY;
@@ -157,7 +158,7 @@ public class PagerGridLayoutManager extends RecyclerView.LayoutManager
         // setPageCount(mPageCount);
         // setPageIndex(mCurrentPageIndex, false);
 
-        Log.i(TAG, "count = " + getItemCount());
+        LogUtils.i(TAG, "count = " + getItemCount());
 
         if (mItemWidth <= 0) {
             mItemWidth = getUsableWidth() / mColumns;
@@ -216,20 +217,20 @@ public class PagerGridLayoutManager extends RecyclerView.LayoutManager
             return;
         }
 
-        Log.i(TAG, "mOffsetX = " + mOffsetX);
-        Log.i(TAG, "mOffsetY = " + mOffsetY);
+        LogUtils.i(TAG, "mOffsetX = " + mOffsetX);
+        LogUtils.i(TAG, "mOffsetY = " + mOffsetY);
 
         // 计算显示区域区前后多存储一列或则一行
         Rect displayRect = new Rect(mOffsetX - mItemWidth, mOffsetY - mItemHeight,
                 getUsableWidth() + mOffsetX + mItemWidth, getUsableHeight() + mOffsetY + mItemHeight);
         // 对显显示区域进行修正(计算当前显示区域和最大显示区域对交集)
         displayRect.intersect(0, 0, mMaxScrollX + getUsableWidth(), mMaxScrollY + getUsableHeight());
-        Log.d(TAG, "displayRect = " + displayRect.toString());
+        LogUtils.d(TAG, "displayRect = " + displayRect.toString());
 
         int startPos = 0;                  // 获取第一个条目的Pos
         int pageIndex = getPageIndexByOffset();
         startPos = pageIndex * mOnePageSize;
-        Log.d(TAG, "startPos = " + startPos);
+        LogUtils.d(TAG, "startPos = " + startPos);
         startPos = startPos - mOnePageSize * 2;
         if (startPos < 0) {
             startPos = 0;
@@ -239,8 +240,8 @@ public class PagerGridLayoutManager extends RecyclerView.LayoutManager
             stopPos = getItemCount();
         }
 
-        Log.d(TAG, "startPos = " + startPos);
-        Log.d(TAG, "stopPos = " + stopPos);
+        LogUtils.d(TAG, "startPos = " + startPos);
+        LogUtils.d(TAG, "stopPos = " + stopPos);
 
         detachAndScrapAttachedViews(recycler); // 移除所有View
 
@@ -253,7 +254,7 @@ public class PagerGridLayoutManager extends RecyclerView.LayoutManager
                 addOrRemove(recycler, displayRect, i);
             }
         }
-        Log.d(TAG, "child count = " + getChildCount());
+        LogUtils.d(TAG, "child count = " + getChildCount());
     }
 
     /**
@@ -348,7 +349,7 @@ public class PagerGridLayoutManager extends RecyclerView.LayoutManager
      */
     @Override
     public void onScrollStateChanged(int state) {
-        Log.i(TAG, "onScrollStateChanged = " + state);
+        LogUtils.i(TAG, "onScrollStateChanged = " + state);
         mScrollState = state;
         super.onScrollStateChanged(state);
         if (state == SCROLL_STATE_IDLE) {
@@ -392,12 +393,12 @@ public class PagerGridLayoutManager extends RecyclerView.LayoutManager
             offsetY += row * mItemHeight;
 
             // 状态输出，用于调试
-            Log.i(TAG, "pagePos = " + pagePos);
-            Log.i(TAG, "行 = " + row);
-            Log.i(TAG, "列 = " + col);
+            LogUtils.i(TAG, "pagePos = " + pagePos);
+            LogUtils.i(TAG, "行 = " + row);
+            LogUtils.i(TAG, "列 = " + col);
 
-            Log.i(TAG, "offsetX = " + offsetX);
-            Log.i(TAG, "offsetY = " + offsetY);
+            LogUtils.i(TAG, "offsetX = " + offsetX);
+            LogUtils.i(TAG, "offsetY = " + offsetY);
 
             rect.left = offsetX;
             rect.top = offsetY;
@@ -481,7 +482,7 @@ public class PagerGridLayoutManager extends RecyclerView.LayoutManager
                 }
             }
         }
-        Log.i(TAG, "getPageIndexByOffset pageIndex = " + pageIndex);
+        LogUtils.i(TAG, "getPageIndexByOffset pageIndex = " + pageIndex);
         return pageIndex;
     }
 
@@ -558,7 +559,7 @@ public class PagerGridLayoutManager extends RecyclerView.LayoutManager
         if (page >= getTotalPageCount()) {
             page = getTotalPageCount() - 1;
         }
-        Log.d(TAG, "computeScrollVectorForPosition next = " + page);
+        LogUtils.d(TAG, "computeScrollVectorForPosition next = " + page);
         return page * mOnePageSize;
     }
 
@@ -571,11 +572,11 @@ public class PagerGridLayoutManager extends RecyclerView.LayoutManager
         // 在获取时由于前一页的View预加载出来了，所以获取到的直接就是前一页
         int page = mLastPageIndex;
         page--;
-        Log.e(TAG, "computeScrollVectorForPosition pre = " + page);
+        LogUtils.e(TAG, "computeScrollVectorForPosition pre = " + page);
         if (page < 0) {
             page = 0;
         }
-        Log.e(TAG, "computeScrollVectorForPosition pre = " + page);
+        LogUtils.e(TAG, "computeScrollVectorForPosition pre = " + page);
         return page * mOnePageSize;
     }
 
@@ -699,7 +700,7 @@ public class PagerGridLayoutManager extends RecyclerView.LayoutManager
      * @param isScrolling 是否处于滚动状态
      */
     private void setPageIndex(int pageIndex, boolean isScrolling) {
-        Log.d(TAG, "setPageIndex = " + pageIndex + ":" + isScrolling);
+        LogUtils.d(TAG, "setPageIndex = " + pageIndex + ":" + isScrolling);
         if (pageIndex == mLastPageIndex) return;
         // 如果允许连续滚动，那么在滚动过程中就会更新页码记录
         if (isAllowContinuousScroll()) {
@@ -778,11 +779,11 @@ public class PagerGridLayoutManager extends RecyclerView.LayoutManager
      */
     public void smoothScrollToPage(int pageIndex) {
         if (pageIndex < 0 || pageIndex >= mLastPageCount) {
-            Log.e(TAG, "pageIndex is outOfIndex, must in [0, " + mLastPageCount + ").");
+            LogUtils.e(TAG, "pageIndex is outOfIndex, must in [0, " + mLastPageCount + ").");
             return;
         }
         if (null == mRecyclerView) {
-            Log.e(TAG, "RecyclerView Not Found!");
+            LogUtils.e(TAG, "RecyclerView Not Found!");
             return;
         }
 
@@ -833,12 +834,12 @@ public class PagerGridLayoutManager extends RecyclerView.LayoutManager
      */
     public void scrollToPage(int pageIndex) {
         if (pageIndex < 0 || pageIndex >= mLastPageCount) {
-            Log.e(TAG, "pageIndex = " + pageIndex + " is out of bounds, mast in [0, " + mLastPageCount + ")");
+            LogUtils.e(TAG, "pageIndex = " + pageIndex + " is out of bounds, mast in [0, " + mLastPageCount + ")");
             return;
         }
 
         if (null == mRecyclerView) {
-            Log.e(TAG, "RecyclerView Not Found!");
+            LogUtils.e(TAG, "RecyclerView Not Found!");
             return;
         }
 
@@ -851,8 +852,8 @@ public class PagerGridLayoutManager extends RecyclerView.LayoutManager
             mTargetOffsetXBy = pageIndex * getUsableWidth() - mOffsetX;
             mTargetOffsetYBy = 0;
         }
-        Log.d(TAG, "mTargetOffsetXBy = " + mTargetOffsetXBy);
-        Log.d(TAG, "mTargetOffsetYBy = " + mTargetOffsetYBy);
+        LogUtils.d(TAG, "mTargetOffsetXBy = " + mTargetOffsetXBy);
+        LogUtils.d(TAG, "mTargetOffsetYBy = " + mTargetOffsetYBy);
         mRecyclerView.scrollBy(mTargetOffsetXBy, mTargetOffsetYBy);
         setPageIndex(pageIndex, false);
     }

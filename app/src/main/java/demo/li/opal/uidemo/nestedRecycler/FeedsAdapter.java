@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.net.Uri;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,8 +18,9 @@ import java.util.ArrayList;
 import NS_PITU_META_PROTOCOL.eMaterialFeedDisplay;
 import NS_PITU_META_PROTOCOL.eMaterialFeedNumType;
 import NS_PITU_META_PROTOCOL.stMetaMaterialFeed;
-import demo.li.opal.uidemo.Utils.DeviceUtils;
 import demo.li.opal.uidemo.R;
+import demo.li.opal.uidemo.Utils.DeviceUtils;
+import demo.li.opal.uidemo.Utils.LogUtils;
 import demo.li.opal.uidemo.nestedRecycler.holder.AdFeedVH;
 import demo.li.opal.uidemo.nestedRecycler.holder.FakeFeedVH;
 import demo.li.opal.uidemo.nestedRecycler.holder.FeedsFootVH;
@@ -59,13 +59,13 @@ public class FeedsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
 //        public void onSurfaceAvailable(FeedBaseVH viewHolder, FeedsCropVideoView v) {
 //            int pos = viewHolder.getAdapterPosition();
 //            if (pos == playingItem && pos >= 0 && mData.get(pos).isNormalOrAd() && mData.get(pos).isPreviewVideo()) {
-//                Log.d(TAG, "video edit: bind - onSurfaceAvailable(" + pos + ")");
+//                LogUtils.d(TAG, "video edit: bind - onSurfaceAvailable(" + pos + ")");
 //                if (!OnlineVideoController.getInstance().isPlaying()) {
-//                    Log.d(TAG, "video edit: bind - onSurfaceAvailable(" + pos + "); not playing");
+//                    LogUtils.d(TAG, "video edit: bind - onSurfaceAvailable(" + pos + "); not playing");
 //                    v.bindController(OskVideoController.getInstance());
 //                    OnlineVideoController.getInstance().play();
 //                    viewHolder.btnPlay.setVisibility(View.GONE);
-//                    Log.d(TAG, "video edit: bind - onSurfaceAvailable() - playVideo()");
+//                    LogUtils.d(TAG, "video edit: bind - onSurfaceAvailable() - playVideo()");
 //                }
 //            }
 //        }
@@ -96,16 +96,16 @@ public class FeedsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         switch (viewType) {
             case VIEW_TYPE_FOOTER:
-                Log.d(TAG, "[onCreateViewHolder] is VIEW_TYPE_FOOTER");
+                LogUtils.d(TAG, "[onCreateViewHolder] is VIEW_TYPE_FOOTER");
                 return new FeedsFootVH(LayoutInflater.from(parent.getContext()).inflate(R.layout.item_feeds_footer, null));
             case VIEW_TYPE_AD:
-                Log.d(TAG, "[onCreateViewHolder] is VIEW_TYPE_AD");
+                LogUtils.d(TAG, "[onCreateViewHolder] is VIEW_TYPE_AD");
                 return new AdFeedVH(LayoutInflater.from(parent.getContext()).inflate(R.layout.item_ad_feed, null));
             case VIEW_TYPE_FAKE:
                 return new FakeFeedVH(LayoutInflater.from(parent.getContext()).inflate(R.layout.item_fake_feed, null));
             case VIEW_TYPE_NORMAL:
             default:
-                Log.d(TAG, "[onCreateViewHolder] is VIEW_TYPE_NORMAL");
+                LogUtils.d(TAG, "[onCreateViewHolder] is VIEW_TYPE_NORMAL");
                 return new NormalFeedVH(LayoutInflater.from(parent.getContext()).inflate(R.layout.item_feed, null));
         }
     }
@@ -114,7 +114,7 @@ public class FeedsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
     public void onBindViewHolder(RecyclerView.ViewHolder viewHolder, final int position) {
         switch (getItemViewType(position)) {
             case VIEW_TYPE_FOOTER:
-                Log.i(TAG, "[onBindViewHolder] pos = " + position + ", is VIEW_TYPE_FOOTER");
+                LogUtils.i(TAG, "[onBindViewHolder] pos = " + position + ", is VIEW_TYPE_FOOTER");
                 final FeedsFootVH vh = (FeedsFootVH) viewHolder;
                 // 只有获取数据为空时，hasMore 为 false，所以当我们拉到底部时基本都会首先显示“正在加载更多...”
                 if (hasMore == true) {
@@ -131,10 +131,10 @@ public class FeedsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
                 }
                 break;
             case VIEW_TYPE_FAKE:
-                Log.i(TAG, "[onBindViewHolder] pos = " + position + ", is VIEW_TYPE_FAKE");
+                LogUtils.i(TAG, "[onBindViewHolder] pos = " + position + ", is VIEW_TYPE_FAKE");
                 break;
             case VIEW_TYPE_AD:
-                Log.i(TAG, "[onBindViewHolder] pos = " + position + ", is VIEW_TYPE_AD");
+                LogUtils.i(TAG, "[onBindViewHolder] pos = " + position + ", is VIEW_TYPE_AD");
                 stMetaMaterialFeed ad = mData.get(position);
                 final Activity ac = mActivityRef.get();
                 final AdFeedVH adHolder = (AdFeedVH) viewHolder;
@@ -161,11 +161,11 @@ public class FeedsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
                 break;
             case VIEW_TYPE_NORMAL:
             default:
-                Log.i(TAG, "[onBindViewHolder] pos = " + position + ", is VIEW_TYPE_NORMAL");
+                LogUtils.i(TAG, "[onBindViewHolder] pos = " + position + ", is VIEW_TYPE_NORMAL");
                 final stMetaMaterialFeed feed = mData.get(position);
                 Activity activity = mActivityRef.get();
                 final NormalFeedVH holder = (NormalFeedVH) viewHolder;
-                //Log.d(TAG, "[onBindViewHolder] pos = " + position + ", feed.isContentVideo() = " + feed.isContentVideo());
+                //LogUtils.d(TAG, "[onBindViewHolder] pos = " + position + ", feed.isContentVideo() = " + feed.isContentVideo());
                 //holder.videoView.setViewHolder(holder);
                 if (feed.isContentVideo()) {
                     holder.btnIsVideo.setVisibility(View.VISIBLE);

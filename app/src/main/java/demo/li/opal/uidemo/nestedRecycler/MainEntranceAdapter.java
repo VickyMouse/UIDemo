@@ -11,7 +11,6 @@ import android.graphics.Color;
 import android.graphics.Rect;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -25,9 +24,10 @@ import java.util.ArrayList;
 import java.util.concurrent.Delayed;
 import java.util.concurrent.TimeUnit;
 
+import demo.li.opal.uidemo.R;
 import demo.li.opal.uidemo.Utils.DeviceUtils;
 import demo.li.opal.uidemo.Utils.GlideUtil;
-import demo.li.opal.uidemo.R;
+import demo.li.opal.uidemo.Utils.LogUtils;
 import io.reactivex.Observable;
 import io.reactivex.ObservableEmitter;
 import io.reactivex.ObservableOnSubscribe;
@@ -208,7 +208,7 @@ public class MainEntranceAdapter extends RecyclerView.Adapter<MainEntranceAdapte
                     public void onLoaded(Bitmap bitmap) {
                         bgBitmap[0] = bitmap;
                         e.onComplete();
-                        Log.d("111", "bgImg.............");
+                        LogUtils.d("111", "bgImg.............");
                     }
                 });
             }
@@ -227,7 +227,7 @@ public class MainEntranceAdapter extends RecyclerView.Adapter<MainEntranceAdapte
                     public void onLoaded(Bitmap bitmap) {
                         fgBitmap[0] = bitmap;
                         e.onComplete();
-                        Log.d("111", "fgImg.............");
+                        LogUtils.d("111", "fgImg.............");
                     }
                 });
             }
@@ -251,7 +251,7 @@ public class MainEntranceAdapter extends RecyclerView.Adapter<MainEntranceAdapte
 
                     @Override
                     public void onComplete() {
-                        Log.d("111", "finished.............");
+                        LogUtils.d("111", "finished.............");
 
                         if (imageLoadCallback != null) {
                             imageLoadCallback.onRxFinished(model, holder, bgBitmap[0], fgBitmap[0]);

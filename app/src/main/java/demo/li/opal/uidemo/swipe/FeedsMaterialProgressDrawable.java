@@ -546,7 +546,7 @@ class FeedsMaterialProgressDrawable extends Drawable implements Animatable {
          * Draw the progress spinner
          */
         public void draw(Canvas c, Rect bounds) {
-//            Log.i("Ring", "draw()");
+//            LogUtils.i("Ring", "draw()");
             final RectF arcBounds = mTempBounds;
             arcBounds.set(bounds);
             arcBounds.inset(mStrokeInset, mStrokeInset);
@@ -554,7 +554,7 @@ class FeedsMaterialProgressDrawable extends Drawable implements Animatable {
             final float startAngle = (mStartTrim + mRotation) * 360;
             final float endAngle = (mEndTrim + mRotation) * 360;
             float sweepAngle = endAngle - startAngle;
-//            Log.i("draw()", "(" + mStartTrim + ", " + mEndTrim + ", " + sweepAngle + ", " + mRotation + "), (" + startAngle + ", " + endAngle + ")");
+//            LogUtils.i("draw()", "(" + mStartTrim + ", " + mEndTrim + ", " + sweepAngle + ", " + mRotation + "), (" + startAngle + ", " + endAngle + ")");
 
             // 创建一个渐变渲染器
             SweepGradient mSweepGradient = new SweepGradient(c.getWidth() / 2,

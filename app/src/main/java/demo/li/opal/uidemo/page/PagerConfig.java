@@ -22,7 +22,7 @@
 
 package demo.li.opal.uidemo.page;
 
-import android.util.Log;
+import demo.li.opal.uidemo.Utils.LogUtils;
 
 /**
  * 作用：Pager配置
@@ -93,11 +93,11 @@ public class PagerConfig {
 
     public static void Logi(String msg) {
         if (!PagerConfig.isShowLog()) return;
-        Log.i(TAG, msg);
+        LogUtils.i(TAG, msg);
     }
 
     public static void Loge(String msg) {
         if (!PagerConfig.isShowLog()) return;
-        Log.e(TAG, msg);
+        LogUtils.e(TAG, msg);
     }
 }

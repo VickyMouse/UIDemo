@@ -232,7 +232,7 @@ public class FileUtils {
         } catch (FileNotFoundException e) {
             // ignore
         } catch (Exception e) {
-            Log.e(TAG, e.toString());
+            LogUtils.e(TAG, e.toString());
         } finally {
             IOUtils.closeQuietly(stream);
         }

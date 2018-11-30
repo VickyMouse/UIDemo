@@ -109,10 +109,10 @@ public class DeviceUtils {
         long memoryClass = getRuntimeMaxMemory(MEMORY_CLASS.IN_MB);
         try {
             ActivityManager activityManager = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
-            Log.v(TAG, "getHeapMaxSizeInMb(), heap size(Mb) = " + activityManager.getMemoryClass());
+            LogUtils.v(TAG, "getHeapMaxSizeInMb(), heap size(Mb) = " + activityManager.getMemoryClass());
             memoryClass = activityManager.getMemoryClass();
         } catch (Exception e) {
-            Log.e(TAG, e.getMessage());
+            LogUtils.e(TAG, e.getMessage());
         }
         return memoryClass;
     }
@@ -126,10 +126,10 @@ public class DeviceUtils {
         long memoryClass = getRuntimeMaxMemory(MEMORY_CLASS.IN_KB);
         try {
             ActivityManager activityManager = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
-            Log.v(TAG, "getHeapMaxSizeInKb(), heap size(Mb) = " + activityManager.getMemoryClass());
+            LogUtils.v(TAG, "getHeapMaxSizeInKb(), heap size(Mb) = " + activityManager.getMemoryClass());
             memoryClass = activityManager.getMemoryClass() * 1024;
         } catch (Exception e) {
-            Log.e(TAG, e.getMessage());
+            LogUtils.e(TAG, e.getMessage());
         }
         return memoryClass;
     }
@@ -139,10 +139,10 @@ public class DeviceUtils {
         long memoryClass = getRuntimeMaxMemory(MEMORY_CLASS.IN_KB);
         try {
             ActivityManager activityManager = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
-            Log.v(TAG, "getLargeHeapMaxSizeInKb(), heap size(Mb) = " + activityManager.getLargeMemoryClass());
+            LogUtils.v(TAG, "getLargeHeapMaxSizeInKb(), heap size(Mb) = " + activityManager.getLargeMemoryClass());
             memoryClass = activityManager.getLargeMemoryClass() * 1024;
         } catch (Exception e) {
-            Log.e(TAG, e.getMessage());
+            LogUtils.e(TAG, e.getMessage());
         }
         return memoryClass;
     }
@@ -154,14 +154,14 @@ public class DeviceUtils {
      */
     public static long getHeapRemainSizeInKb(Context context) {
         long remainSize = getHeapMaxSizeInKb(context) - getHeapAllocatedSizeInKb();
-        Log.v(TAG, "getHeapRemainSizeInKb(), remainSize = " + remainSize / 1024f + "(Mb), " + remainSize + "(Kb)");
+        LogUtils.v(TAG, "getHeapRemainSizeInKb(), remainSize = " + remainSize / 1024f + "(Mb), " + remainSize + "(Kb)");
         return remainSize;
     }
 
 
     public static long getLargeHeapRemainSizeInKb(Context context) {
         long remainSize = getLargeHeapMaxSizeInKb(context) - getHeapAllocatedSizeInKb();
-        Log.v(TAG, "getLargeHeapRemainSizeInKb(), remainSize = " + remainSize / 1024f + "(Mb), " + remainSize + "(Kb)");
+        LogUtils.v(TAG, "getLargeHeapRemainSizeInKb(), remainSize = " + remainSize / 1024f + "(Mb), " + remainSize + "(Kb)");
         return remainSize;
     }
 
@@ -172,7 +172,7 @@ public class DeviceUtils {
      */
     public static long getHeapAllocatedSizeInKb() {
         long heapAllocated = getRuntimeTotalMemory(MEMORY_CLASS.IN_KB) - getRuntimeFreeMemory(MEMORY_CLASS.IN_KB);
-        Log.v(TAG, "getHeapAllocatedSizeInKb(), heapAllocated = " + heapAllocated / 1024f + "(Mb), " + heapAllocated + "(Kb)");
+        LogUtils.v(TAG, "getHeapAllocatedSizeInKb(), heapAllocated = " + heapAllocated / 1024f + "(Mb), " + heapAllocated + "(Kb)");
         return heapAllocated;
     }
 
@@ -185,7 +185,7 @@ public class DeviceUtils {
         long heapAllocated = getHeapAllocatedSizeInKb();
         long heapMax = getHeapMaxSizeInKb(context);
         float percent = heapAllocated * 1.0f / heapMax;
-        Log.v(TAG, "getHeapAllocatedPercent(), percent = " + percent);
+        LogUtils.v(TAG, "getHeapAllocatedPercent(), percent = " + percent);
         return percent;
     }
 
@@ -210,7 +210,7 @@ public class DeviceUtils {
             default:
                 break;
         }
-        Log.v(TAG, "[getRuntimeMaxMemory] maxMemory = " + Runtime.getRuntime().maxMemory() / 1024 / 1024 + "(Mb), " + Runtime.getRuntime().maxMemory() / 1024 + "(Kb)");
+        LogUtils.v(TAG, "[getRuntimeMaxMemory] maxMemory = " + Runtime.getRuntime().maxMemory() / 1024 / 1024 + "(Mb), " + Runtime.getRuntime().maxMemory() / 1024 + "(Kb)");
         return maxMemory;
     }
 
@@ -228,7 +228,7 @@ public class DeviceUtils {
             default:
                 break;
         }
-        Log.v(TAG, "[getRuntimeRemainSize] remainMemory = " + remainMemory + " " + memoryClass);
+        LogUtils.v(TAG, "[getRuntimeRemainSize] remainMemory = " + remainMemory + " " + memoryClass);
         return remainMemory;
     }
 
@@ -254,7 +254,7 @@ public class DeviceUtils {
                 totalMemory = Runtime.getRuntime().totalMemory();
                 break;
         }
-        Log.v(TAG, "[getRuntimeTotalMemory] totalMemory = " + Runtime.getRuntime().totalMemory() / 1024 / 1024 + "(Mb), " + Runtime.getRuntime().totalMemory() / 1024 + "(Kb)");
+        LogUtils.v(TAG, "[getRuntimeTotalMemory] totalMemory = " + Runtime.getRuntime().totalMemory() / 1024 / 1024 + "(Mb), " + Runtime.getRuntime().totalMemory() / 1024 + "(Kb)");
         return totalMemory;
     }
 
@@ -281,7 +281,7 @@ public class DeviceUtils {
                 freeMemory = Runtime.getRuntime().freeMemory();
                 break;
         }
-        Log.v(TAG, "[getRuntimeFreeMemory] freeMemory = " + Runtime.getRuntime().freeMemory() / 1024 / 1024 + "(Mb), " + Runtime.getRuntime().freeMemory() / 1024 + "(Kb)");
+        LogUtils.v(TAG, "[getRuntimeFreeMemory] freeMemory = " + Runtime.getRuntime().freeMemory() / 1024 / 1024 + "(Mb), " + Runtime.getRuntime().freeMemory() / 1024 + "(Kb)");
         return freeMemory;
     }
 
@@ -319,10 +319,10 @@ public class DeviceUtils {
                 sCpuCount = 1;
             }
         } catch (Throwable e) {
-            Log.e(TAG, e.getMessage());
+            LogUtils.e(TAG, e.getMessage());
             sCpuCount = 1;
         }
-        Log.v("DeviceUtils", "sCpuCount:" + sCpuCount);
+        LogUtils.v("DeviceUtils", "sCpuCount:" + sCpuCount);
         return sCpuCount;
     }
 
@@ -344,7 +344,7 @@ public class DeviceUtils {
             }
             in.close();
         } catch (IOException ex) {
-            Log.e(TAG, ex.getMessage());
+            LogUtils.e(TAG, ex.getMessage());
             cpuFreq = "";
         }
         cpuFreq = cpuFreq.trim();
@@ -359,7 +359,7 @@ public class DeviceUtils {
 
             }
         }
-        Log.v("DeviceUtils", "sMaxCpuFreq:" + sMaxCpuFreq);
+        LogUtils.v("DeviceUtils", "sMaxCpuFreq:" + sMaxCpuFreq);
         return sMaxCpuFreq;
     }
 
@@ -403,11 +403,11 @@ public class DeviceUtils {
             TelephonyManager telephonyManager = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
             String imei = telephonyManager.getDeviceId();
             if (!TextUtils.isEmpty(imei)) {
-                Log.i(TAG, "[getImei] IMEI: " + imei);
+                LogUtils.i(TAG, "[getImei] IMEI: " + imei);
                 return imei;
             }
         } catch (Throwable e) {
-            Log.e(TAG, e.getMessage());
+            LogUtils.e(TAG, e.getMessage());
         }
         return "";
     }
@@ -551,7 +551,7 @@ public class DeviceUtils {
         try {
             return Integer.parseInt(versionCode);
         } catch (Throwable e) {
-            Log.e(TAG, e.getMessage());
+            LogUtils.e(TAG, e.getMessage());
         }
         return 0;
     }
@@ -623,7 +623,7 @@ public class DeviceUtils {
         mIsOpenGlEsValid = (getOpenGlEsVersion(context) >= MIN_OPENGL_ES_VERSION);
         //mIsAllUnusable = BlacklistUtils.isAllUnusable();
         mIsAllUnusable = false;
-        //Log.v(TAG, "MemoryManager.getInstance().postJob, mIsAllUnusable = " + mIsAllUnusable);
+        //LogUtils.v(TAG, "MemoryManager.getInstance().postJob, mIsAllUnusable = " + mIsAllUnusable);
         if (mIsAllUnusable || !mIsOpenGlEsValid) {
             return false;
         }
@@ -723,7 +723,7 @@ public class DeviceUtils {
                 }
             }
         } catch (SocketException ex) {
-            Log.e(TAG, ex.getMessage());
+            LogUtils.e(TAG, ex.getMessage());
         }
         return "";
     }
@@ -837,7 +837,7 @@ public class DeviceUtils {
                 }
             }
         } catch (Exception e) {
-            Log.e(TAG, e.getMessage());
+            LogUtils.e(TAG, e.getMessage());
         }
         return net;
     }
@@ -1027,7 +1027,7 @@ public class DeviceUtils {
             nowBrightnessValue = Settings.System.getInt(
                     resolver, Settings.System.SCREEN_BRIGHTNESS);
         } catch (Exception e) {
-            Log.e(TAG, e.getMessage());
+            LogUtils.e(TAG, e.getMessage());
         }
         return nowBrightnessValue;
     }
@@ -1038,7 +1038,7 @@ public class DeviceUtils {
             mode = Settings.System.getInt(resolver,
                     Settings.System.SCREEN_BRIGHTNESS_MODE);
         } catch (Exception e) {
-            Log.e(TAG, e.getMessage());
+            LogUtils.e(TAG, e.getMessage());
         }
         return mode;
     }
@@ -1051,7 +1051,7 @@ public class DeviceUtils {
                     .getUriFor("screen_brightness_mode");
             resolver.notifyChange(uri, null);
         } catch (Exception e) {
-            Log.e(TAG, e.getMessage());
+            LogUtils.e(TAG, e.getMessage());
         }
     }
 
@@ -1059,7 +1059,7 @@ public class DeviceUtils {
         try{
             Settings.System.putInt(resolver, Settings.System.SCREEN_BRIGHTNESS, brightness);
         } catch (Exception e) {
-            Log.e(TAG, e.getMessage());
+            LogUtils.e(TAG, e.getMessage());
         }
     }
 
