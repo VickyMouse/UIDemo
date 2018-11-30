@@ -6,14 +6,16 @@ import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
 
+import demo.li.opal.uidemo.cardDeck.CardDeckActivity;
 import demo.li.opal.uidemo.nestedRecycler.NestedRecyclerActivity;
 import demo.li.opal.uidemo.swipe.SwipeRefreshActivity;
-import demo.li.opal.uidemo.swipecard.SwipeCardActivity;
+import demo.li.opal.uidemo.swipeCard.SwipeCardActivity;
 
 public class MainActivity extends AppCompatActivity implements OnClickListener {
 
     private View btn2SwipeRefresh;
     private View btn2NestedRecycler;
+    private View btn2SwipeCard;
     private View btn2CardDeck;
 
     @Override
@@ -26,6 +28,9 @@ public class MainActivity extends AppCompatActivity implements OnClickListener {
 
         btn2NestedRecycler = findViewById(R.id.nested_recycler);
         btn2NestedRecycler.setOnClickListener(this);
+
+        btn2SwipeCard = findViewById(R.id.swipe_card);
+        btn2SwipeCard.setOnClickListener(this);
 
         btn2CardDeck = findViewById(R.id.card_deck);
         btn2CardDeck.setOnClickListener(this);
@@ -42,8 +47,12 @@ public class MainActivity extends AppCompatActivity implements OnClickListener {
                 Intent iNR = new Intent(MainActivity.this, NestedRecyclerActivity.class);
                 startActivity(iNR);
                 break;
+            case R.id.swipe_card:
+                Intent iSC = new Intent(MainActivity.this, SwipeCardActivity.class);
+                startActivity(iSC);
+                break;
             case R.id.card_deck:
-                Intent iCD = new Intent(MainActivity.this, SwipeCardActivity.class);
+                Intent iCD = new Intent(MainActivity.this, CardDeckActivity.class);
                 startActivity(iCD);
                 break;
         }

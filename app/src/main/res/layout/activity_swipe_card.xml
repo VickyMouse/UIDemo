@@ -3,9 +3,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="demo.li.opal.uidemo.swipecard.SwipeCardActivity">
+    tools:context="demo.li.opal.uidemo.swipeCard.SwipeCardActivity">
 
-    <demo.li.opal.uidemo.swipecard.SwipeCardLayout
+    <demo.li.opal.uidemo.swipeCard.SwipeCardLayout
         android:id="@+id/scl_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>

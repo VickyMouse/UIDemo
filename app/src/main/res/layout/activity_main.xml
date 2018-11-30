@@ -53,6 +53,20 @@
         android:textColor="@android:color/white"
         android:textSize="16sp" />
     <TextView
+        android:id="@+id/swipe_card"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="5dp"
+        android:paddingLeft="20dp"
+        android:paddingRight="20dp"
+        android:paddingTop="10dp"
+        android:paddingBottom="10dp"
+        android:gravity="center"
+        android:text="Swipe Card"
+        android:background="@drawable/corner_view"
+        android:textColor="@android:color/white"
+        android:textSize="16sp" />
+    <TextView
         android:id="@+id/card_deck"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

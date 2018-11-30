@@ -1,4 +1,4 @@
-package demo.li.opal.uidemo.swipecard;
+package demo.li.opal.uidemo.swipeCard;
 
 import android.animation.Animator;
 import android.animation.ObjectAnimator;
@@ -85,7 +85,7 @@ public class SwipeCardLayout extends RelativeLayout {
         paint.setColor(getResources().getColor(R.color.white_smoke));
         paint.setAntiAlias(true);
 
-        // 卡片边框色
+        // 卡片边框色card
         paint_s = new Paint();
         paint_s.setColor(getResources().getColor(R.color.black_alpha_40));
         paint_s.setStyle(Paint.Style.STROKE);

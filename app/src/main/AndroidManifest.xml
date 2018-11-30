@@ -34,7 +34,12 @@
             android:exported="false"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".swipecard.SwipeCardActivity"
+            android:name=".swipeCard.SwipeCardActivity"
+            android:theme="@style/Demo.NoActionBar"
+            android:exported="false"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".cardDeck.CardDeckActivity"
             android:theme="@style/Demo.NoActionBar"
             android:exported="false"
             android:screenOrientation="portrait" />

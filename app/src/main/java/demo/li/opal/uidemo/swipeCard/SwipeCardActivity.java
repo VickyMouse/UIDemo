@@ -1,4 +1,4 @@
-package demo.li.opal.uidemo.swipecard;
+package demo.li.opal.uidemo.swipeCard;
 
 import android.app.Activity;
 import android.os.Bundle;
