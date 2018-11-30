@@ -19,7 +19,7 @@ import android.widget.RelativeLayout;
 import java.util.Queue;
 
 import demo.li.opal.uidemo.R;
-import demo.li.opal.uidemo.Utils.Utils;
+import demo.li.opal.uidemo.Utils.DeviceUtils;
 
 
 /**
@@ -89,7 +89,7 @@ public class SwipeCardLayout extends RelativeLayout {
         paint_s = new Paint();
         paint_s.setColor(getResources().getColor(R.color.black_alpha_40));
         paint_s.setStyle(Paint.Style.STROKE);
-        paint_s.setStrokeWidth(Utils.dip2px(getContext(), 1));
+        paint_s.setStrokeWidth(DeviceUtils.dip2px(getContext(), 1));
         paint_s.setAntiAlias(true);
         rect = new RectF();
         round = density * 8;
