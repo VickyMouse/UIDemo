@@ -33,7 +33,7 @@ public class SwipeCardLayout extends RelativeLayout {
 
     private final static int SWIPE_SLOP = 150;   // 前后两张卡片的比例差
     private final static float SCALE_RATE = 0.9f;   // 前后两张卡片的比例差
-    private final static float MAX_ROTATE = 7;   // 前后两张卡片的比例差
+    private final static float MAX_ROTATE_ANGLE = 7;   // 前后两张卡片的角度差
     private final static int FRONT_INDEX = 1;   // 最上面的卡片的 index
     private final static int BACK_INDEX = 0;   // 第二张卡片的 index
     int mTranslate;
@@ -265,8 +265,7 @@ public class SwipeCardLayout extends RelativeLayout {
 
                     // 卡片倾斜
                     if (Math.abs(translationX) <= SWIPE_SLOP) {
-                        setRotation(getTranslationX() / SWIPE_SLOP * MAX_ROTATE);
-
+                        setRotation(getTranslationX() / SWIPE_SLOP * MAX_ROTATE_ANGLE);
                     }
                     refreshFloor();
                     eventRawX = rawX;

@@ -43,6 +43,7 @@ public class CardSlidePanel extends ViewGroup {
 
     private static final float SCALE_STEP = 0.08f; // view 叠加缩放的步长
     private static final int MAX_SLIDE_DISTANCE_LINKAGE = 500; // 水平距离+垂直距离
+    private final static float MAX_ROTATE_ANGLE = 10;   // 前后两张卡片的角度差
 
     private int itemMarginTop = 10; // 卡片距离顶部的偏移量
     private int bottomMarginTop = 40; // 底部按钮与卡片的 margin 值
@@ -272,7 +273,22 @@ public class CardSlidePanel extends ViewGroup {
         if (index + 2 > viewList.size()) {  // index > VIEW_COUNT - 1 - 1，即最后一张卡片，牌堆中只有一张卡片了，没有下面的卡片需要微调
             return;
         }
-        processLinkageView(changedView);
+
+        // 顶部卡片是可以拖动和划走的，计算其移动量
+        int changeViewLeft = changedView.getLeft();
+        int changeViewTop = changedView.getTop();
+        // 计算卡片倾斜角度，只和 x 方向的偏移量有关
+        changedView.setRotation(MAX_ROTATE_ANGLE * (changeViewLeft - initialTopViewX) / MAX_SLIDE_DISTANCE_LINKAGE);
+
+        // 这里需要计算两个方向的位移吗？即使计算两个方向，不应该使用勾股定理吗？
+//        int distance = Math.abs(changeViewTop - initialTopViewY)    // 第一张卡片 Y 轴移动的距离
+//                + Math.abs(changeViewLeft - initialTopViewX);    // 第一张卡片 X 轴移动的距离
+        // 使用勾股定理计算位移，而不是单纯 x，y 方向相加
+        float distance = (float) DeviceUtils.calDistance(
+                new PointF(changeViewLeft, changeViewTop),
+                new PointF(initialTopViewX, initialTopViewY));
+        float rate = distance / (float) MAX_SLIDE_DISTANCE_LINKAGE;
+        processLinkageViews(changedView, rate);
     }
 
     /**
@@ -292,12 +308,14 @@ public class CardSlidePanel extends ViewGroup {
             return;
         }
         // 1. 消失的卡片 View 位置重置，由于大多手机会重新调用 onLayout 函数，所以此处大可以不做处理，不信你注释掉看看
+        // 其实还是有用的，不然加载更多数据时，可能看到卡片没有回到初始态，尝试注释掉 setRotation(0) 看看
         changedView.offsetLeftAndRight(initialTopViewX - changedView.getLeft());
         changedView.offsetTopAndBottom(initialTopViewY - changedView.getTop() + yOffsetStep * (VIEW_COUNT - 1)); // 2 是因为此卡片被放到最后了，而一共只显示三张卡片，之后的都被遮挡
         float scale = 1.0f - SCALE_STEP * (VIEW_COUNT - 1);
         changedView.setScaleX(scale);
         changedView.setScaleY(scale);
         changedView.setAlpha(0);
+        changedView.setRotation(0);
 
         // 2. 卡片 View 在 ViewGroup 中的次序调整，插入到最后
         LayoutParams lp = changedView.getLayoutParams();
@@ -330,20 +348,9 @@ public class CardSlidePanel extends ViewGroup {
      * 顶层卡片 View 位置改变，底层的位置需要调整
      *
      * @param changedView 顶层的卡片 view
+     * @param rate        顶层的卡片移动比例（相对于 MAX_SLIDE_DISTANCE_LINKAGE）
      */
-    private void processLinkageView(View changedView) {
-        // 一共四张卡片，第一张是可以拖动和划走的
-        int changeViewLeft = changedView.getLeft();
-        int changeViewTop = changedView.getTop();
-        // 这里需要计算两个方向的位移吗？即使计算两个方向，不应该使用勾股定理吗？
-//        int distance = Math.abs(changeViewTop - initialTopViewY)    // 第一张卡片 Y 轴移动的距离
-//                + Math.abs(changeViewLeft - initialTopViewX);    // 第一张卡片 X 轴移动的距离
-        // 使用勾股定理计算位移，而不是单纯 x，y 方向相加
-        float distance = (float) DeviceUtils.calDistance(
-                new PointF(changeViewLeft, changeViewTop),
-                new PointF(initialTopViewX, initialTopViewY));
-        float rate = distance / (float) MAX_SLIDE_DISTANCE_LINKAGE;
-
+    private void processLinkageViews(View changedView, float rate) {
 //        float rate1 = rate;
 //        float rate2 = rate - 0.1f;
 //        // To do: 这里可以调整顺序优化一下？把 MAX_SLIDE_DISTANCE_LINKAGE 改成 50 验证一下
@@ -555,7 +562,7 @@ public class CardSlidePanel extends ViewGroup {
     protected void onLayout(boolean changed,
                             int left, int top,
                             int right, int bottom) {
-        // 一共 VIEW_COUNT 个 View，从 viewList 的 [0, VIEW_COUNT)（child 的 (VIEW_COUNT, 0]）是第一张到第四张卡片
+        // 一共 VIEW_COUNT 个 View，从 viewList 的 [0, VIEW_COUNT)（child 的 (VIEW_COUNT, 0]）
         int childCount = getChildCount();
 
         for (int i = 0; i < childCount; i++) {
