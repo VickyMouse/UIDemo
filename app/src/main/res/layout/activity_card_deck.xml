@@ -20,7 +20,7 @@
             android:textSize="17sp" />
 
         <ImageView
-            android:id="@+id/notify_change"
+            android:id="@+id/load_more"
             android:layout_width="50dp"
             android:layout_height="50dp"
             android:layout_gravity="right|center_vertical"

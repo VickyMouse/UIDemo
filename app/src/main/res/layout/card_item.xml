@@ -33,14 +33,14 @@
             android:layout_width="wrap_content"
             android:layout_height="20dp"
             android:layout_margin="5dp"
-            android:background="#5f000000"
+            android:background="@color/black_alpha_35"
             android:drawableLeft="@drawable/card_photo"
             android:drawablePadding="4dp"
             android:gravity="center"
             android:paddingLeft="6dp"
             android:paddingRight="4dp"
             android:text="6"
-            android:textColor="#fff" />
+            android:textColor="@color/white" />
     </RelativeLayout>
 
     <RelativeLayout
@@ -56,7 +56,7 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="10dp"
             android:text="叶琪琪 23"
-            android:textColor="#111"
+            android:textColor="@color/black"
             android:textSize="18sp" />
 
         <TextView
@@ -68,7 +68,7 @@
             android:layout_marginTop="5dp"
             android:paddingBottom="16dp"
             android:text="其它 6km4"
-            android:textColor="#888" />
+            android:textColor="@color/medium_gray" />
 
         <LinearLayout
             android:layout_width="wrap_content"
@@ -80,11 +80,11 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:drawableLeft="@drawable/card_left1"
+                android:drawableLeft="@drawable/card_book"
                 android:drawablePadding="2dp"
                 android:gravity="center_horizontal"
                 android:text="0"
-                android:textColor="#999"
+                android:textColor="@color/dark_gray"
                 android:textSize="15sp" />
 
             <TextView
@@ -93,11 +93,11 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="5dp"
                 android:layout_marginRight="10dp"
-                android:drawableLeft="@drawable/card_left2"
+                android:drawableLeft="@drawable/card_people"
                 android:drawablePadding="2dp"
                 android:gravity="center_horizontal"
                 android:text="2"
-                android:textColor="#999"
+                android:textColor="@color/dark_gray"
                 android:textSize="15sp" />
         </LinearLayout>
     </RelativeLayout>

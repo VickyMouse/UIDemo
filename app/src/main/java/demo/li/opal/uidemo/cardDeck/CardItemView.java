@@ -14,9 +14,9 @@ import com.facebook.rebound.SpringConfig;
 import com.facebook.rebound.SpringSystem;
 
 /**
- * 卡片View项
+ * 卡片 View 项
  *
- * @author xmuSistone
+ * @author opalli
  */
 @SuppressLint("NewApi")
 public class CardItemView extends FrameLayout {
@@ -73,7 +73,7 @@ public class CardItemView extends FrameLayout {
     }
 
     /**
-     * 设置当前spring位置
+     * 设置当前 spring 位置
      */
     private void setCurrentSpringPos(int xPos, int yPos) {
         springX.setCurrentValue(xPos);

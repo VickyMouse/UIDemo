@@ -40,6 +40,7 @@ public class CardDeckActivity extends FragmentActivity {
             "李易峰", "霍建华", "胡歌", "曾志伟", "吴孟达", "梁朝伟"}; // 12个人名
 
     private List<CardDataItem> dataList = new ArrayList<>();
+    private CardSlidePanel slidePanel;
 
 
     @Override
@@ -50,10 +51,17 @@ public class CardDeckActivity extends FragmentActivity {
         initView();
     }
 
-    private void initView() {
-        final CardSlidePanel slidePanel = findViewById(R.id.image_slide_panel);
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (slidePanel != null) {
+            slidePanel.doUnbindAdapter();
+        }
+    }
 
-        // 1. 左右滑动监听
+    private void initView() {
+        slidePanel = findViewById(R.id.image_slide_panel);
+        // 对当前卡片的左右滑动监听
         cardSwitchListener = new CardSlidePanel.CardSwitchListener() {
 
             @Override
@@ -69,7 +77,7 @@ public class CardDeckActivity extends FragmentActivity {
         slidePanel.setCardSwitchListener(cardSwitchListener);
 
 
-        // 2. 绑定Adapter
+        // 2. 绑定 Adapter
         slidePanel.setAdapter(new CardAdapter() {
             @Override
             public int getLayoutId() {
@@ -84,14 +92,13 @@ public class CardDeckActivity extends FragmentActivity {
             @Override
             public void bindView(View view, int index) {
                 Object tag = view.getTag();
-                ViewHolder viewHolder;
+                CardVH viewHolder;
                 if (null != tag) {
-                    viewHolder = (ViewHolder) tag;
+                    viewHolder = (CardVH) tag;
                 } else {
-                    viewHolder = new ViewHolder(view);
+                    viewHolder = new CardVH(view);
                     view.setTag(viewHolder);
                 }
-
                 viewHolder.bindData(dataList.get(index));
             }
 
@@ -114,7 +121,6 @@ public class CardDeckActivity extends FragmentActivity {
             }
         });
 
-
         Handler handler = new Handler();
         handler.postDelayed(new Runnable() {
             @Override
@@ -124,8 +130,8 @@ public class CardDeckActivity extends FragmentActivity {
             }
         }, 500);
 
-        // 3. notifyDataSetChanged调用
-        findViewById(R.id.notify_change).setOnClickListener(new View.OnClickListener() {
+        // 加载更多数据
+        findViewById(R.id.load_more).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 appendDataList();
@@ -156,27 +162,27 @@ public class CardDeckActivity extends FragmentActivity {
         }
     }
 
-    class ViewHolder {
+    class CardVH {
 
         ImageView imageView;
         View maskView;
-        TextView userNameTv;
-        TextView imageNumTv;
-        TextView likeNumTv;
+        TextView userName;
+        TextView picCount;
+        TextView likeCount;
 
-        public ViewHolder(View view) {
-            imageView = (ImageView) view.findViewById(R.id.card_image_view);
+        public CardVH(View view) {
+            imageView = view.findViewById(R.id.card_image_view);
             maskView = view.findViewById(R.id.maskView);
-            userNameTv = (TextView) view.findViewById(R.id.card_user_name);
-            imageNumTv = (TextView) view.findViewById(R.id.card_pic_num);
-            likeNumTv = (TextView) view.findViewById(R.id.card_like);
+            userName = view.findViewById(R.id.card_user_name);
+            picCount = view.findViewById(R.id.card_pic_num);
+            likeCount = view.findViewById(R.id.card_like);
         }
 
         public void bindData(CardDataItem itemData) {
             Glide.with(CardDeckActivity.this).load(itemData.imagePath).into(imageView);
-            userNameTv.setText(itemData.userName);
-            imageNumTv.setText(itemData.imageNum + "");
-            likeNumTv.setText(itemData.likeNum + "");
+            userName.setText(itemData.userName);
+            picCount.setText(itemData.imageNum + "");
+            likeCount.setText(itemData.likeNum + "");
         }
     }
 
