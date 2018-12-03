@@ -86,12 +86,12 @@ public class CardDeckActivity extends FragmentActivity {
 
             @Override
             public int getCount() {
-                return dataList.size();
+                return dataList.size(); // 不只是 VIEW_COUNT(4)，可能大大超出
             }
 
             @Override
             public void bindView(View view, int index) {
-                Object tag = view.getTag();
+                Object tag = view.getTag(); // ViewHolder 的指针
                 CardVH viewHolder;
                 if (null != tag) {
                     viewHolder = (CardVH) tag;

@@ -294,7 +294,7 @@ public class SwipeCardLayout extends RelativeLayout {
                                     onSwipeListener.onSwipe(type);
                                 }
                                 if (adapter.tQueue.size() > 0) {
-                                    SwipeLayout childAt = (SwipeLayout) parent.getChildAt(FRONT_INDEX);   // child 1 是它本身（第一张卡片），child 0 是下面一张卡片（后 addView 的）
+                                    SwipeLayout childAt = (SwipeLayout) parent.getChildAt(FRONT_INDEX);   // child 1 是它本身（第一张卡片），child 0 是下面一张卡片（先 addView 的）
                                     adapter.bindData(adapter.tQueue.poll(), childAt.getChildAt(0)); // child 1(划走的卡片和下一条数据绑定)
                                 } else {
                                     parent.removeView(SwipeLayout.this);
