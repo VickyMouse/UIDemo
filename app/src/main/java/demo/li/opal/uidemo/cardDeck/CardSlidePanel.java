@@ -62,8 +62,6 @@ public class CardSlidePanel extends ViewGroup {
 
     private CardDeckListener cardDeckListener; // 回调接口
     private int isShowing = 0; // 当前正在显示的小项
-    private boolean btnLock = false;
-    private GestureDetectorCompat moveDetector; // todo ??
     private Point downPoint = new Point();
     private CardAdapter adapter;
     private static final int VIEW_COUNT = Math.min(15, (int) Math.floor(1 / SCALE_STEP) + 2);  // 限制一下 VIEW_COUNT 数量，使得 scale 等永远是正值，不然会有很特别的反向增大现象;    //  Todo: 多于 4 是否会有问题，因为 processLinkageView 只处理了 4 张牌
@@ -154,10 +152,6 @@ public class CardSlidePanel extends ViewGroup {
 
         ViewConfiguration configuration = ViewConfiguration.get(getContext());
         mTouchSlop = configuration.getScaledTouchSlop();
-        // Todo: moveDetector 删除可以吗？
-        moveDetector = new GestureDetectorCompat(context,
-                new MoveDetector());
-        moveDetector.setIsLongpressEnabled(false);
 
         getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
             @Override
@@ -215,18 +209,6 @@ public class CardSlidePanel extends ViewGroup {
         adapter.unregisterDataSetObserver(mDataObserver);
     }
 
-    // todo: MoveDetector? for rebound spring?
-    class MoveDetector extends SimpleOnGestureListener {
-
-        @Override
-        public boolean onScroll(MotionEvent e1, MotionEvent e2, float dx,
-                                float dy) {
-            // 拖动了，touch 不往下传递
-            return Math.abs(dy) + Math.abs(dx) > mTouchSlop;
-        }
-    }
-
-
     /**
      * 这是 viewDragHelper 拖拽效果的主要逻辑
      */
@@ -247,11 +229,6 @@ public class CardSlidePanel extends ViewGroup {
                     || child.getScaleX() <= 1.0f - SCALE_STEP) {
                 // 一般来讲，如果拖动的是第三层、或者第四层的 View，则直接禁止
                 // 此处用 getScale 的用法来巧妙回避
-                return false;
-            }
-
-            // Todo: 貌似现在只会是 false 了？
-            if (btnLock) {
                 return false;
             }
 
@@ -529,7 +506,6 @@ public class CardSlidePanel extends ViewGroup {
             // 动画结束
             if (mDragHelper.getViewDragState() == ViewDragHelper.STATE_IDLE) {
                 orderViewStack();
-                btnLock = false;
             }
         }
     }
@@ -549,8 +525,6 @@ public class CardSlidePanel extends ViewGroup {
     @Override
     public boolean onInterceptTouchEvent(MotionEvent ev) {
         boolean shouldIntercept = mDragHelper.shouldInterceptTouchEvent(ev);
-        // Todo: what's moveDetector for?
-        boolean moveFlag = moveDetector.onTouchEvent(ev);
         int action = ev.getActionMasked();
         if (action == MotionEvent.ACTION_DOWN) {
             // ACTION_DOWN 的时候就对 view 重新排序，更新卡堆，即使动画没有做完
@@ -563,8 +537,7 @@ public class CardSlidePanel extends ViewGroup {
             // action_down 时就让 mDragHelper 开始工作，否则有时候导致异常
             mDragHelper.processTouchEvent(ev);
         }
-
-        return shouldIntercept && moveFlag;
+        return shouldIntercept;
     }
 
     @Override
