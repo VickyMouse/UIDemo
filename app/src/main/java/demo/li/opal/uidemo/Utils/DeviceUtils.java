@@ -52,9 +52,9 @@ public class DeviceUtils {
     private static final String TAG = DeviceUtils.class.getSimpleName();
 
     public static class MEMORY_CLASS {
-        public static final int IN_B = 0; // 计算单位为byte
-        public static final int IN_KB = 1; // 计算单位为Kb
-        public static final int IN_MB = 2; // 计算单位为Mb
+        public static final int IN_B = 0; // 计算单位为 byte
+        public static final int IN_KB = 1; // 计算单位为 Kb
+        public static final int IN_MB = 2; // 计算单位为 Mb
     }
 
     public static final int MIN_STORAGE_SIZE = 50 * 1024 * 1024; // 50MB

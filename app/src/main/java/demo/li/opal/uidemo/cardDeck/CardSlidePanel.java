@@ -25,7 +25,7 @@ import demo.li.opal.uidemo.Utils.LogUtils;
 /**
  * 卡片滑动面板，主要逻辑实现类
  *
- * @author opalli
+ * @author opalli on 2018/12/01
  */
 @SuppressLint({"HandlerLeak", "NewApi", "ClickableViewAccessibility"})
 public class CardSlidePanel extends ViewGroup {

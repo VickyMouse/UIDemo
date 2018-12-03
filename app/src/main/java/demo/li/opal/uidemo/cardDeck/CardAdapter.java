@@ -6,7 +6,7 @@ import android.graphics.Rect;
 import android.view.View;
 
 /**
- * Created by xmuSistone on 2017/7/5.
+ * Created by opalli on 2018/12/01
  */
 
 public abstract class CardAdapter {
