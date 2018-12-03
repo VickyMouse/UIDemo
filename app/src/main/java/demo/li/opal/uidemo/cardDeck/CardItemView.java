@@ -21,6 +21,8 @@ import com.facebook.rebound.SpringSystem;
 @SuppressLint("NewApi")
 public class CardItemView extends FrameLayout {
 
+    public static final int ANIM_DURATION = 300;
+    public static final int DELAY_INTERVAL = 150;
     private Spring springX, springY;
     private CardSlidePanel parentView;
     private ObjectAnimator alphaAnimator;
@@ -113,8 +115,8 @@ public class CardItemView extends FrameLayout {
             }
             alphaAnimator = ObjectAnimator.ofFloat(this, "alpha",
                     0.0f, 1.0f);
-            alphaAnimator.setDuration(360);
-            alphaAnimator.setStartDelay(delayIndex * 200);
+            alphaAnimator.setDuration(ANIM_DURATION);
+            alphaAnimator.setStartDelay(delayIndex * DELAY_INTERVAL);
             alphaAnimator.start();
         }
     }

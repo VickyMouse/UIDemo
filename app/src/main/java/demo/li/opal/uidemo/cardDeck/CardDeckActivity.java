@@ -19,7 +19,7 @@ import demo.li.opal.uidemo.Utils.LogUtils;
 
 public class CardDeckActivity extends FragmentActivity {
 
-    private CardSlidePanel.CardSwitchListener cardSwitchListener;
+    private CardSlidePanel.CardDeckListener cardSwitchListener;
 
     private String imagePaths[] = {
             "file:///android_asset/cards/wall01.jpg",
@@ -39,8 +39,9 @@ public class CardDeckActivity extends FragmentActivity {
     private String names[] = {"郭富城", "刘德华", "张学友", "李连杰", "成龙", "谢霆锋",
             "李易峰", "霍建华", "胡歌", "曾志伟", "吴孟达", "梁朝伟"}; // 12个人名
 
-    private List<CardDataItem> dataList = new ArrayList<>();
+    private List<CardItemData> dataList = new ArrayList<>();
     private CardSlidePanel slidePanel;
+    private View btnLoadMore;
 
 
     @Override
@@ -62,7 +63,7 @@ public class CardDeckActivity extends FragmentActivity {
     private void initView() {
         slidePanel = findViewById(R.id.image_slide_panel);
         // 对当前卡片的左右滑动监听
-        cardSwitchListener = new CardSlidePanel.CardSwitchListener() {
+        cardSwitchListener = new CardSlidePanel.CardDeckListener() {
 
             @Override
             public void onShow(int index) {
@@ -73,8 +74,15 @@ public class CardDeckActivity extends FragmentActivity {
             public void onCardVanish(int index, int type) {
                 LogUtils.d("Card", "正在消失-" + dataList.get(index).userName + " 消失type=" + type);
             }
+
+            @Override
+            public void onCardDeckLoadFinish() {
+                if (!btnLoadMore.isEnabled()) {
+                    btnLoadMore.setEnabled(true);
+                }
+            }
         };
-        slidePanel.setCardSwitchListener(cardSwitchListener);
+        slidePanel.setCardDeckListener(cardSwitchListener);
 
 
         // 2. 绑定 Adapter
@@ -125,15 +133,18 @@ public class CardDeckActivity extends FragmentActivity {
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
+                btnLoadMore.setEnabled(false);
                 prepareDataList();
                 slidePanel.getAdapter().notifyDataSetChanged();
             }
         }, 500);
 
         // 加载更多数据
-        findViewById(R.id.load_more).setOnClickListener(new View.OnClickListener() {
+        btnLoadMore = findViewById(R.id.load_more);
+        btnLoadMore.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                btnLoadMore.setEnabled(false);
                 appendDataList();
                 slidePanel.getAdapter().notifyDataSetChanged();
             }
@@ -142,7 +153,7 @@ public class CardDeckActivity extends FragmentActivity {
 
     private void prepareDataList() {
         for (int i = 0; i < 6; i++) {
-            CardDataItem dataItem = new CardDataItem();
+            CardItemData dataItem = new CardItemData();
             dataItem.userName = names[i];
             dataItem.imagePath = imagePaths[i];
             dataItem.likeNum = (int) (Math.random() * 10);
@@ -153,7 +164,7 @@ public class CardDeckActivity extends FragmentActivity {
 
     private void appendDataList() {
         for (int i = 0; i < 6; i++) {
-            CardDataItem dataItem = new CardDataItem();
+            CardItemData dataItem = new CardItemData();
             dataItem.userName = "From Append";
             dataItem.imagePath = imagePaths[8];
             dataItem.likeNum = (int) (Math.random() * 10);
@@ -178,7 +189,7 @@ public class CardDeckActivity extends FragmentActivity {
             likeCount = view.findViewById(R.id.card_like);
         }
 
-        public void bindData(CardDataItem itemData) {
+        public void bindData(CardItemData itemData) {
             Glide.with(CardDeckActivity.this).load(itemData.imagePath).into(imageView);
             userName.setText(itemData.userName);
             picCount.setText(itemData.imageNum + "");

@@ -24,6 +24,7 @@ import java.util.List;
 
 import demo.li.opal.uidemo.R;
 import demo.li.opal.uidemo.Utils.DeviceUtils;
+import demo.li.opal.uidemo.Utils.LogUtils;
 
 /**
  * 卡片滑动面板，主要逻辑实现类
@@ -32,6 +33,8 @@ import demo.li.opal.uidemo.Utils.DeviceUtils;
  */
 @SuppressLint({"HandlerLeak", "NewApi", "ClickableViewAccessibility"})
 public class CardSlidePanel extends ViewGroup {
+    private static final String TAG = CardSlidePanel.class.getSimpleName();
+
     private List<CardItemView> viewList = new ArrayList<>(); // 存放的是每一层的 view，从顶到底
     private List<View> releasedViewList = new ArrayList<>(); // 手指松开后存放的 view 列表，可能因为手速过快，同时会有多个 View 被松手开始做动画？？
 
@@ -57,13 +60,13 @@ public class CardSlidePanel extends ViewGroup {
     public static final int VANISH_TYPE_LEFT = 0;
     public static final int VANISH_TYPE_RIGHT = 1;
 
-    private CardSwitchListener cardSwitchListener; // 回调接口
+    private CardDeckListener cardDeckListener; // 回调接口
     private int isShowing = 0; // 当前正在显示的小项
     private boolean btnLock = false;
     private GestureDetectorCompat moveDetector; // todo ??
     private Point downPoint = new Point();
     private CardAdapter adapter;
-    private static final int VIEW_COUNT = Math.min(5, (int) Math.floor(1 / SCALE_STEP) + 2);  // 限制一下 VIEW_COUNT 数量，使得 scale 等永远是正值，不然会有很特别的反向增大现象;    //  Todo: 多于 4 是否会有问题，因为 processLinkageView 只处理了 4 张牌
+    private static final int VIEW_COUNT = Math.min(15, (int) Math.floor(1 / SCALE_STEP) + 2);  // 限制一下 VIEW_COUNT 数量，使得 scale 等永远是正值，不然会有很特别的反向增大现象;    //  Todo: 多于 4 是否会有问题，因为 processLinkageView 只处理了 4 张牌
     private Rect draggableArea;
     private WeakReference<Object> savedFirstItemData;
 
@@ -103,7 +106,7 @@ public class CardSlidePanel extends ViewGroup {
                         if (isShowing > 0) {
                             isShowing++;
                         }
-                        cardSwitchListener.onShow(isShowing);
+                        cardDeckListener.onShow(isShowing);
                     }
                     // 卡片一张张渐显动画
                     if (i == VIEW_COUNT - 1) {
@@ -116,6 +119,15 @@ public class CardSlidePanel extends ViewGroup {
                 } else {
                     itemView.setVisibility(View.INVISIBLE);
                 }
+            }
+            if (delay > 0) {
+                LogUtils.d(TAG, "delay > 0");
+                postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        cardDeckListener.onCardDeckLoadFinish();
+                    }
+                }, CardItemView.DELAY_INTERVAL * delay + CardItemView.ANIM_DURATION);
             }
         }
     };
@@ -346,8 +358,8 @@ public class CardSlidePanel extends ViewGroup {
         if (isShowing + 1 < adapter.getCount()) {
             isShowing++;
         }
-        if (null != cardSwitchListener) {
-            cardSwitchListener.onShow(isShowing);
+        if (null != cardDeckListener) {
+            cardDeckListener.onShow(isShowing);
         }
     }
 
@@ -473,9 +485,9 @@ public class CardSlidePanel extends ViewGroup {
             }
 
             // 3. 消失动画即将进行，listener 回调
-            if (flyType >= 0 && cardSwitchListener != null) {
+            if (flyType >= 0 && cardDeckListener != null) {
                 // Todo: 区分一下左右划
-                cardSwitchListener.onCardVanish(isShowing, flyType);
+                cardDeckListener.onCardVanish(isShowing, flyType);
             }
         }
     }
@@ -504,8 +516,8 @@ public class CardSlidePanel extends ViewGroup {
             }
         }
 
-        if (type >= 0 && cardSwitchListener != null) {
-            cardSwitchListener.onCardVanish(isShowing, type);
+        if (type >= 0 && cardDeckListener != null) {
+            cardDeckListener.onCardVanish(isShowing, type);
         }
     }
 
@@ -633,20 +645,20 @@ public class CardSlidePanel extends ViewGroup {
     /**
      * 设置卡片操作回调
      */
-    public void setCardSwitchListener(CardSwitchListener cardSwitchListener) {
-        this.cardSwitchListener = cardSwitchListener;
+    public void setCardDeckListener(CardDeckListener cardDeckListener) {
+        this.cardDeckListener = cardDeckListener;
     }
 
     /**
      * 卡片回调接口
      */
-    public interface CardSwitchListener {
+    public interface CardDeckListener {
         /**
          * 新卡片显示回调
          *
          * @param index 最顶层显示的卡片的index
          */
-        public void onShow(int index);
+        void onShow(int index);
 
         /**
          * 卡片飞向两侧回调
@@ -654,6 +666,8 @@ public class CardSlidePanel extends ViewGroup {
          * @param index 飞向两侧的卡片数据 index
          * @param type  飞向哪一侧{@link #VANISH_TYPE_LEFT}或{@link #VANISH_TYPE_RIGHT}
          */
-        public void onCardVanish(int index, int type);
+        void onCardVanish(int index, int type);
+
+        void onCardDeckLoadFinish();
     }
 }

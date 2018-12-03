@@ -5,7 +5,7 @@ package demo.li.opal.uidemo.cardDeck;
  *
  * @author xmuSistone
  */
-public class CardDataItem {
+public class CardItemData {
     String imagePath;
     String userName;
     int likeNum;
