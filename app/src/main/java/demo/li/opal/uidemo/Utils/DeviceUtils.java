@@ -10,6 +10,7 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.res.Resources;
 import android.graphics.Point;
+import android.graphics.PointF;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
@@ -1080,6 +1081,13 @@ public class DeviceUtils {
     public static int px2dip(Context context, float pxValue) {
         final float scale = context.getResources().getDisplayMetrics().density;
         return (int) (pxValue / scale + 0.5f);
+    }
+
+
+    public static double calDistance(PointF a, PointF b) {
+        float dx = b.x - a.x;
+        float dy = b.y - a.y;
+        return Math.sqrt(dx * dx + dy * dy);
     }
 
 }

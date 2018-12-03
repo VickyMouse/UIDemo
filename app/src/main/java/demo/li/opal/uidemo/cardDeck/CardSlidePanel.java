@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.res.TypedArray;
 import android.database.DataSetObserver;
 import android.graphics.Point;
+import android.graphics.PointF;
 import android.graphics.Rect;
 import android.support.v4.view.GestureDetectorCompat;
 import android.support.v4.view.ViewCompat;
@@ -22,6 +23,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import demo.li.opal.uidemo.R;
+import demo.li.opal.uidemo.Utils.DeviceUtils;
 
 /**
  * 卡片滑动面板，主要逻辑实现类
@@ -35,7 +37,7 @@ public class CardSlidePanel extends ViewGroup {
 
     /* 拖拽工具类 */
     private final ViewDragHelper mDragHelper; // 这个跟原生的ViewDragHelper差不多，我仅仅只是修改了Interpolator
-    private int initCenterViewX = 0, initCenterViewY = 0; // 最初时，中间 View（第一张卡片的左边和上边）的 x, y 位置
+    private int initialTopViewX = 0, initialTopViewY = 0; // 最初时，中间 View（第一张卡片的左边和上边）的 x, y 位置
     private int allWidth = 0; // 面板的宽度
     private int allHeight = 0; // 面板的高度
     private int childWith = 0; // 每一个子 View 对应的宽度
@@ -61,7 +63,7 @@ public class CardSlidePanel extends ViewGroup {
     private GestureDetectorCompat moveDetector; // todo ??
     private Point downPoint = new Point();
     private CardAdapter adapter;
-    private static final int VIEW_COUNT = 4;    //  Todo: 多于 4 是否会有问题，因为 processLinkageView 只处理了 4 张牌
+    private static final int VIEW_COUNT = Math.min(5, (int) Math.floor(1 / SCALE_STEP) + 2);  // 限制一下 VIEW_COUNT 数量，使得 scale 等永远是正值，不然会有很特别的反向增大现象;    //  Todo: 多于 4 是否会有问题，因为 processLinkageView 只处理了 4 张牌
     private Rect draggableArea;
     private WeakReference<Object> savedFirstItemData;
 
@@ -168,8 +170,8 @@ public class CardSlidePanel extends ViewGroup {
             // Todo: wrap_content
             addView(itemView, new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT));
 
-            if (i == 0) {
-                itemView.setAlpha(0);   // Todo：最后一张卡片，alpha 为 0，是不是应该除了 123，都是 alpha 为 0，因为 processLinkage 方法只处理了 前三张，如果 VIEW_COUNT 改成 5，就会有一张 4 一直 100% alpha
+            if (i < VIEW_COUNT - 2) {
+                itemView.setAlpha(0);   // 最后一张卡片，alpha 为 0
             }
         }
 
@@ -309,15 +311,15 @@ public class CardSlidePanel extends ViewGroup {
         }
         // Todo: ??打一下 log，应该是 release 到最后一张卡片了，所以没有卡片了？？不用再隐藏一下吗？
         CardItemView changedView = (CardItemView) releasedViewList.get(0);
-        if (changedView.getLeft() == initCenterViewX) {
+        if (changedView.getLeft() == initialTopViewX) {
             releasedViewList.remove(0);
             return;
         }
 
         // 1. 消失的卡片 View 位置重置，由于大多手机会重新调用 onLayout 函数，所以此处大可以不做处理，不信你注释掉看看
-        changedView.offsetLeftAndRight(initCenterViewX - changedView.getLeft());
-        changedView.offsetTopAndBottom(initCenterViewY - changedView.getTop() + yOffsetStep * 2); // 2 是因为此卡片被放到最后了，而一共只显示三张卡片，之后的都被遮挡
-        float scale = 1.0f - SCALE_STEP * 2;
+        changedView.offsetLeftAndRight(initialTopViewX - changedView.getLeft());
+        changedView.offsetTopAndBottom(initialTopViewY - changedView.getTop() + yOffsetStep * (VIEW_COUNT - 1)); // 2 是因为此卡片被放到最后了，而一共只显示三张卡片，之后的都被遮挡
+        float scale = 1.0f - SCALE_STEP * (VIEW_COUNT - 1);
         changedView.setScaleX(scale);
         changedView.setScaleY(scale);
         changedView.setAlpha(0);
@@ -328,7 +330,7 @@ public class CardSlidePanel extends ViewGroup {
         addViewInLayout(changedView, 0, lp, true);  // view 的 index 越小，越在下面
 
         // 3. ChangedView 填充新数据，数据用完则隐藏卡片
-        int newIndex = isShowing + 4;   // Todo: 这里不应该用上 VIEW_COUNT?
+        int newIndex = isShowing + VIEW_COUNT;
         if (newIndex < adapter.getCount()) {
             adapter.bindView(changedView, newIndex);
         } else {
@@ -358,30 +360,42 @@ public class CardSlidePanel extends ViewGroup {
         // 一共四张卡片，第一张是可以拖动和划走的
         int changeViewLeft = changedView.getLeft();
         int changeViewTop = changedView.getTop();
-        // Todo: 改名字，不是 center；这里需要计算两个方向的位移吗？即使计算两个方向，不应该使用勾股定理吗？
-        int distance = Math.abs(changeViewTop - initCenterViewY)    // 第一张卡片 Y 轴移动的距离
-                + Math.abs(changeViewLeft - initCenterViewX);    // 第一张卡片 X 轴移动的距离
+        // 这里需要计算两个方向的位移吗？即使计算两个方向，不应该使用勾股定理吗？
+//        int distance = Math.abs(changeViewTop - initialTopViewY)    // 第一张卡片 Y 轴移动的距离
+//                + Math.abs(changeViewLeft - initialTopViewX);    // 第一张卡片 X 轴移动的距离
+        // 使用勾股定理计算位移，而不是单纯 x，y 方向相加
+        float distance = (float) DeviceUtils.calDistance(
+                new PointF(changeViewLeft, changeViewTop),
+                new PointF(initialTopViewX, initialTopViewY));
         float rate = distance / (float) MAX_SLIDE_DISTANCE_LINKAGE;
 
-        float rate1 = rate;
-        float rate2 = rate - 0.1f;  // Todo: 是不是改成 SCALE_STEP 更好？？
-        // Todo: 是不是可以调整顺序优化一下？把 MAX_SLIDE_DISTANCE_LINKAGE 改成 50 验证一下
-        if (rate > 1) {
-            rate1 = 1;
+//        float rate1 = rate;
+//        float rate2 = rate - 0.1f;
+//        // Todo: 是不是可以调整顺序优化一下？把 MAX_SLIDE_DISTANCE_LINKAGE 改成 50 验证一下
+//        if (rate > 1) {
+//            rate1 = 1;
+//        }
+//
+//        if (rate2 < 0) {
+//            rate2 = 0;
+//        } else if (rate2 > 1) {
+//            rate2 = 1;
+//        }
+//
+//        adjustLinkageViewItem(changedView, rate1, 1);    // 第二张卡片，会缩放和上下移动
+//        adjustLinkageViewItem(changedView, rate2, 2);    // 第三张卡片，会缩放和上下移动
+        float rateOne;
+        for (int i = 1; i < VIEW_COUNT - 1; i++) {
+            // 这里使用 0.1f 而不是 SCALE_STEP，是为了越往后的卡片受顶部卡片的移动的影响越小，可以换成更大的值就能观察到影响
+            rateOne = Math.max(Math.min(rate - 0.1f * (i - 1), 1), 0);
+            adjustLinkageViewItem(changedView, rateOne, i);
         }
-
-        if (rate2 < 0) {
-            rate2 = 0;
-        } else if (rate2 > 1) {
-            rate2 = 1;
-        }
-
-        adjustLinkageViewItem(changedView, rate1, 1);    // 第二张卡片，会缩放和上下移动
-        adjustLinkageViewItem(changedView, rate2, 2);    // 第三张卡片，会缩放和上下移动
 
         // 第四张及更后面的卡片，一开始在第三张卡片后方，看不见，不缩放和移动，只改变透明度
-        CardItemView bottomCardView = viewList.get(viewList.size() - 1);
-        bottomCardView.setAlpha(rate2);
+        if (VIEW_COUNT == viewList.size()) {
+            CardItemView bottomCardView = viewList.get(VIEW_COUNT - 1);
+            bottomCardView.setAlpha(rate);      // 这里必须使用 rate，如果使用 rateOne（卡片很多时远小于 rate，造成划掉很多张卡片后，后面的卡片是半透明的）
+        }
     }
 
     // 由 index 对应 view 变成 index-1 对应的 view
@@ -397,22 +411,25 @@ public class CardSlidePanel extends ViewGroup {
         float scale = initScale + (nextScale - initScale) * rate;
 
         View adjustView = viewList.get(changeIndex + index);
-        adjustView.offsetTopAndBottom(offset - adjustView.getTop() + initCenterViewY);  // adjustView.getTop() - initCenterViewY = 已有的 offset
+        adjustView.offsetTopAndBottom(offset - adjustView.getTop() + initialTopViewY);  // adjustView.getTop() - initialTopViewY = 已有的 offset
         adjustView.setScaleX(scale);
         adjustView.setScaleY(scale);
+//        if (adjustView.getAlpha() != 1.0f) {
+//            adjustView.setAlpha(1.0f);
+//        }
     }
 
     /**
      * 松手时处理滑动到边缘的动画
      */
     private void animToSide(CardItemView changedView, int xVel, int yVel) {
-        int finalX = initCenterViewX;
-        int finalY = initCenterViewY;
+        int finalX = initialTopViewX;
+        int finalY = initialTopViewY;
         int flyType = -1;
 
         // 1. 下面这一坨计算 finalX 和 finalY，要读懂代码需要建立一个比较清晰的数学模型才能理解，不信拉倒
-        int dx = changedView.getLeft() - initCenterViewX;
-        int dy = changedView.getTop() - initCenterViewY;
+        int dx = changedView.getLeft() - initialTopViewX;
+        int dy = changedView.getTop() - initialTopViewY;
 
         // yVel < xVel * xyRate 则允许以速度计算偏移
         final float xyRate = 3f;
@@ -429,12 +446,12 @@ public class CardSlidePanel extends ViewGroup {
         } else if (dx > X_DISTANCE_THRESHOLD && Math.abs(dy) < dx * xyRate) {
             // x 正方向的位移足够大，向右滑动消失
             finalX = allWidth;
-            finalY = dy * (childWith + initCenterViewX) / dx + initCenterViewY;
+            finalY = dy * (childWith + initialTopViewX) / dx + initialTopViewY;
             flyType = VANISH_TYPE_RIGHT;
         } else if (dx < -X_DISTANCE_THRESHOLD && Math.abs(dy) < -dx * xyRate) {
             // x 负方向的位移足够大，向左滑动消失
             finalX = -childWith;
-            finalY = dy * (childWith + initCenterViewX) / (-dx) + initCenterViewY;
+            finalY = dy * (childWith + initialTopViewX) / (-dx) + initialTopViewY;
             flyType = VANISH_TYPE_LEFT;
         }
 
@@ -446,8 +463,8 @@ public class CardSlidePanel extends ViewGroup {
         }
 
         // 如果没有飞向两侧（y 方向速度远大于 x 方向，或者 x 方向位移没有超出阈值），而是回到了中间，需要谨慎处理
-        if (finalX == initCenterViewX) {
-            changedView.animTo(initCenterViewX, initCenterViewY);
+        if (finalX == initialTopViewX) {
+            changedView.animTo(initialTopViewX, initialTopViewY);
         } else {
             // 2. 向两边消失的动画
             releasedViewList.add(changedView);
@@ -482,7 +499,7 @@ public class CardSlidePanel extends ViewGroup {
 
         if (finalX != 0) {
             releasedViewList.add(animateView);
-            if (mDragHelper.smoothSlideViewTo(animateView, finalX, initCenterViewY + allHeight / 2)) {
+            if (mDragHelper.smoothSlideViewTo(animateView, finalX, initialTopViewY + allHeight / 2)) {
                 ViewCompat.postInvalidateOnAnimation(this);
             }
         }
@@ -569,6 +586,7 @@ public class CardSlidePanel extends ViewGroup {
                             int right, int bottom) {
         // 一共 VIEW_COUNT 个 View，从 viewList 的 [0, VIEW_COUNT)（child 的 (VIEW_COUNT, 0]）是第一张到第四张卡片
         int childCount = getChildCount();
+
         for (int i = 0; i < childCount; i++) {
             View viewItem = viewList.get(i);
             // 1. 先 layout 出来
@@ -579,10 +597,11 @@ public class CardSlidePanel extends ViewGroup {
             // 2. 调整位置
             int offset = yOffsetStep * i;
             float scale = 1 - SCALE_STEP * i;
-            if (i > 2) {
-                // 备用的 View，即第四张卡片及以后的所有卡片（如果 VIEW_COUNT 设置成大于 4 的话）
-                offset = yOffsetStep * 2;   // 第四（及更后面的）张卡片和第三张位置重叠
-                scale = 1 - SCALE_STEP * 2; // 第四（及更后面的）张卡片和第三张大小也一样
+
+            if (i > VIEW_COUNT - 2) {
+                // 备用的 View，最后一张卡片
+                offset = yOffsetStep * (VIEW_COUNT - 2);   // 最后一张备用卡或者超出 countThresh 后的卡片位置同前一张重叠
+                scale = 1 - SCALE_STEP * (VIEW_COUNT - 2); // 最后一张备用卡或者超出 countThresh 后的卡片大小同前一张也一样
             }
             viewItem.offsetTopAndBottom(offset);
 
@@ -595,8 +614,8 @@ public class CardSlidePanel extends ViewGroup {
 
         if (childCount > 0) {
             // 初始化一些中间参数
-            initCenterViewX = viewList.get(0).getLeft();
-            initCenterViewY = viewList.get(0).getTop();
+            initialTopViewX = viewList.get(0).getLeft();
+            initialTopViewY = viewList.get(0).getTop();
             childWith = viewList.get(0).getMeasuredWidth();
         }
     }
