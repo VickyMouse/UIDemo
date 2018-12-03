@@ -2,9 +2,9 @@ package demo.li.opal.uidemo.cardDeck;
 
 import android.graphics.Rect;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.v4.app.FragmentActivity;
 import android.view.View;
+import android.view.ViewTreeObserver;
 import android.view.Window;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -18,6 +18,7 @@ import demo.li.opal.uidemo.R;
 import demo.li.opal.uidemo.Utils.LogUtils;
 
 public class CardDeckActivity extends FragmentActivity {
+    private static final String TAG = CardDeckActivity.class.getSimpleName();
 
     private CardSlidePanel.CardDeckListener cardSwitchListener;
 
@@ -84,7 +85,6 @@ public class CardDeckActivity extends FragmentActivity {
         };
         slidePanel.setCardDeckListener(cardSwitchListener);
 
-
         // 2. 绑定 Adapter
         slidePanel.setAdapter(new CardAdapter() {
             @Override
@@ -129,24 +129,26 @@ public class CardDeckActivity extends FragmentActivity {
             }
         });
 
-        Handler handler = new Handler();
-        handler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                btnLoadMore.setEnabled(false);
-                prepareDataList();
-                slidePanel.getAdapter().notifyDataSetChanged();
-            }
-        }, 500);
-
         // 加载更多数据
         btnLoadMore = findViewById(R.id.load_more);
+        btnLoadMore.setEnabled(false);
         btnLoadMore.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 btnLoadMore.setEnabled(false);
                 appendDataList();
                 slidePanel.getAdapter().notifyDataSetChanged();
+            }
+        });
+
+        slidePanel.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+            @Override
+            public void onGlobalLayout() {
+                LogUtils.d(TAG, "onGlobalLayout()");
+                if (dataList.size() == 0) {
+                    prepareDataList();  // Todo: 不知道为什么，必须在 View 都创建完后再和数据绑定，不然只会有两张卡片
+                    slidePanel.getAdapter().notifyDataSetChanged();
+                }
             }
         });
     }

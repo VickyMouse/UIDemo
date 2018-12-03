@@ -8,7 +8,7 @@ import android.util.LruCache;
 
 public class LogUtils {
 
-    public static boolean isLogcatEnable = false;
+    public static boolean isLogcatEnable = true;
 
     public static void setLogcatEnable(boolean enable) {
         isLogcatEnable = enable;

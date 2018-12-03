@@ -7,16 +7,12 @@ import android.database.DataSetObserver;
 import android.graphics.Point;
 import android.graphics.PointF;
 import android.graphics.Rect;
-import android.support.v4.view.GestureDetectorCompat;
 import android.support.v4.view.ViewCompat;
 import android.support.v4.widget.ViewDragHelper;
 import android.util.AttributeSet;
-import android.view.GestureDetector.SimpleOnGestureListener;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.ViewConfiguration;
 import android.view.ViewGroup;
-import android.view.ViewTreeObserver;
 
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
@@ -63,27 +59,30 @@ public class CardSlidePanel extends ViewGroup {
     private int isShowing = 0; // 当前正在显示的小项
     private Point downPoint = new Point();
     private CardAdapter adapter;
-    private static final int VIEW_COUNT = Math.min(15, (int) Math.floor(1 / SCALE_STEP) + 2);  // 限制一下 VIEW_COUNT 数量，使得 scale 等永远是正值，不然会有很特别的反向增大现象;    //  Todo: 多于 4 是否会有问题，因为 processLinkageView 只处理了 4 张牌
+    private static final int VIEW_COUNT = Math.min(15, (int) Math.floor(1 / SCALE_STEP) + 2);  // 限制一下 VIEW_COUNT 数量，使得 scale 等永远是正值，不然会有很特别的反向增大现象;
     private Rect draggableArea;
     private WeakReference<Object> savedFirstItemData;
 
     private DataSetObserver mDataObserver = new DataSetObserver() {
         @Override
         public void onChanged() {
+            LogUtils.d(TAG, "DataSetObserver.onChanged()");
             orderViewStack();
-
             boolean reset = false;
             if (adapter.getCount() > 0) {
-                Object firstObj = adapter.getItem(0);
+                Object firstObj = adapter.getItem(0);   // 第一条数据
                 if (null == savedFirstItemData) {
                     // 此前就没有数据，需要保存第一条数据
-                    // 异常情况？因为 doBindAdapter 会初始化 savedFirstItemData
+                    // 这里是异常情况吗？因为 doBindAdapter 会初始化 savedFirstItemData
+                    LogUtils.d(TAG, "DataSetObserver.onChanged() - savedFirstItemData == null");
                     savedFirstItemData = new WeakReference<>(firstObj);
                     isShowing = 0;
                 } else {
+                    LogUtils.d(TAG, "DataSetObserver.onChanged() - savedFirstItemData != null");
                     Object savedObj = savedFirstItemData.get();
-                    if (firstObj != savedObj) {
+                    if (firstObj != savedObj) { // 当前显示的数据不是第一条数据（异常情况）？？
                         // 如果第一条数据不等的话，需要重置
+                        LogUtils.d(TAG, "DataSetObserver.onChanged() - firstObj != savedObj");
                         isShowing = 0;
                         reset = true;
                         savedFirstItemData = new WeakReference<>(firstObj);
@@ -105,7 +104,7 @@ public class CardSlidePanel extends ViewGroup {
                         }
                         cardDeckListener.onShow(isShowing);
                     }
-                    // 卡片一张张渐显动画
+                    // TODO：卡片一张张渐显动画
                     if (i == VIEW_COUNT - 1) {
                         itemView.setAlpha(0);
                         itemView.setVisibility(View.VISIBLE);
@@ -137,7 +136,7 @@ public class CardSlidePanel extends ViewGroup {
         this(context, attrs, 0);
     }
 
-    public CardSlidePanel(Context context, AttributeSet attrs, int defStyle) {
+    public CardSlidePanel(final Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
         TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.card);
 
@@ -148,25 +147,15 @@ public class CardSlidePanel extends ViewGroup {
         mDragHelper = ViewDragHelper.create(this, 10f, new DragHelperCallback());
         mDragHelper.setEdgeTrackingEnabled(ViewDragHelper.EDGE_BOTTOM);
         a.recycle();
-
-        ViewConfiguration configuration = ViewConfiguration.get(getContext());
-
-        getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
-            @Override
-            public void onGlobalLayout() {
-                if (getChildCount() != VIEW_COUNT) {
-                    doBindAdapter();
-                }
-            }
-        });
     }
 
     private void doBindAdapter() {
-        if (adapter == null || allWidth <= 0 || allHeight <= 0) {
+        LogUtils.d(TAG, "doBindAdapter()");
+        if (adapter == null) {
             return;
         }
 
-        // 1. addView 添加到 ViewGroup 中，添加了 4 张卡片
+        // 1. addView 添加到 ViewGroup 中，添加了 VIEW_COUNT 张卡片
         for (int i = 0; i < VIEW_COUNT; i++) {
             CardItemView itemView = new CardItemView(getContext());
             itemView.bindLayoutResId(adapter.getLayoutId());    // R.layout.card_item
@@ -178,7 +167,7 @@ public class CardSlidePanel extends ViewGroup {
             }
         }
 
-        // 2. viewList 初始化，4 个卡片 View
+        // 2. viewList 初始化，VIEW_COUNT 个卡片 View
         viewList.clear();
         for (int i = 0; i < VIEW_COUNT; i++) {
             // 上面 addView 加入的每一个，child index 依次增加，叠放次序依次往上（top），所以数据要反过来绑
@@ -186,14 +175,14 @@ public class CardSlidePanel extends ViewGroup {
         }
 
         // 3. 填充数据
-        int count = adapter.getCount(); // 数据个数，不只是 VIEW_COUNT(4)，可能大大超出
+        int count = adapter.getCount(); // 数据个数，不只是 VIEW_COUNT，可能大大超出
         for (int i = 0; i < VIEW_COUNT; i++) {
             if (i < count) {
                 adapter.bindView(viewList.get(i), i);
                 if (i == 0) {
                     savedFirstItemData = new WeakReference<>(adapter.getItem(i));
                 }
-            } else {    // 数据个数小于 View 个数，即不足 VIEW_COUNT(4) 张卡片了
+            } else {    // 数据个数小于 View 个数，即不足 VIEW_COUNT 张卡片了
                 viewList.get(i).setVisibility(View.INVISIBLE);
             }
         }
@@ -295,13 +284,13 @@ public class CardSlidePanel extends ViewGroup {
             // 如果在左右划松手动画未完成时又点击，会往下走
             return;
         }
-        // Todo: ??打一下 log，应该是 release 到最后一张卡片了，所以没有卡片了？？不用再隐藏一下吗？
+        // Todo: 打 log 从来没有进入过这里，是什么情况呢？
         CardItemView changedView = (CardItemView) releasedViewList.get(0);
         if (changedView.getLeft() == initialTopViewX) {
+            LogUtils.d(TAG, "changedView.getLeft() == initialTopViewX");
             releasedViewList.remove(0);
             return;
         }
-
         // 1. 消失的卡片 View 位置重置，由于大多手机会重新调用 onLayout 函数，所以此处大可以不做处理，不信你注释掉看看
         changedView.offsetLeftAndRight(initialTopViewX - changedView.getLeft());
         changedView.offsetTopAndBottom(initialTopViewY - changedView.getTop() + yOffsetStep * (VIEW_COUNT - 1)); // 2 是因为此卡片被放到最后了，而一共只显示三张卡片，之后的都被遮挡
@@ -357,7 +346,7 @@ public class CardSlidePanel extends ViewGroup {
 
 //        float rate1 = rate;
 //        float rate2 = rate - 0.1f;
-//        // Todo: 是不是可以调整顺序优化一下？把 MAX_SLIDE_DISTANCE_LINKAGE 改成 50 验证一下
+//        // To do: 这里可以调整顺序优化一下？把 MAX_SLIDE_DISTANCE_LINKAGE 改成 50 验证一下
 //        if (rate > 1) {
 //            rate1 = 1;
 //        }
@@ -604,6 +593,7 @@ public class CardSlidePanel extends ViewGroup {
 
     public void setAdapter(final CardAdapter adapter) {
         this.adapter = adapter;
+        LogUtils.d(TAG, "setAdapter()");
         doBindAdapter();
         adapter.registerDataSetObserver(mDataObserver);
     }
