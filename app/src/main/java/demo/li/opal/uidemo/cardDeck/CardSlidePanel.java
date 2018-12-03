@@ -29,7 +29,7 @@ import demo.li.opal.uidemo.Utils.LogUtils;
 /**
  * 卡片滑动面板，主要逻辑实现类
  *
- * @author xmuSistone
+ * @author opalli
  */
 @SuppressLint({"HandlerLeak", "NewApi", "ClickableViewAccessibility"})
 public class CardSlidePanel extends ViewGroup {
@@ -39,7 +39,7 @@ public class CardSlidePanel extends ViewGroup {
     private List<View> releasedViewList = new ArrayList<>(); // 手指松开后存放的 view 列表，可能因为手速过快，同时会有多个 View 被松手开始做动画？？
 
     /* 拖拽工具类 */
-    private final ViewDragHelper mDragHelper; // 这个跟原生的ViewDragHelper差不多，我仅仅只是修改了Interpolator
+    private final ViewDragHelper mDragHelper; // 这个跟原生的 ViewDragHelper 差不多，只是修改了 Interpolator
     private int initialTopViewX = 0, initialTopViewY = 0; // 最初时，中间 View（第一张卡片的左边和上边）的 x, y 位置
     private int allWidth = 0; // 面板的宽度
     private int allHeight = 0; // 面板的高度
@@ -51,7 +51,6 @@ public class CardSlidePanel extends ViewGroup {
     private int itemMarginTop = 10; // 卡片距离顶部的偏移量
     private int bottomMarginTop = 40; // 底部按钮与卡片的 margin 值
     private int yOffsetStep = 40; // view 叠加垂直偏移量的步长
-    private int mTouchSlop = 5; // 判定为滑动的阈值，单位是像素
 
     private static final int X_VEL_THRESHOLD = 800; // vel：velocity，速度
     private static final int X_DISTANCE_THRESHOLD = 300;
@@ -151,7 +150,6 @@ public class CardSlidePanel extends ViewGroup {
         a.recycle();
 
         ViewConfiguration configuration = ViewConfiguration.get(getContext());
-        mTouchSlop = configuration.getScaledTouchSlop();
 
         getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
             @Override
@@ -173,8 +171,7 @@ public class CardSlidePanel extends ViewGroup {
             CardItemView itemView = new CardItemView(getContext());
             itemView.bindLayoutResId(adapter.getLayoutId());    // R.layout.card_item
             itemView.setParentView(this);
-            // Todo: wrap_content
-            addView(itemView, new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT));
+            addView(itemView, new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
 
             if (i < VIEW_COUNT - 2) {
                 itemView.setAlpha(0);   // 最后一张卡片，alpha 为 0
