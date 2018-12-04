@@ -1,5 +1,7 @@
 package demo.li.opal.uidemo.cardDeck;
 
+import demo.li.opal.uidemo.Utils.FileUtils;
+
 /**
  * 卡片数据装载对象
  *
@@ -13,7 +15,7 @@ public class CardItemData {
 
     public CardItemData() {
         this.userName = "Default Template";
-        this.imagePath = "file:///android_asset/cards/wall08.jpg";
+        this.imagePath = FileUtils.FRESCO_SCHEME_ASSETS + "cards/wall09.jpg";
         this.likeNum = (int) (Math.random() * 10);
         this.imageNum = (int) (Math.random() * 6);
     }

@@ -6,15 +6,20 @@ import android.support.v4.app.FragmentActivity;
 import android.view.View;
 import android.view.ViewTreeObserver;
 import android.view.Window;
-import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.bumptech.glide.Glide;
+import com.facebook.drawee.backends.pipeline.Fresco;
+import com.facebook.drawee.controller.AbstractDraweeController;
+import com.facebook.drawee.view.SimpleDraweeView;
+import com.facebook.imagepipeline.common.ResizeOptions;
+import com.facebook.imagepipeline.request.ImageRequest;
+import com.facebook.imagepipeline.request.ImageRequestBuilder;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import demo.li.opal.uidemo.R;
+import demo.li.opal.uidemo.Utils.FileUtils;
 import demo.li.opal.uidemo.Utils.LogUtils;
 
 public class CardDeckActivity extends FragmentActivity {
@@ -23,18 +28,18 @@ public class CardDeckActivity extends FragmentActivity {
     private CardSlidePanel.CardDeckListener cardSwitchListener;
 
     private String imagePaths[] = {
-            "file:///android_asset/cards/wall01.jpg",
-            "file:///android_asset/cards/wall02.jpg",
-            "file:///android_asset/cards/wall03.jpg",
-            "file:///android_asset/cards/wall04.jpg",
-            "file:///android_asset/cards/wall05.jpg",
-            "file:///android_asset/cards/wall06.jpg",
-            "file:///android_asset/cards/wall07.jpg",
-            "file:///android_asset/cards/wall08.jpg",
-            "file:///android_asset/cards/wall09.jpg",
-            "file:///android_asset/cards/wall10.jpg",
-            "file:///android_asset/cards/wall11.jpg",
-            "file:///android_asset/cards/wall12.jpg"
+            FileUtils.FRESCO_SCHEME_ASSETS + "cards/wall01.jpg",
+            FileUtils.FRESCO_SCHEME_ASSETS + "cards/wall02.jpg",
+            FileUtils.FRESCO_SCHEME_ASSETS + "cards/wall03.jpg",
+            FileUtils.FRESCO_SCHEME_ASSETS + "cards/wall04.jpg",
+            FileUtils.FRESCO_SCHEME_ASSETS + "cards/wall05.jpg",
+            FileUtils.FRESCO_SCHEME_ASSETS + "cards/wall06.jpg",
+            FileUtils.FRESCO_SCHEME_ASSETS + "cards/wall07.jpg",
+            FileUtils.FRESCO_SCHEME_ASSETS + "cards/wall08.jpg",
+            FileUtils.FRESCO_SCHEME_ASSETS + "cards/wall09.jpg",
+            FileUtils.FRESCO_SCHEME_ASSETS + "cards/wall10.jpg",
+            FileUtils.FRESCO_SCHEME_ASSETS + "cards/wall11.jpg",
+            FileUtils.FRESCO_SCHEME_ASSETS + "cards/wall12.jpg"
     }; // 12 个图片资源
 
     private String names[] = {"郭富城", "刘德华", "张学友", "李连杰", "成龙", "谢霆锋",
@@ -78,7 +83,9 @@ public class CardDeckActivity extends FragmentActivity {
 
             @Override
             public void onCardDeckLoadFinish() {
+                LogUtils.d(TAG, "onCardDeckLoadFinish()");
                 if (!btnLoadMore.isEnabled()) {
+                    LogUtils.d(TAG, "onCardDeckLoadFinish() - enable btn");
                     btnLoadMore.setEnabled(true);
                 }
             }
@@ -169,14 +176,14 @@ public class CardDeckActivity extends FragmentActivity {
 
     class CardVH {
 
-        ImageView imageView;
+        SimpleDraweeView cardImage;
         View maskView;
         TextView userName;
         TextView picCount;
         TextView likeCount;
 
         public CardVH(View view) {
-            imageView = view.findViewById(R.id.card_image_view);
+            cardImage = view.findViewById(R.id.card_image_view);
             maskView = view.findViewById(R.id.maskView);
             userName = view.findViewById(R.id.card_user_name);
             picCount = view.findViewById(R.id.card_pic_num);
@@ -184,10 +191,22 @@ public class CardDeckActivity extends FragmentActivity {
         }
 
         public void bindData(CardItemData itemData) {
-            Glide.with(CardDeckActivity.this).load(itemData.imagePath).into(imageView);
-            userName.setText(itemData.userName);
-            picCount.setText(itemData.imageNum + "");
-            likeCount.setText(itemData.likeNum + "");
+//            Glide.with(CardDeckActivity.this).load(itemData.imagePath).into(cardImage);
+
+            ResizeOptions options = new ResizeOptions(cardImage.getWidth(), cardImage.getHeight());
+            ImageRequest request = ImageRequestBuilder
+                    .newBuilderWithSource(FileUtils.getUri(itemData.getImagePath()))
+                    .setResizeOptions(options)
+                    .build();
+
+            AbstractDraweeController controller = Fresco.newDraweeControllerBuilder()
+                    .setImageRequest(request)
+                    .setOldController(cardImage.getController()).build();
+            cardImage.setController(controller);
+
+            userName.setText(itemData.getUserName());
+            picCount.setText(itemData.getImageNum() + "");
+            likeCount.setText(itemData.getLikeNum() + "");
         }
     }
 

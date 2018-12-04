@@ -3,6 +3,7 @@ package demo.li.opal.uidemo.Utils;
 import android.content.Context;
 import android.content.res.AssetFileDescriptor;
 import android.content.res.AssetManager;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.text.TextUtils;
 import android.util.Base64;
@@ -28,6 +29,8 @@ import java.io.OutputStreamWriter;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
+import demo.li.opal.uidemo.GlobalContext;
+
 public class FileUtils {
     private static final String TAG = FileUtils.class.getSimpleName();
 
@@ -39,6 +42,8 @@ public class FileUtils {
     public static final String PIC_POSTFIX_JPEG = ".jpg";
     public static final String PIC_POSTFIX_PNG = ".png";
     public static final String PIC_POSTFIX_WEBP = ".webp";
+
+    public static final String FRESCO_SCHEME_ASSETS = "asset:///";
 
     public static String checkPhoto(String path) {
         if (TextUtils.isEmpty(path)) {
@@ -900,5 +905,30 @@ public class FileUtils {
         void onCopySuccess();
 
         void onCopyFailed();
+    }
+
+    /**
+     * Fresco URL 转换方法，把图片地址转换成 Fresco 支持的格式
+     *
+     * @param url
+     * @return
+     */
+    public static Uri getUri(String url) {
+        if (TextUtils.isEmpty(url)) {
+            return null;
+        }
+        if (url.startsWith(RES_PREFIX_ASSETS)) {
+            url = FRESCO_SCHEME_ASSETS + FileUtils.checkAssetsPhoto(GlobalContext.getContext(), url.substring(RES_PREFIX_ASSETS.length()));
+        } else if (url.startsWith(RES_PREFIX_STORAGE)) {
+//            url = FRESCO_SCHEME_STORAGE + FileUtils.checkPhoto(url);
+            return Uri.fromFile(new File(FileUtils.checkPhoto(url)));
+            /* 此处修复 Bug #62785233：【选图界面】在设置中修改"保存路径"文件夹，若包含特殊字符（如：???），拍照保存，下次进入打开选图界面，该图片缩略图为空。
+            问题原因：Uri.parse() 方法传入的参数 urlString 中的特殊字符必须要经过转义, 否则会出问题。
+            修复方式：采用："对文件路径拼接成的 uri 字符串利用 Uri.encode() 进行编码, 然后传递给 Uri.parse() 方法"的方式修改仍然不行，导致所有图片都加载不出来了!!
+            所以最终选择了：使用 android.net.Uri.fromFile(File file) 方法获取本地文件的 Uri 对象。
+            */
+        }
+        LogUtils.d(TAG, "[getUri] + END  , output url = " + url);
+        return Uri.parse(url);
     }
 }
