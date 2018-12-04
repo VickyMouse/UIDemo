@@ -14,7 +14,7 @@ import demo.li.opal.uidemo.R;
 import demo.li.opal.uidemo.Utils.FileUtils;
 import demo.li.opal.uidemo.Utils.LogUtils;
 
-public class CardDeckActivity extends FragmentActivity {
+public class CardDeckActivity extends FragmentActivity implements View.OnClickListener {
     private static final String TAG = CardDeckActivity.class.getSimpleName();
 
     private CardSlidePanel.CardDeckListener cardSwitchListener;
@@ -37,10 +37,12 @@ public class CardDeckActivity extends FragmentActivity {
     private String names[] = {"郭富城", "刘德华", "张学友", "李连杰", "成龙", "谢霆锋",
             "李易峰", "霍建华", "胡歌", "曾志伟", "吴孟达", "梁朝伟"}; // 12个人名
 
-    private List<NormalCardItemData> dataList = new ArrayList<>();
+    private List<CosCardItemData> dataList = new ArrayList<>();
     private CardSlidePanel slidePanel;
     private View btnLoadMore;
-
+    private View btnRetake;
+    private View btnDiscard;
+    private View btnSave;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,12 +67,12 @@ public class CardDeckActivity extends FragmentActivity {
 
             @Override
             public void onShow(int index) {
-                LogUtils.d("Card", "正在显示-" + dataList.get(index).getUserName());
+                LogUtils.d("Card", "正在显示-" + dataList.get(index).getDescription());
             }
 
             @Override
             public void onCardVanish(int index, int type) {
-                LogUtils.d("Card", "正在消失-" + dataList.get(index).getUserName() + " 消失 type=" + type);
+                LogUtils.d("Card", "正在消失-" + dataList.get(index).getDescription() + " 消失 type=" + type);
             }
 
             @Override
@@ -88,7 +90,7 @@ public class CardDeckActivity extends FragmentActivity {
         slidePanel.setAdapter(new CardAdapter() {
             @Override
             public int getLayoutId() {
-                return R.layout.normal_card_item;
+                return R.layout.cos_card_item;
             }
 
             @Override
@@ -117,13 +119,11 @@ public class CardDeckActivity extends FragmentActivity {
             @Override
             public Rect obtainDraggableArea(View view) {
                 // 可滑动区域定制，该函数只会调用一次
-                View contentView = view.findViewById(R.id.card_item_content);
-                View topLayout = view.findViewById(R.id.card_top_layout);
-                View bottomLayout = view.findViewById(R.id.card_bottom_layout);
-                int left = view.getLeft() + contentView.getPaddingLeft() + topLayout.getPaddingLeft();
-                int right = view.getRight() - contentView.getPaddingRight() - topLayout.getPaddingRight();
-                int top = view.getTop() + contentView.getPaddingTop() + topLayout.getPaddingTop();
-                int bottom = view.getBottom() - contentView.getPaddingBottom() - bottomLayout.getPaddingBottom();
+                View contentView = view.findViewById(R.id.card_item);
+                int left = view.getLeft() + contentView.getPaddingLeft();
+                int right = view.getRight() - contentView.getPaddingRight();
+                int top = view.getTop() + contentView.getPaddingTop();
+                int bottom = view.getBottom() - contentView.getPaddingBottom();
                 return new Rect(left, top, right, bottom);
             }
         });
@@ -131,14 +131,14 @@ public class CardDeckActivity extends FragmentActivity {
         // 加载更多数据
         btnLoadMore = findViewById(R.id.load_more);
         btnLoadMore.setEnabled(false);
-        btnLoadMore.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                btnLoadMore.setEnabled(false);
-                appendDataList();
-                slidePanel.getAdapter().notifyDataSetChanged();
-            }
-        });
+        btnLoadMore.setOnClickListener(this);
+
+        btnRetake = findViewById(R.id.change_photo);
+        btnRetake.setOnClickListener(this);
+        btnDiscard = findViewById(R.id.discard_container);
+        btnDiscard.setOnClickListener(this);
+        btnSave = findViewById(R.id.save_container);
+        btnSave.setOnClickListener(this);
 
         slidePanel.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
             @Override
@@ -154,15 +154,35 @@ public class CardDeckActivity extends FragmentActivity {
 
     private void prepareDataList() {
         for (int i = 0; i < 6; i++) {
-            NormalCardItemData dataItem = new NormalCardItemData(names[i], imagePaths[i], (int) (Math.random() * 10), (int) (Math.random() * 6));
+            CosCardItemData dataItem = new CosCardItemData(imagePaths[i], "造型设计 by " + names[i]);
             dataList.add(dataItem);
         }
     }
 
     private void appendDataList() {
         for (int i = 0; i < 6; i++) {
-            NormalCardItemData dataItem = new NormalCardItemData();
+            CosCardItemData dataItem = new CosCardItemData();
             dataList.add(dataItem);
         }
     }
+
+    @Override
+    public void onClick(View view){
+        switch (view.getId()) {
+            case R.id.load_more:
+                btnLoadMore.setEnabled(false);
+                appendDataList();
+                slidePanel.getAdapter().notifyDataSetChanged();
+                break;
+            case R.id.change_photo:
+                break;
+            case R.id.discard_container:
+                slidePanel.vanishOnBtnClick(CardSlidePanel.VANISH_TYPE_LEFT);
+                break;
+            case R.id.save_container:
+                slidePanel.vanishOnBtnClick(CardSlidePanel.VANISH_TYPE_RIGHT);
+                break;
+        }
+    }
+
 }

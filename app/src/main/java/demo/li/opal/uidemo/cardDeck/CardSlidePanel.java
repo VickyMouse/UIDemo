@@ -41,7 +41,7 @@ public class CardSlidePanel extends FrameLayout {
     private int allHeight = 0; // 面板的高度
     private int childWith = 0; // 每一个子 View 对应的宽度
 
-    private static final float SCALE_STEP = 0.08f; // view 叠加缩放的步长
+    private static final float SCALE_STEP = 0.1f; // view 叠加缩放的步长
     private static final int MAX_SLIDE_DISTANCE_LINKAGE = 500; // 水平距离+垂直距离
     private final static float MAX_ROTATE_ANGLE = 10;   // 前后两张卡片的角度差
 
@@ -154,13 +154,15 @@ public class CardSlidePanel extends FrameLayout {
         if (adapter == null) {
             return;
         }
+        int widthMeasureSpec = DeviceUtils.dip2px(getContext(), 295);
+        int heightMeasureSpec = DeviceUtils.dip2px(getContext(), 415);
 
         // 1. addView 添加到 ViewGroup 中，添加了 VIEW_COUNT 张卡片
         for (int i = 0; i < VIEW_COUNT; i++) {
             CardItemView itemView = new CardItemView(getContext());
             itemView.bindLayoutResId(adapter.getLayoutId());    // R.layout.normal_card_item
             itemView.setParentView(this);
-            addView(itemView, new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
+            addView(itemView, new LayoutParams(widthMeasureSpec, heightMeasureSpec));
 
             if (i < VIEW_COUNT - 2) {
                 itemView.setAlpha(0);   // 最后一张卡片，alpha 为 0
@@ -464,7 +466,7 @@ public class CardSlidePanel extends FrameLayout {
     /**
      * 点击按钮消失动画
      */
-    private void vanishOnBtnClick(int type) {
+    public void vanishOnBtnClick(int type) {
         View animateView = viewList.get(0);
         if (animateView.getVisibility() != View.VISIBLE || releasedViewList.contains(animateView)) {
             return;
@@ -544,32 +546,50 @@ public class CardSlidePanel extends FrameLayout {
         return true;
     }
 
+//    @Override
+//    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+//        super.onMeasure(widthMeasureSpec, heightMeasureSpec);
+//
+//////        int width = MeasureSpec.getSize(widthMeasureSpec);
+//////        int widthMode = MeasureSpec.getMode(widthMeasureSpec);
+//////        int height = MeasureSpec.getSize(heightMeasureSpec);
+////        int heightMode = MeasureSpec.getMode(heightMeasureSpec);
+////
+//////        if (widthMode == MeasureSpec.AT_MOST && heightMode == MeasureSpec.AT_MOST) {
+//////            setMeasuredDimension(allWidth, allHeight);
+//////        } else if (widthMode == MeasureSpec.AT_MOST) {
+//////            setMeasuredDimension(allWidth, height);
+//////        } else if (heightMode == MeasureSpec.AT_MOST) {
+//////            setMeasuredDimension(width, allHeight);
+//////        }
+////        // WRAP_CONTENT 的话，高度要加上后面几张卡片的偏移量
+////        if (heightMode == MeasureSpec.AT_MOST) {
+////            setMeasuredDimension(
+////                    getMeasuredWidth(),
+////                    getMeasuredHeight() + (getChildCount() - 1) * yOffsetStep);
+////        }
+//
+//        allWidth = getMeasuredWidth();
+//        allHeight = getMeasuredHeight();
+//
+//        LogUtils.d(TAG, "onMeasure_in(" + widthMeasureSpec + ", " + heightMeasureSpec + ")");
+//        LogUtils.d(TAG, "onMeasure_all(" + allWidth + ", " + allHeight + ")");
+//        LogUtils.d(TAG, "onMeasure_child(" + getChildCount() + ", " + getChildCount() * yOffsetStep + ")");
+//    }
+
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-        super.onMeasure(widthMeasureSpec, heightMeasureSpec);
-
-//        int width = MeasureSpec.getSize(widthMeasureSpec);
-//        int widthMode = MeasureSpec.getMode(widthMeasureSpec);
-//        int height = MeasureSpec.getSize(heightMeasureSpec);
-        int heightMode = MeasureSpec.getMode(heightMeasureSpec);
-
-//        if (widthMode == MeasureSpec.AT_MOST && heightMode == MeasureSpec.AT_MOST) {
-//            setMeasuredDimension(allWidth, allHeight);
-//        } else if (widthMode == MeasureSpec.AT_MOST) {
-//            setMeasuredDimension(allWidth, height);
-//        } else if (heightMode == MeasureSpec.AT_MOST) {
-//            setMeasuredDimension(width, allHeight);
-//        }
-        // WRAP_CONTENT 的话，高度要加上后面几张卡片的偏移量
-        if (heightMode == MeasureSpec.AT_MOST) {
-            setMeasuredDimension(
-                    getMeasuredWidth(),
-                    getMeasuredHeight() + (getChildCount() - 1) * yOffsetStep);
-        }
+//        widthMeasureSpec = DeviceUtils.dip2px(getContext(), 295);
+//        heightMeasureSpec = DeviceUtils.dip2px(getContext(), 415);
+        measureChildren(widthMeasureSpec, heightMeasureSpec);
+        int maxWidth = MeasureSpec.getSize(widthMeasureSpec);
+        int maxHeight = MeasureSpec.getSize(heightMeasureSpec);
+        setMeasuredDimension(
+                resolveSizeAndState(maxWidth, widthMeasureSpec, 0),
+                resolveSizeAndState(maxHeight, heightMeasureSpec, 0));
 
         allWidth = getMeasuredWidth();
         allHeight = getMeasuredHeight();
-
         LogUtils.d(TAG, "onMeasure_in(" + widthMeasureSpec + ", " + heightMeasureSpec + ")");
         LogUtils.d(TAG, "onMeasure_all(" + allWidth + ", " + allHeight + ")");
         LogUtils.d(TAG, "onMeasure_child(" + getChildCount() + ", " + getChildCount() * yOffsetStep + ")");

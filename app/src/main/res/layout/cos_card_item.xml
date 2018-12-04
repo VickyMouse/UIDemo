@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:fresco="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/card_item"
+    android:layout_width="295dp"
+    android:layout_height="415dp"
+    android:paddingLeft="20dp"
+    android:paddingTop="16dp"
+    android:paddingRight="20dp"
+    android:paddingBottom="26dp"
+    android:background="@drawable/bg_daily_cos_card">
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:src="@drawable/cardpat_1"/>
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentBottom="true"
+        android:rotation="180"
+        android:src="@drawable/cardpat_1"/>
+    <FrameLayout
+        android:id="@+id/card_content"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginBottom="39dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="39dp"
+        android:background="@color/light_gray"
+        android:foreground="@drawable/fg_daily_cos_card">
+
+        <com.facebook.drawee.view.SimpleDraweeView
+            android:id="@+id/card_image_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            fresco:actualImageScaleType="centerCrop"
+            fresco:roundBottomLeft="false"
+            fresco:roundBottomRight="false"
+            fresco:roundTopLeft="true"
+            fresco:roundTopRight="true"
+            fresco:roundedCornerRadius="10dp" />
+    </FrameLayout>
+
+    <TextView
+        android:id="@+id/card_description"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/card_content"
+        android:layout_marginTop="13dp"
+        android:layout_centerHorizontal="true"
+        android:gravity="center"
+        android:text="造型设计 by 谷田达子"
+        android:textSize="11sp"
+        android:textColor="@color/daily_cos_card_desc" />
+</RelativeLayout>

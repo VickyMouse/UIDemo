@@ -64,4 +64,8 @@
     <color name="ops_subtitle_color_ttptgif">#f1b76c</color>
     <color name="ops_title_color_ttptmaterials">#965bd2</color>
     <color name="ops_subtitle_color_ttptmaterials">#cb9cec</color>
+
+    <color name="daily_cos_card_desc">#cbaac1</color>
+    <color name="daily_cos_left_count_bg">#ffc8da</color>
+    <color name="daily_cos_left_count_txt">#f25f8f</color>
 </resources>
