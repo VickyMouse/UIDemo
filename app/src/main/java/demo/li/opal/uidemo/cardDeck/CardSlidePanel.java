@@ -158,7 +158,7 @@ public class CardSlidePanel extends FrameLayout {
         // 1. addView 添加到 ViewGroup 中，添加了 VIEW_COUNT 张卡片
         for (int i = 0; i < VIEW_COUNT; i++) {
             CardItemView itemView = new CardItemView(getContext());
-            itemView.bindLayoutResId(adapter.getLayoutId());    // R.layout.card_item
+            itemView.bindLayoutResId(adapter.getLayoutId());    // R.layout.normal_card_item
             itemView.setParentView(this);
             addView(itemView, new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
 

@@ -88,7 +88,7 @@ public class CardDeckActivity extends FragmentActivity {
         slidePanel.setAdapter(new CardAdapter() {
             @Override
             public int getLayoutId() {
-                return R.layout.card_item;
+                return R.layout.normal_card_item;
             }
 
             @Override
