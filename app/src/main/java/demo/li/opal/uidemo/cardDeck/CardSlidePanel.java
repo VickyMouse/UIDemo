@@ -4,9 +4,6 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.database.DataSetObserver;
-import android.graphics.Canvas;
-import android.graphics.Paint;
-import android.graphics.PaintFlagsDrawFilter;
 import android.graphics.Point;
 import android.graphics.PointF;
 import android.graphics.Rect;
@@ -15,7 +12,7 @@ import android.support.v4.widget.ViewDragHelper;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.ViewGroup;
+import android.widget.FrameLayout;
 
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
@@ -31,7 +28,7 @@ import demo.li.opal.uidemo.Utils.LogUtils;
  * @author opalli on 2018/12/01
  */
 @SuppressLint({"HandlerLeak", "NewApi", "ClickableViewAccessibility"})
-public class CardSlidePanel extends ViewGroup {
+public class CardSlidePanel extends FrameLayout {
     private static final String TAG = CardSlidePanel.class.getSimpleName();
 
     private List<CardItemView> viewList = new ArrayList<>(); // 存放的是每一层的 view，从顶到底
@@ -63,7 +60,7 @@ public class CardSlidePanel extends ViewGroup {
     private int isShowing = 0; // 当前正在显示的小项
     private Point downPoint = new Point();
     private CardAdapter adapter;
-    private static final int VIEW_COUNT = Math.min(15, (int) Math.floor(1 / SCALE_STEP) + 2);  // 限制一下 VIEW_COUNT 数量，使得 scale 等永远是正值，不然会有很特别的反向增大现象;
+    private static final int VIEW_COUNT = Math.min(3, (int) Math.floor(1 / SCALE_STEP) + 2);  // 限制一下 VIEW_COUNT 数量，使得 scale 等永远是正值，不然会有很特别的反向增大现象;
     private Rect draggableArea;
     private WeakReference<Object> savedFirstItemData;
 
@@ -321,7 +318,7 @@ public class CardSlidePanel extends ViewGroup {
         changedView.setRotation(0);
 
         // 2. 卡片 View 在 ViewGroup 中的次序调整，插入到最后
-        LayoutParams lp = changedView.getLayoutParams();
+        FrameLayout.LayoutParams lp = (FrameLayout.LayoutParams) changedView.getLayoutParams();
         removeViewInLayout(changedView);
         addViewInLayout(changedView, 0, lp, true);  // view 的 index 越小，越在下面
 
@@ -550,15 +547,33 @@ public class CardSlidePanel extends ViewGroup {
 
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-        measureChildren(widthMeasureSpec, heightMeasureSpec);
-        int maxWidth = MeasureSpec.getSize(widthMeasureSpec);
-        int maxHeight = MeasureSpec.getSize(heightMeasureSpec);
-        setMeasuredDimension(
-                resolveSizeAndState(maxWidth, widthMeasureSpec, 0),
-                resolveSizeAndState(maxHeight, heightMeasureSpec, 0));
+        super.onMeasure(widthMeasureSpec, heightMeasureSpec);
+
+//        int width = MeasureSpec.getSize(widthMeasureSpec);
+//        int widthMode = MeasureSpec.getMode(widthMeasureSpec);
+//        int height = MeasureSpec.getSize(heightMeasureSpec);
+        int heightMode = MeasureSpec.getMode(heightMeasureSpec);
+
+//        if (widthMode == MeasureSpec.AT_MOST && heightMode == MeasureSpec.AT_MOST) {
+//            setMeasuredDimension(allWidth, allHeight);
+//        } else if (widthMode == MeasureSpec.AT_MOST) {
+//            setMeasuredDimension(allWidth, height);
+//        } else if (heightMode == MeasureSpec.AT_MOST) {
+//            setMeasuredDimension(width, allHeight);
+//        }
+        // WRAP_CONTENT 的话，高度要加上后面几张卡片的偏移量
+        if (heightMode == MeasureSpec.AT_MOST) {
+            setMeasuredDimension(
+                    getMeasuredWidth(),
+                    getMeasuredHeight() + (getChildCount() - 1) * yOffsetStep);
+        }
 
         allWidth = getMeasuredWidth();
         allHeight = getMeasuredHeight();
+
+        LogUtils.d(TAG, "onMeasure_in(" + widthMeasureSpec + ", " + heightMeasureSpec + ")");
+        LogUtils.d(TAG, "onMeasure_all(" + allWidth + ", " + allHeight + ")");
+        LogUtils.d(TAG, "onMeasure_child(" + getChildCount() + ", " + getChildCount() * yOffsetStep + ")");
     }
 
     @Override
