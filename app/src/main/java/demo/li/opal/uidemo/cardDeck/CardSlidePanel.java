@@ -4,6 +4,9 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.database.DataSetObserver;
+import android.graphics.Canvas;
+import android.graphics.Paint;
+import android.graphics.PaintFlagsDrawFilter;
 import android.graphics.Point;
 import android.graphics.PointF;
 import android.graphics.Rect;
@@ -597,6 +600,14 @@ public class CardSlidePanel extends ViewGroup {
             childWith = viewList.get(0).getMeasuredWidth();
         }
     }
+
+//    @Override
+//    protected void onDraw(Canvas canvas) {
+//        // 抗锯齿
+//        canvas.setDrawFilter(new PaintFlagsDrawFilter(0,
+//                Paint.ANTI_ALIAS_FLAG | Paint.FILTER_BITMAP_FLAG)); //设置图形、图片的抗锯齿
+//        super.onDraw(canvas);
+//    }
 
     public void setAdapter(final CardAdapter adapter) {
         this.adapter = adapter;

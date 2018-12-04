@@ -10,4 +10,34 @@ public class CardItemData {
     String userName;
     int likeNum;
     int imageNum;
+
+    public CardItemData() {
+        this.userName = "Default Template";
+        this.imagePath = "file:///android_asset/cards/wall08.jpg";
+        this.likeNum = (int) (Math.random() * 10);
+        this.imageNum = (int) (Math.random() * 6);
+    }
+
+    public CardItemData(String userName, String imagePath, int likeNum, int imageNum) {
+        this.userName = userName;
+        this.imagePath = imagePath;
+        this.likeNum = likeNum;
+        this.imageNum = imageNum;
+    }
+
+    public String getImagePath() {
+        return imagePath;
+    }
+
+    public String getUserName() {
+        return userName;
+    }
+
+    public int getLikeNum() {
+        return likeNum;
+    }
+
+    public int getImageNum() {
+        return imageNum;
+    }
 }

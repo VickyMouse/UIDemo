@@ -155,11 +155,7 @@ public class CardDeckActivity extends FragmentActivity {
 
     private void prepareDataList() {
         for (int i = 0; i < 6; i++) {
-            CardItemData dataItem = new CardItemData();
-            dataItem.userName = names[i];
-            dataItem.imagePath = imagePaths[i];
-            dataItem.likeNum = (int) (Math.random() * 10);
-            dataItem.imageNum = (int) (Math.random() * 6);
+            CardItemData dataItem = new CardItemData(names[i], imagePaths[i], (int) (Math.random() * 10), (int) (Math.random() * 6));
             dataList.add(dataItem);
         }
     }
@@ -167,10 +163,6 @@ public class CardDeckActivity extends FragmentActivity {
     private void appendDataList() {
         for (int i = 0; i < 6; i++) {
             CardItemData dataItem = new CardItemData();
-            dataItem.userName = "From Append";
-            dataItem.imagePath = imagePaths[8];
-            dataItem.likeNum = (int) (Math.random() * 10);
-            dataItem.imageNum = (int) (Math.random() * 6);
             dataList.add(dataItem);
         }
     }
