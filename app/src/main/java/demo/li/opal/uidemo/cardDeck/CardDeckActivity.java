@@ -6,14 +6,6 @@ import android.support.v4.app.FragmentActivity;
 import android.view.View;
 import android.view.ViewTreeObserver;
 import android.view.Window;
-import android.widget.TextView;
-
-import com.facebook.drawee.backends.pipeline.Fresco;
-import com.facebook.drawee.controller.AbstractDraweeController;
-import com.facebook.drawee.view.SimpleDraweeView;
-import com.facebook.imagepipeline.common.ResizeOptions;
-import com.facebook.imagepipeline.request.ImageRequest;
-import com.facebook.imagepipeline.request.ImageRequestBuilder;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -45,7 +37,7 @@ public class CardDeckActivity extends FragmentActivity {
     private String names[] = {"郭富城", "刘德华", "张学友", "李连杰", "成龙", "谢霆锋",
             "李易峰", "霍建华", "胡歌", "曾志伟", "吴孟达", "梁朝伟"}; // 12个人名
 
-    private List<CardItemData> dataList = new ArrayList<>();
+    private List<NormalCardItemData> dataList = new ArrayList<>();
     private CardSlidePanel slidePanel;
     private View btnLoadMore;
 
@@ -73,12 +65,12 @@ public class CardDeckActivity extends FragmentActivity {
 
             @Override
             public void onShow(int index) {
-                LogUtils.d("Card", "正在显示-" + dataList.get(index).userName);
+                LogUtils.d("Card", "正在显示-" + dataList.get(index).getUserName());
             }
 
             @Override
             public void onCardVanish(int index, int type) {
-                LogUtils.d("Card", "正在消失-" + dataList.get(index).userName + " 消失type=" + type);
+                LogUtils.d("Card", "正在消失-" + dataList.get(index).getUserName() + " 消失 type=" + type);
             }
 
             @Override
@@ -162,52 +154,15 @@ public class CardDeckActivity extends FragmentActivity {
 
     private void prepareDataList() {
         for (int i = 0; i < 6; i++) {
-            CardItemData dataItem = new CardItemData(names[i], imagePaths[i], (int) (Math.random() * 10), (int) (Math.random() * 6));
+            NormalCardItemData dataItem = new NormalCardItemData(names[i], imagePaths[i], (int) (Math.random() * 10), (int) (Math.random() * 6));
             dataList.add(dataItem);
         }
     }
 
     private void appendDataList() {
         for (int i = 0; i < 6; i++) {
-            CardItemData dataItem = new CardItemData();
+            NormalCardItemData dataItem = new NormalCardItemData();
             dataList.add(dataItem);
         }
     }
-
-    class CardVH {
-
-        SimpleDraweeView cardImage;
-        View maskView;
-        TextView userName;
-        TextView picCount;
-        TextView likeCount;
-
-        public CardVH(View view) {
-            cardImage = view.findViewById(R.id.card_image_view);
-            maskView = view.findViewById(R.id.maskView);
-            userName = view.findViewById(R.id.card_user_name);
-            picCount = view.findViewById(R.id.card_pic_num);
-            likeCount = view.findViewById(R.id.card_like);
-        }
-
-        public void bindData(CardItemData itemData) {
-//            Glide.with(CardDeckActivity.this).load(itemData.imagePath).into(cardImage);
-
-            ResizeOptions options = new ResizeOptions(cardImage.getWidth(), cardImage.getHeight());
-            ImageRequest request = ImageRequestBuilder
-                    .newBuilderWithSource(FileUtils.getUri(itemData.getImagePath()))
-                    .setResizeOptions(options)
-                    .build();
-
-            AbstractDraweeController controller = Fresco.newDraweeControllerBuilder()
-                    .setImageRequest(request)
-                    .setOldController(cardImage.getController()).build();
-            cardImage.setController(controller);
-
-            userName.setText(itemData.getUserName());
-            picCount.setText(itemData.getImageNum() + "");
-            likeCount.setText(itemData.getLikeNum() + "");
-        }
-    }
-
 }
