@@ -60,7 +60,7 @@ public class CardSlidePanel extends FrameLayout {
     private int isShowing = 0; // 当前正在显示的小项
     private Point downPoint = new Point();
     private CardAdapter adapter;
-    private static final int VIEW_COUNT = Math.min(3, (int) Math.floor(1 / SCALE_STEP) + 2);  // 限制一下 VIEW_COUNT 数量，使得 scale 等永远是正值，不然会有很特别的反向增大现象;
+    private static final int VIEW_COUNT = Math.min(4, (int) Math.floor(1 / SCALE_STEP) + 2);  // 限制一下 VIEW_COUNT 数量，使得 scale 等永远是正值，不然会有很特别的反向增大现象;
     private Rect draggableArea;
     private WeakReference<Object> savedFirstItemData;
 
@@ -117,15 +117,14 @@ public class CardSlidePanel extends FrameLayout {
                     itemView.setVisibility(View.INVISIBLE);
                 }
             }
-            if (delay > 0) {
-                LogUtils.d(TAG, "delay > 0");
-                postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        cardDeckListener.onCardDeckLoadFinish();
-                    }
-                }, CardItemView.DELAY_INTERVAL * delay + CardItemView.ANIM_DURATION);
-            }
+            LogUtils.d(TAG, "delay > 0");
+            postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    cardDeckListener.onCardDeckLoadFinish();
+                }
+            }, CardItemView.DELAY_INTERVAL * (delay > 0 ? delay : VIEW_COUNT - 2) + CardItemView.ANIM_DURATION);
+
         }
     };
 
