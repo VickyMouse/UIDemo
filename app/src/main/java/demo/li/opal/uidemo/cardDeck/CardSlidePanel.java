@@ -41,6 +41,8 @@ public class CardSlidePanel extends FrameLayout {
     private int allHeight = 0; // 面板的高度
     private int childWith = 0; // 每一个子 View 对应的宽度
 
+    private int topCardW = 295, topCardH = 415;
+    private float topCardScale = 1f;
     private static final float SCALE_STEP = 0.1f; // view 叠加缩放的步长
     private static final int MAX_SLIDE_DISTANCE_LINKAGE = 500; // 水平距离+垂直距离
     private final static float MAX_ROTATE_ANGLE = 10;   // 前后两张卡片的角度差
@@ -149,20 +151,20 @@ public class CardSlidePanel extends FrameLayout {
         a.recycle();
     }
 
-    private void doBindAdapter() {
+    public void doBindAdapter() {
         LogUtils.d(TAG, "doBindAdapter()");
         if (adapter == null) {
             return;
         }
-        int widthMeasureSpec = DeviceUtils.dip2px(getContext(), 295);
-        int heightMeasureSpec = DeviceUtils.dip2px(getContext(), 415);
+//        int widthMeasureSpec = DeviceUtils.dip2px(getContext(), 295);
+//        int heightMeasureSpec = DeviceUtils.dip2px(getContext(), 415);
 
         // 1. addView 添加到 ViewGroup 中，添加了 VIEW_COUNT 张卡片
         for (int i = 0; i < VIEW_COUNT; i++) {
             CardItemView itemView = new CardItemView(getContext());
             itemView.bindLayoutResId(adapter.getLayoutId());    // R.layout.normal_card_item
             itemView.setParentView(this);
-            addView(itemView, new LayoutParams(widthMeasureSpec, heightMeasureSpec));
+            addView(itemView, new LayoutParams(topCardW, topCardH));
 
             if (i < VIEW_COUNT - 2) {
                 itemView.setAlpha(0);   // 最后一张卡片，alpha 为 0
@@ -681,5 +683,29 @@ public class CardSlidePanel extends FrameLayout {
         void onCardVanish(int index, int type);
 
         void onCardDeckLoadFinish();
+    }
+
+    public int getTopCardW() {
+        return topCardW;
+    }
+
+    public void setTopCardW(int topCardW) {
+        this.topCardW = topCardW;
+    }
+
+    public int getTopCardH() {
+        return topCardH;
+    }
+
+    public void setTopCardH(int topCardH) {
+        this.topCardH = topCardH;
+    }
+
+    public float getTopCardScale() {
+        return topCardScale;
+    }
+
+    public void setTopCardScale(float topCardScale) {
+        this.topCardScale = topCardScale;
     }
 }

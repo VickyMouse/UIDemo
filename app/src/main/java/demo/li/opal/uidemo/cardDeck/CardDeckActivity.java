@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import demo.li.opal.uidemo.R;
+import demo.li.opal.uidemo.Utils.DeviceUtils;
 import demo.li.opal.uidemo.Utils.FileUtils;
 import demo.li.opal.uidemo.Utils.LogUtils;
 
@@ -43,6 +44,8 @@ public class CardDeckActivity extends FragmentActivity implements View.OnClickLi
     private View btnRetake;
     private View btnDiscard;
     private View btnSave;
+
+    private int availableCardDeckW = -1, availableCardDeckH = -1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -86,6 +89,7 @@ public class CardDeckActivity extends FragmentActivity implements View.OnClickLi
         };
         slidePanel.setCardDeckListener(cardSwitchListener);
 
+        calculateTopCardScale();
         // 2. 绑定 Adapter
         slidePanel.setAdapter(new CardAdapter() {
             @Override
@@ -144,12 +148,33 @@ public class CardDeckActivity extends FragmentActivity implements View.OnClickLi
             @Override
             public void onGlobalLayout() {
                 LogUtils.d(TAG, "onGlobalLayout()");
+
                 if (dataList.size() == 0) {
                     prepareDataList();  // Todo: 不知道为什么，必须在 View 都创建完后再和数据绑定，不然只会有两张卡片
                     slidePanel.getAdapter().notifyDataSetChanged();
                 }
             }
         });
+    }
+
+    private void calculateTopCardScale() {
+        if (availableCardDeckW < 0 || availableCardDeckH < 0) {
+            availableCardDeckW = (int) (DeviceUtils.getScreenWidth(CardDeckActivity.this) * 0.786);
+            availableCardDeckH = DeviceUtils.getScreenHeight(CardDeckActivity.this)
+                    - DeviceUtils.dip2px(CardDeckActivity.this, 83 * 2 + 90);
+//            availableCardDeckH = ((RelativeLayout)slidePanel.getParent()).getMeasuredHeight()
+//                    - DeviceUtils.dip2px(CardDeckActivity.this, 83*2 + 75);
+            int initWidth = slidePanel.getTopCardW();
+            float cardDeckRatio = 1f * initWidth / slidePanel.getTopCardH();
+            if (availableCardDeckW / availableCardDeckH > cardDeckRatio) {
+                slidePanel.setTopCardW(availableCardDeckW);
+                slidePanel.setTopCardH((int) (availableCardDeckW / cardDeckRatio));
+            } else {
+                slidePanel.setTopCardH(availableCardDeckH);
+                slidePanel.setTopCardW((int) (availableCardDeckH * cardDeckRatio));
+            }
+            slidePanel.setTopCardScale(1f * slidePanel.getTopCardW() / DeviceUtils.dip2px(CardDeckActivity.this, initWidth));
+        }
     }
 
     private void prepareDataList() {
@@ -167,7 +192,7 @@ public class CardDeckActivity extends FragmentActivity implements View.OnClickLi
     }
 
     @Override
-    public void onClick(View view){
+    public void onClick(View view) {
         switch (view.getId()) {
             case R.id.load_more:
                 btnLoadMore.setEnabled(false);
@@ -184,5 +209,4 @@ public class CardDeckActivity extends FragmentActivity implements View.OnClickLi
                 break;
         }
     }
-
 }
