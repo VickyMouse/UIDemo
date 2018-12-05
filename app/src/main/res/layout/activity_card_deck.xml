@@ -28,7 +28,7 @@
         android:layout_alignParentRight="true"
         android:layout_gravity="right|center_vertical"
         android:padding="16dp"
-        android:layout_marginBottom="32dp"
+        android:layout_marginBottom="17dp"
         android:src="@drawable/download" />
 
     <RelativeLayout
@@ -92,7 +92,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:layout_marginBottom="32dp"
+        android:layout_marginBottom="17dp"
         android:orientation="horizontal">
 
         <ImageView
@@ -122,7 +122,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
-                android:layout_marginLeft="5dp"
+                android:layout_marginLeft="6dp"
                 android:src="@drawable/txt_daily_cos_discard"
                 android:duplicateParentState="true"/>
         </LinearLayout>
@@ -147,7 +147,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
-                android:layout_marginLeft="5dp"
+                android:layout_marginLeft="6dp"
                 android:src="@drawable/txt_daily_cos_save"
                 android:duplicateParentState="true"/>
         </LinearLayout>

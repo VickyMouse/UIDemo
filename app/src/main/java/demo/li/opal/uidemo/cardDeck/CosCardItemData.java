@@ -1,7 +1,5 @@
 package demo.li.opal.uidemo.cardDeck;
 
-import demo.li.opal.uidemo.Utils.FileUtils;
-
 /**
  * 卡片数据装载对象
  *
@@ -12,11 +10,11 @@ public class CosCardItemData extends CardItemData {
 
     public CosCardItemData() {
         super();
-        this.imagePath = FileUtils.FRESCO_SCHEME_ASSETS + "cards/wall09.jpg";
+        this.description = "造型设计 by 谷田达子";
     }
 
     public CosCardItemData(String imagePath, String userName) {
-        this.imagePath = imagePath;
+        super(imagePath);
         this.description = userName;
     }
 

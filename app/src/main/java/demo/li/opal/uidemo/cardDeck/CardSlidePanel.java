@@ -311,8 +311,8 @@ public class CardSlidePanel extends FrameLayout {
         // 1. 消失的卡片 View 位置重置，由于大多手机会重新调用 onLayout 函数，所以此处大可以不做处理，不信你注释掉看看
         // 其实还是有用的，不然加载更多数据时，可能看到卡片没有回到初始态，尝试注释掉 setRotation(0) 看看
         changedView.offsetLeftAndRight(initialTopViewX - changedView.getLeft());
-        changedView.offsetTopAndBottom(initialTopViewY - changedView.getTop() + yOffsetStep * (VIEW_COUNT - 1)); // 2 是因为此卡片被放到最后了，而一共只显示三张卡片，之后的都被遮挡
-        float scale = 1.0f - SCALE_STEP * (VIEW_COUNT - 1);
+        changedView.offsetTopAndBottom(initialTopViewY - changedView.getTop() + yOffsetStep * (VIEW_COUNT - 2)); // 2 是因为此卡片被放到最后了，完全遮挡
+        float scale = 1.0f - SCALE_STEP * (VIEW_COUNT - 2);
         changedView.setScaleX(scale);
         changedView.setScaleY(scale);
         changedView.setAlpha(0);

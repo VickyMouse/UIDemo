@@ -14,7 +14,7 @@ public class CardItemData {
         this.imagePath = FileUtils.FRESCO_SCHEME_ASSETS + "cards/wall09.jpg";
     }
 
-    public CardItemData(String userName, String imagePath, int likeNum, int imageNum) {
+    public CardItemData(String imagePath) {
         this.imagePath = imagePath;
     }
 

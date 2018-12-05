@@ -18,7 +18,7 @@ public class NormalCardItemData extends CardItemData {
     }
 
     public NormalCardItemData(String imagePath, String userName, int likeNum, int imageNum) {
-        this.imagePath = imagePath;
+        super(imagePath);
         this.userName = userName;
         this.likeNum = likeNum;
         this.imageNum = imageNum;
