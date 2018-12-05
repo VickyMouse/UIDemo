@@ -60,7 +60,7 @@ public class CardSlidePanel extends FrameLayout {
     private int isShowing = 0; // 当前正在显示的小项
     private Point downPoint = new Point();
     private CardAdapter adapter;
-    private static final int VIEW_COUNT = Math.min(5, (int) Math.floor(1 / SCALE_STEP) + 2);  // 限制一下 VIEW_COUNT 数量，使得 scale 等永远是正值，不然会有很特别的反向增大现象;
+    private static final int VIEW_COUNT = Math.min(3, (int) Math.floor(1 / SCALE_STEP) + 2);  // 限制一下 VIEW_COUNT 数量，使得 scale 等永远是正值，不然会有很特别的反向增大现象;
     private Rect draggableArea;
     private WeakReference<Object> savedFirstItemData;
 
