@@ -90,7 +90,6 @@ public class CardDeckActivity extends FragmentActivity implements View.OnClickLi
         slidePanel.setCardDeckListener(cardSwitchListener);
 
         // 2. 绑定 Adapter
-        calculateTopCardScale();
         slidePanel.setAdapter(new CardAdapter() {
             @Override
             public int getLayoutId() {
@@ -130,6 +129,29 @@ public class CardDeckActivity extends FragmentActivity implements View.OnClickLi
                 int bottom = view.getBottom() - contentView.getPaddingBottom();
                 return new Rect(left, top, right, bottom);
             }
+
+            @Override
+            public void calcTopCardDimension() {
+                if (availableCardDeckW < 0 || availableCardDeckH < 0) {
+                    availableCardDeckW = DeviceUtils.getScreenWidth(CardDeckActivity.this) * 0.786f;
+                    availableCardDeckH = DeviceUtils.getScreenHeight(CardDeckActivity.this)
+                            - DeviceUtils.dip2px(CardDeckActivity.this, 83 * 2 + 75 + 3 * 7);
+//            availableCardDeckH = ((RelativeLayout)slidePanel.getParent()).getMeasuredHeight()
+//                    - DeviceUtils.dip2px(CardDeckActivity.this, 83*2 + 75);
+                    int initWidth = slidePanel.getTopCardW();
+                    int initHeight = slidePanel.getTopCardH();
+                    float cardDeckRatio = 1f * initWidth / initHeight;
+                    if (availableCardDeckW / availableCardDeckH < cardDeckRatio) {
+                        slidePanel.setTopCardW((int) availableCardDeckW);
+                        slidePanel.setTopCardH((int) (availableCardDeckW / cardDeckRatio));
+                    } else {
+                        slidePanel.setTopCardH((int) availableCardDeckH);
+                        slidePanel.setTopCardW((int) (availableCardDeckH * cardDeckRatio));
+                    }
+                    slidePanel.setTopCardScale(1f * slidePanel.getTopCardW() / DeviceUtils.dip2px(CardDeckActivity.this, initWidth));
+                    slidePanel.setItemMarginTop(slidePanel.getItemMarginTop() + (int) (availableCardDeckH - slidePanel.getTopCardH()) / 2);
+                }
+            }
         });
 
         // 加载更多数据
@@ -156,28 +178,6 @@ public class CardDeckActivity extends FragmentActivity implements View.OnClickLi
                 }
             }
         });
-    }
-
-    private void calculateTopCardScale() {
-        if (availableCardDeckW < 0 || availableCardDeckH < 0) {
-            availableCardDeckW = DeviceUtils.getScreenWidth(CardDeckActivity.this) * 0.786f;
-            availableCardDeckH = DeviceUtils.getScreenHeight(CardDeckActivity.this)
-                    - DeviceUtils.dip2px(CardDeckActivity.this, 83 * 2 + 75 + 3 * 7);
-//            availableCardDeckH = ((RelativeLayout)slidePanel.getParent()).getMeasuredHeight()
-//                    - DeviceUtils.dip2px(CardDeckActivity.this, 83*2 + 75);
-            int initWidth = slidePanel.getTopCardW();
-            int initHeight = slidePanel.getTopCardH();
-            float cardDeckRatio = 1f * initWidth / initHeight;
-            if (availableCardDeckW / availableCardDeckH < cardDeckRatio) {
-                slidePanel.setTopCardW((int) availableCardDeckW);
-                slidePanel.setTopCardH((int) (availableCardDeckW / cardDeckRatio));
-            } else {
-                slidePanel.setTopCardH((int) availableCardDeckH);
-                slidePanel.setTopCardW((int) (availableCardDeckH * cardDeckRatio));
-            }
-            slidePanel.setTopCardScale(1f * slidePanel.getTopCardW() / DeviceUtils.dip2px(CardDeckActivity.this, initWidth));
-            slidePanel.setItemMarginTop(slidePanel.getItemMarginTop() + (int)(availableCardDeckH - slidePanel.getTopCardH())/2);
-        }
     }
 
     private void prepareDataList() {

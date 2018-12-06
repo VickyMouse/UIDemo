@@ -33,7 +33,10 @@ public abstract class CardAdapter {
      */
     public abstract Object getItem(int index);
 
-
+    /**
+     * 在初始化 AddView 之前，计算顶部卡片的尺寸和位置
+     */
+    public abstract void calcTopCardDimension();
     /**
      * 可滑动区域定制
      *

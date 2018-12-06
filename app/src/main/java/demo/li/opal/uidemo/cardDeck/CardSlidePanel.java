@@ -154,13 +154,16 @@ public class CardSlidePanel extends FrameLayout {
 
     public void doBindAdapter() {
         LogUtils.d(TAG, "doBindAdapter()");
-        if (adapter == null) {
-            return;
-        }
-//        int widthMeasureSpec = DeviceUtils.dip2px(getContext(), 295);
-//        int heightMeasureSpec = DeviceUtils.dip2px(getContext(), 415);
+        // 1. 添加 VIEW_COUNT 张卡片 View 到"牌堆"
+        initCardViews();
+        // 2. viewList 初始化，VIEW_COUNT 个卡片 View，注意 list 中的 index 和 child index 相反
+        initViewList();
+        // 3. 填充数据
+        doBindData();
+    }
 
-        // 1. addView 添加到 ViewGroup 中，添加了 VIEW_COUNT 张卡片
+    public void initCardViews() {
+        LogUtils.d(TAG, "initCardViews()");
         for (int i = 0; i < VIEW_COUNT; i++) {
             CardItemView itemView = new CardItemView(getContext());
             itemView.bindLayoutResId(adapter.getLayoutId());    // R.layout.normal_card_item
@@ -172,25 +175,19 @@ public class CardSlidePanel extends FrameLayout {
             }
             itemView.setVisibility(INVISIBLE);   // 一开始，全部设为不可见
         }
+    }
 
-        // 2. viewList 初始化，VIEW_COUNT 个卡片 View
+    public void initViewList() {
+        LogUtils.d(TAG, "initViewList()");
         viewList.clear();
         for (int i = 0; i < VIEW_COUNT; i++) {
             // 上面 addView 加入的每一个，child index 依次增加，叠放次序依次往上（top），所以数据要反过来绑
             viewList.add((CardItemView) getChildAt(VIEW_COUNT - 1 - i));
         }
-
-        // 3. 填充数据
-        doBindData();
     }
 
     public void doBindData() {
         LogUtils.d(TAG, "doBindData()");
-        if (adapter == null) {
-            return;
-        }
-
-        // 3. 填充数据
         int count = adapter.getCount(); // 数据个数，不只是 VIEW_COUNT，可能大大超出
         for (int i = 0; i < VIEW_COUNT; i++) {
             if (i < count) {
@@ -659,8 +656,12 @@ public class CardSlidePanel extends FrameLayout {
 //    }
 
     public void setAdapter(final CardAdapter adapter) {
+        if (adapter == null) {
+            return;
+        }
         this.adapter = adapter;
         LogUtils.d(TAG, "setAdapter()");
+        adapter.calcTopCardDimension();
         doBindAdapter();
         adapter.registerDataSetObserver(mDataObserver);
     }
