@@ -44,6 +44,7 @@ public class FileUtils {
     public static final String PIC_POSTFIX_WEBP = ".webp";
 
     public static final String FRESCO_SCHEME_ASSETS = "asset:///";
+    public static final String FRESCO_SCHEME_RES = "res://";
 
     public static String checkPhoto(String path) {
         if (TextUtils.isEmpty(path)) {
@@ -930,5 +931,9 @@ public class FileUtils {
         }
         LogUtils.d(TAG, "[getUri] + END  , output url = " + url);
         return Uri.parse(url);
+    }
+
+    public static Uri getUriByRes(int resId) {
+        return Uri.parse(FRESCO_SCHEME_RES + "drawable/" + resId);
     }
 }

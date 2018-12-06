@@ -44,6 +44,7 @@ public class CardSlidePanel extends FrameLayout {
     private int topCardW = 295, topCardH = 415;
     private float topCardScale = 1f;
     private static final float SCALE_STEP = 0.1f; // view 叠加缩放的步长
+    private static final float LINKAGE_SCALE_STEP = SCALE_STEP * 1.1f; // LINKAGE_SCALE_STEP 不是 SCALE_STEP，是为了越往后的卡片受顶部卡片的移动的影响越小，可以换成更大的值就能观察到影响
     private static final int MAX_SLIDE_DISTANCE_LINKAGE = 500; // 水平距离+垂直距离
     private final static float MAX_ROTATE_ANGLE = 10;   // 前后两张卡片的角度差
 
@@ -62,7 +63,7 @@ public class CardSlidePanel extends FrameLayout {
     private int isShowing = 0; // 当前正在显示的小项
     private Point downPoint = new Point();
     private CardAdapter adapter;
-    private static final int VIEW_COUNT = Math.min(3, (int) Math.floor(1 / SCALE_STEP) + 2);  // 限制一下 VIEW_COUNT 数量，使得 scale 等永远是正值，不然会有很特别的反向增大现象;
+    private static final int VIEW_COUNT = Math.min(5, (int) Math.floor(1 / SCALE_STEP) + 2);  // 限制一下 VIEW_COUNT 数量，使得 scale 等永远是正值，不然会有很特别的反向增大现象;
     private Rect draggableArea;
     private WeakReference<Object> savedFirstItemData;
 
@@ -166,9 +167,10 @@ public class CardSlidePanel extends FrameLayout {
             itemView.setParentView(this);
             addView(itemView, new LayoutParams(topCardW, topCardH));
 
-            if (i < VIEW_COUNT - 2) {
+            if (i == 0) {
                 itemView.setAlpha(0);   // 最后一张卡片，alpha 为 0
             }
+            itemView.setVisibility(INVISIBLE);   // 一开始，全部设为不可见
         }
 
         // 2. viewList 初始化，VIEW_COUNT 个卡片 View
@@ -179,6 +181,16 @@ public class CardSlidePanel extends FrameLayout {
         }
 
         // 3. 填充数据
+        doBindData();
+    }
+
+    public void doBindData() {
+        LogUtils.d(TAG, "doBindData()");
+        if (adapter == null) {
+            return;
+        }
+
+        // 3. 填充数据
         int count = adapter.getCount(); // 数据个数，不只是 VIEW_COUNT，可能大大超出
         for (int i = 0; i < VIEW_COUNT; i++) {
             if (i < count) {
@@ -186,6 +198,7 @@ public class CardSlidePanel extends FrameLayout {
                 if (i == 0) {
                     savedFirstItemData = new WeakReference<>(adapter.getItem(i));
                 }
+                viewList.get(i).setVisibility(View.VISIBLE);
             } else {    // 数据个数小于 View 个数，即不足 VIEW_COUNT 张卡片了
                 viewList.get(i).setVisibility(View.INVISIBLE);
             }
@@ -371,8 +384,8 @@ public class CardSlidePanel extends FrameLayout {
 //        adjustLinkageViewItem(changedView, rate2, 2);    // 第三张卡片，会缩放和上下移动
         float rateOne;
         for (int i = 1; i < VIEW_COUNT - 1; i++) {
-            // 这里使用 0.1f 而不是 SCALE_STEP，是为了越往后的卡片受顶部卡片的移动的影响越小，可以换成更大的值就能观察到影响
-            rateOne = Math.max(Math.min(rate - 0.1f * (i - 1), 1), 0);
+            // 这里使用 LINKAGE_SCALE_STEP 而不是 SCALE_STEP，是为了越往后的卡片受顶部卡片的移动的影响越小，可以换成更大的值就能观察到影响
+            rateOne = Math.max(Math.min(rate - LINKAGE_SCALE_STEP * (i - 1), 1), 0);
             adjustLinkageViewItem(changedView, rateOne, i);
         }
 
@@ -707,5 +720,13 @@ public class CardSlidePanel extends FrameLayout {
 
     public void setTopCardScale(float topCardScale) {
         this.topCardScale = topCardScale;
+    }
+
+    public int getItemMarginTop() {
+        return itemMarginTop;
+    }
+
+    public void setItemMarginTop(int itemMarginTop) {
+        this.itemMarginTop = itemMarginTop;
     }
 }

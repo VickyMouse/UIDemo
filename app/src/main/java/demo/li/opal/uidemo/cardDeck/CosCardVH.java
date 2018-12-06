@@ -1,6 +1,7 @@
 package demo.li.opal.uidemo.cardDeck;
 
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import demo.li.opal.uidemo.R;
@@ -11,16 +12,30 @@ import demo.li.opal.uidemo.R;
 
 public class CosCardVH extends CardVH<CosCardItemData> {
 
-    TextView userName;
+    private int cornerDecorPath[] = {
+            R.drawable.cardpat_1,
+            R.drawable.cardpat_2,
+            R.drawable.cardpat_3,
+            R.drawable.cardpat_4
+    };
+
+    TextView description;
+    ImageView topLeftDecor, rightBottomDecor;
 
     public CosCardVH(View view) {
         super(view);
-        userName = view.findViewById(R.id.card_user_name);
+        description = view.findViewById(R.id.card_description);
+        topLeftDecor = view.findViewById(R.id.top_left_decor);
+        rightBottomDecor = view.findViewById(R.id.right_bottom_decor);
     }
 
     @Override
     public void bindData(CosCardItemData itemData) {
         super.bindData(itemData);
-        userName.setText(itemData.getDescription());
+        int decorIndex = itemData.index % cornerDecorPath.length;
+        topLeftDecor.setImageResource(cornerDecorPath[decorIndex]);
+        rightBottomDecor.setImageResource(cornerDecorPath[decorIndex]);
+        description.setText(itemData.getDescription());
+
     }
 }

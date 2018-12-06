@@ -10,12 +10,14 @@
     android:paddingBottom="26dp"
     android:background="@drawable/bg_daily_cos_card">
     <ImageView
+        android:id="@+id/top_left_decor"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_alignParentTop="true"
         android:src="@drawable/cardpat_1"/>
     <ImageView
+        android:id="@+id/right_bottom_decor"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"

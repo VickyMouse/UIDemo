@@ -45,7 +45,7 @@ public class CardDeckActivity extends FragmentActivity implements View.OnClickLi
     private View btnDiscard;
     private View btnSave;
 
-    private int availableCardDeckW = -1, availableCardDeckH = -1;
+    private float availableCardDeckW = -1f, availableCardDeckH = -1f;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -89,8 +89,8 @@ public class CardDeckActivity extends FragmentActivity implements View.OnClickLi
         };
         slidePanel.setCardDeckListener(cardSwitchListener);
 
-        calculateTopCardScale();
         // 2. 绑定 Adapter
+        calculateTopCardScale();
         slidePanel.setAdapter(new CardAdapter() {
             @Override
             public int getLayoutId() {
@@ -105,11 +105,11 @@ public class CardDeckActivity extends FragmentActivity implements View.OnClickLi
             @Override
             public void bindView(View view, int index) {
                 Object tag = view.getTag(); // ViewHolder 的指针
-                CardVH viewHolder;
+                CosCardVH viewHolder;
                 if (null != tag) {
-                    viewHolder = (CardVH) tag;
+                    viewHolder = (CosCardVH) tag;
                 } else {
-                    viewHolder = new CardVH(view);
+                    viewHolder = new CosCardVH(view);
                     view.setTag(viewHolder);
                 }
                 viewHolder.bindData(dataList.get(index));
@@ -150,7 +150,8 @@ public class CardDeckActivity extends FragmentActivity implements View.OnClickLi
                 LogUtils.d(TAG, "onGlobalLayout()");
 
                 if (dataList.size() == 0) {
-                    prepareDataList();  // Todo: 不知道为什么，必须在 View 都创建完后再和数据绑定，不然只会有两张卡片
+                    prepareDataList();
+                    slidePanel.doBindData();
                     slidePanel.getAdapter().notifyDataSetChanged();
                 }
             }
@@ -159,34 +160,36 @@ public class CardDeckActivity extends FragmentActivity implements View.OnClickLi
 
     private void calculateTopCardScale() {
         if (availableCardDeckW < 0 || availableCardDeckH < 0) {
-            availableCardDeckW = (int) (DeviceUtils.getScreenWidth(CardDeckActivity.this) * 0.786);
+            availableCardDeckW = DeviceUtils.getScreenWidth(CardDeckActivity.this) * 0.786f;
             availableCardDeckH = DeviceUtils.getScreenHeight(CardDeckActivity.this)
-                    - DeviceUtils.dip2px(CardDeckActivity.this, 83 * 2 + 90);
+                    - DeviceUtils.dip2px(CardDeckActivity.this, 83 * 2 + 75 + 3 * 7);
 //            availableCardDeckH = ((RelativeLayout)slidePanel.getParent()).getMeasuredHeight()
 //                    - DeviceUtils.dip2px(CardDeckActivity.this, 83*2 + 75);
             int initWidth = slidePanel.getTopCardW();
-            float cardDeckRatio = 1f * initWidth / slidePanel.getTopCardH();
-            if (availableCardDeckW / availableCardDeckH > cardDeckRatio) {
-                slidePanel.setTopCardW(availableCardDeckW);
+            int initHeight = slidePanel.getTopCardH();
+            float cardDeckRatio = 1f * initWidth / initHeight;
+            if (availableCardDeckW / availableCardDeckH < cardDeckRatio) {
+                slidePanel.setTopCardW((int) availableCardDeckW);
                 slidePanel.setTopCardH((int) (availableCardDeckW / cardDeckRatio));
             } else {
-                slidePanel.setTopCardH(availableCardDeckH);
+                slidePanel.setTopCardH((int) availableCardDeckH);
                 slidePanel.setTopCardW((int) (availableCardDeckH * cardDeckRatio));
             }
             slidePanel.setTopCardScale(1f * slidePanel.getTopCardW() / DeviceUtils.dip2px(CardDeckActivity.this, initWidth));
+            slidePanel.setItemMarginTop(slidePanel.getItemMarginTop() + (int)(availableCardDeckH - slidePanel.getTopCardH())/2);
         }
     }
 
     private void prepareDataList() {
         for (int i = 0; i < 6; i++) {
-            CosCardItemData dataItem = new CosCardItemData(imagePaths[i], "造型设计 by " + names[i]);
+            CosCardItemData dataItem = new CosCardItemData(imagePaths[i], dataList.size(), "造型设计 by " + names[i]);
             dataList.add(dataItem);
         }
     }
 
     private void appendDataList() {
         for (int i = 0; i < 6; i++) {
-            CosCardItemData dataItem = new CosCardItemData();
+            CosCardItemData dataItem = new CosCardItemData(dataList.size());
             dataList.add(dataItem);
         }
     }
