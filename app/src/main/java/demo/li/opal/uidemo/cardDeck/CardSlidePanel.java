@@ -156,17 +156,13 @@ public class CardSlidePanel extends FrameLayout {
     }
 
     public void disableClipOnParents(View v) {
-        if (v == null || v.getParent() == null) {
+        if (v == null) {
             return;
         }
-
         if (v instanceof ViewGroup) {
             ((ViewGroup) v).setClipChildren(false);
         }
-
-        if (v.getParent() instanceof View) {
-            disableClipOnParents((View) v.getParent());
-        }
+        disableClipOnParents((View) v.getParent());
     }
 
     public void doBindAdapter() {
