@@ -41,8 +41,10 @@ public class CardSlidePanel extends FrameLayout {
     private int allHeight = 0; // 面板的高度
     private int childWith = 0; // 每一个子 View 对应的宽度
 
+//    public static final int CARD_WIDTH_IN_DP = 295, CARD_HEIGHT_IN_DP = 415;
     private int topCardW = 295, topCardH = 415;
-    private float topCardScale = 1f;
+//    private float cardDeckScale = 1f;
+
     private static final float SCALE_STEP = 0.1f; // view 叠加缩放的步长
     private static final float LINKAGE_SCALE_STEP = SCALE_STEP * 1.1f; // LINKAGE_SCALE_STEP 不是 SCALE_STEP，是为了越往后的卡片受顶部卡片的移动的影响越小，可以换成更大的值就能观察到影响
     private static final int MAX_SLIDE_DISTANCE_LINKAGE = 500; // 水平距离+垂直距离
@@ -63,7 +65,7 @@ public class CardSlidePanel extends FrameLayout {
     private int isShowing = 0; // 当前正在显示的小项
     private Point downPoint = new Point();
     private CardAdapter adapter;
-    private static final int VIEW_COUNT = Math.min(5, (int) Math.floor(1 / SCALE_STEP) + 2);  // 限制一下 VIEW_COUNT 数量，使得 scale 等永远是正值，不然会有很特别的反向增大现象;
+    public static final int VIEW_COUNT = Math.min(5, (int) Math.floor(1 / SCALE_STEP) + 2);  // 限制一下 VIEW_COUNT 数量，使得 scale 等永远是正值，不然会有很特别的反向增大现象;
     private Rect draggableArea;
     private WeakReference<Object> savedFirstItemData;
 
@@ -715,13 +717,13 @@ public class CardSlidePanel extends FrameLayout {
         this.topCardH = topCardH;
     }
 
-    public float getTopCardScale() {
-        return topCardScale;
-    }
-
-    public void setTopCardScale(float topCardScale) {
-        this.topCardScale = topCardScale;
-    }
+//    public float getCardDeckScale() {
+//        return cardDeckScale;
+//    }
+//
+//    public void setCardDeckScale(float cardDeckScale) {
+//        this.cardDeckScale = cardDeckScale;
+//    }
 
     public int getItemMarginTop() {
         return itemMarginTop;
@@ -729,5 +731,9 @@ public class CardSlidePanel extends FrameLayout {
 
     public void setItemMarginTop(int itemMarginTop) {
         this.itemMarginTop = itemMarginTop;
+    }
+
+    public int getYOffsetStep() {
+        return yOffsetStep;
     }
 }

@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/bg_daily_cos_repeat"
-    android:paddingTop="75dp"
+    android:paddingTop="@dimen/daily_cos_top_placeholder"
     android:orientation="vertical">
 
     <ImageView
@@ -18,8 +18,8 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_alignParentTop="true"
-        card:itemMarginTop="83dp"
-        card:yOffsetStep="7dp" />
+        card:itemMarginTop="@dimen/daily_cos_top_panel_height"
+        card:yOffsetStep="@dimen/daily_cos_card_y_offset" />
 
     <ImageView
         android:id="@+id/load_more"
@@ -29,7 +29,7 @@
         android:layout_alignParentRight="true"
         android:layout_gravity="right|center_vertical"
         android:padding="16dp"
-        android:layout_marginBottom="17dp"
+        android:layout_marginBottom="@dimen/daily_cos_bottom_bar_margin_bottom"
         android:src="@drawable/download" />
 
     <RelativeLayout
@@ -91,9 +91,9 @@
     <LinearLayout
         android:id="@+id/bottom_bar"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="@dimen/daily_cos_bottom_bar_height"
+        android:layout_marginBottom="@dimen/daily_cos_bottom_bar_margin_bottom"
         android:layout_alignParentBottom="true"
-        android:layout_marginBottom="17dp"
         android:orientation="horizontal">
 
         <ImageView

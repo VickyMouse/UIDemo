@@ -6,4 +6,12 @@
 
     <dimen name="camera_bottom_button_text_btm_margin">12dp</dimen>
 
+    <dimen name="daily_cos_top_placeholder">75dp</dimen>
+    <dimen name="daily_cos_top_panel_height">83dp</dimen>
+    <dimen name="daily_cos_card_width">295dp</dimen>
+    <dimen name="daily_cos_card_height">415dp</dimen>
+    <dimen name="daily_cos_card_y_offset">7dp</dimen>
+    <dimen name="daily_cos_bottom_bar_height">58dp</dimen>
+    <dimen name="daily_cos_bottom_bar_margin_bottom">17dp</dimen>
+
 </resources>

@@ -1,5 +1,6 @@
 package demo.li.opal.uidemo.cardDeck;
 
+import android.content.res.Resources;
 import android.graphics.Rect;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
@@ -18,7 +19,7 @@ import demo.li.opal.uidemo.Utils.LogUtils;
 public class CardDeckActivity extends FragmentActivity implements View.OnClickListener {
     private static final String TAG = CardDeckActivity.class.getSimpleName();
 
-    private CardSlidePanel.CardDeckListener cardSwitchListener;
+    public static final float CARD_H_RATIO = 0.786f;    // 卡片宽度最多占屏幕比例
 
     private String imagePaths[] = {
             FileUtils.FRESCO_SCHEME_ASSETS + "cards/wall01.jpg",
@@ -46,6 +47,8 @@ public class CardDeckActivity extends FragmentActivity implements View.OnClickLi
     private View btnSave;
 
     private float availableCardDeckW = -1f, availableCardDeckH = -1f;
+
+    private CardSlidePanel.CardDeckListener cardSwitchListener;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -122,6 +125,7 @@ public class CardDeckActivity extends FragmentActivity implements View.OnClickLi
             @Override
             public Rect obtainDraggableArea(View view) {
                 // 可滑动区域定制，该函数只会调用一次
+                // Daily Cos 的作用区域是左上和有下装饰（牌的花色）围起来的区域，找设计确认过可以，无需扩大到整张牌的区域
                 View contentView = view.findViewById(R.id.card_item);
                 int left = view.getLeft() + contentView.getPaddingLeft();
                 int right = view.getRight() - contentView.getPaddingRight();
@@ -133,23 +137,30 @@ public class CardDeckActivity extends FragmentActivity implements View.OnClickLi
             @Override
             public void calcTopCardDimension() {
                 if (availableCardDeckW < 0 || availableCardDeckH < 0) {
-                    availableCardDeckW = DeviceUtils.getScreenWidth(CardDeckActivity.this) * 0.786f;
+                    Resources res = getResources();
+                    slidePanel.setTopCardW(res.getDimensionPixelSize(R.dimen.daily_cos_card_width));
+                    slidePanel.setTopCardH(res.getDimensionPixelSize(R.dimen.daily_cos_card_height));
+
+                    availableCardDeckW = DeviceUtils.getScreenWidth(CardDeckActivity.this) * CARD_H_RATIO;
                     availableCardDeckH = DeviceUtils.getScreenHeight(CardDeckActivity.this)
-                            - DeviceUtils.dip2px(CardDeckActivity.this, 83 * 2 + 75 + 3 * 7);
-//            availableCardDeckH = ((RelativeLayout)slidePanel.getParent()).getMeasuredHeight()
-//                    - DeviceUtils.dip2px(CardDeckActivity.this, 83*2 + 75);
-                    int initWidth = slidePanel.getTopCardW();
-                    int initHeight = slidePanel.getTopCardH();
-                    float cardDeckRatio = 1f * initWidth / initHeight;
+                            - res.getDimensionPixelSize(R.dimen.daily_cos_top_placeholder)  // 顶部其他区域高度
+                            - res.getDimensionPixelSize(R.dimen.daily_cos_top_panel_height) // 顶部 Margin（每日剩余次数面板高度）
+                            - res.getDimensionPixelSize(R.dimen.daily_cos_bottom_bar_height)    // 底部按钮栏高度
+                            - res.getDimensionPixelSize(R.dimen.daily_cos_bottom_bar_margin_bottom) // 底部按钮栏 Margin
+                            - (CardSlidePanel.VIEW_COUNT - 2) * slidePanel.getYOffsetStep(); // 卡堆竖直方向总偏移（TODO：这里其实有漏洞，因为缩放后，这个值也应该偏移）
+//                    availableCardDeckH = ((RelativeLayout) slidePanel.getParent()).getMeasuredHeight();
+                    float cardDeckRatio = 1f * slidePanel.getTopCardW() / slidePanel.getTopCardH();
+                    float deckScale;
                     if (availableCardDeckW / availableCardDeckH < cardDeckRatio) {
-                        slidePanel.setTopCardW((int) availableCardDeckW);
-                        slidePanel.setTopCardH((int) (availableCardDeckW / cardDeckRatio));
+                        deckScale = availableCardDeckW / slidePanel.getTopCardW();
                     } else {
-                        slidePanel.setTopCardH((int) availableCardDeckH);
-                        slidePanel.setTopCardW((int) (availableCardDeckH * cardDeckRatio));
+                        deckScale = availableCardDeckH / slidePanel.getTopCardH();
                     }
-                    slidePanel.setTopCardScale(1f * slidePanel.getTopCardW() / DeviceUtils.dip2px(CardDeckActivity.this, initWidth));
-                    slidePanel.setItemMarginTop(slidePanel.getItemMarginTop() + (int) (availableCardDeckH - slidePanel.getTopCardH()) / 2);
+                    // 默认缩放中心是控件中心
+                    slidePanel.setScaleX(deckScale);
+                    slidePanel.setScaleY(deckScale);
+                    // 竖直方向上居中显示
+                    slidePanel.setItemMarginTop(slidePanel.getItemMarginTop() + (int) ((availableCardDeckH - slidePanel.getTopCardH()) / 2));
                 }
             }
         });
