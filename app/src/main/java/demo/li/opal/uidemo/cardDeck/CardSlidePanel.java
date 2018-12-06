@@ -156,7 +156,7 @@ public class CardSlidePanel extends FrameLayout {
     }
 
     public void disableClipOnParents(View v) {
-        if (v.getParent() == null) {
+        if (v == null || v.getParent() == null) {
             return;
         }
 
