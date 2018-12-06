@@ -12,6 +12,7 @@ import android.support.v4.widget.ViewDragHelper;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.FrameLayout;
 
 import java.lang.ref.WeakReference;
@@ -154,6 +155,20 @@ public class CardSlidePanel extends FrameLayout {
         a.recycle();
     }
 
+    public void disableClipOnParents(View v) {
+        if (v.getParent() == null) {
+            return;
+        }
+
+        if (v instanceof ViewGroup) {
+            ((ViewGroup) v).setClipChildren(false);
+        }
+
+        if (v.getParent() instanceof View) {
+            disableClipOnParents((View) v.getParent());
+        }
+    }
+
     public void doBindAdapter() {
         LogUtils.d(TAG, "doBindAdapter()");
         // 1. 添加 VIEW_COUNT 张卡片 View 到"牌堆"
@@ -177,6 +192,7 @@ public class CardSlidePanel extends FrameLayout {
             }
             itemView.setVisibility(INVISIBLE);   // 一开始，全部设为不可见
         }
+        disableClipOnParents(this);
     }
 
     public void initViewList() {

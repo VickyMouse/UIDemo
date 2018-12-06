@@ -3,9 +3,6 @@ package demo.li.opal.uidemo.cardDeck;
 import android.animation.ObjectAnimator;
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.graphics.Canvas;
-import android.graphics.Paint;
-import android.graphics.PaintFlagsDrawFilter;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -105,7 +102,7 @@ public class CardItemView extends FrameLayout {
     public void bindLayoutResId(int layoutResId) {
         LayoutInflater inflater = LayoutInflater.from(getContext());
         View view = inflater.inflate(layoutResId, null);
-        addView(view, new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT));
+        addView(view, new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
     }
 
     public void setVisibilityWithAnimation(final int visibility, int delayIndex) {
@@ -116,8 +113,7 @@ public class CardItemView extends FrameLayout {
             if (null != alphaAnimator) {
                 alphaAnimator.cancel();
             }
-            alphaAnimator = ObjectAnimator.ofFloat(this, "alpha",
-                    0.0f, 1.0f);
+            alphaAnimator = ObjectAnimator.ofFloat(this, "alpha", 0.0f, 1.0f);
             alphaAnimator.setDuration(ANIM_DURATION);
             alphaAnimator.setStartDelay(delayIndex * DELAY_INTERVAL);
             alphaAnimator.start();
