@@ -19,7 +19,7 @@ import demo.li.opal.uidemo.Utils.LogUtils;
 public class CardDeckActivity extends FragmentActivity implements View.OnClickListener {
     private static final String TAG = CardDeckActivity.class.getSimpleName();
 
-    public static final float CARD_H_RATIO = 0.786f;    // 卡片宽度最多占屏幕比例
+    public static final float CARD_H_RATIO = 0.786f;    // 卡片宽度最多占屏幕宽度的比例
 
     private String imagePaths[] = {
             FileUtils.FRESCO_SCHEME_ASSETS + "cards/wall01.jpg",
@@ -136,6 +136,13 @@ public class CardDeckActivity extends FragmentActivity implements View.OnClickLi
 
             @Override
             public void calcTopCardDimension() {
+                /* 屏幕适配策略：
+                 * 1. 可用宽度 = 屏幕宽度 * CARD_H_RATIO；
+                 * 2. 可用高度 = 屏幕高度 - 顶部其他部分（标题、tab 等）高度 - 顶部 Margin（每日剩余次数面板高度）
+                 *              - 底部按钮栏高度 - 底部按钮栏 Margin - 卡堆内所有卡片竖直方向总偏移；
+                 * 3. 卡片保持宽高比例，在可用区域内缩放适配；
+                 * 4. 如果（长屏手机上）缩放后的卡堆高度没有撑满可用高度，则竖直方向居中显示；
+                 */
                 if (availableCardDeckW < 0 || availableCardDeckH < 0) {
                     Resources res = getResources();
                     slidePanel.setTopCardW(res.getDimensionPixelSize(R.dimen.daily_cos_card_width));
@@ -143,11 +150,11 @@ public class CardDeckActivity extends FragmentActivity implements View.OnClickLi
 
                     availableCardDeckW = DeviceUtils.getScreenWidth(CardDeckActivity.this) * CARD_H_RATIO;
                     availableCardDeckH = DeviceUtils.getScreenHeight(CardDeckActivity.this)
-                            - res.getDimensionPixelSize(R.dimen.daily_cos_top_placeholder)  // 顶部其他区域高度
+                            - res.getDimensionPixelSize(R.dimen.daily_cos_top_placeholder)  // 顶部其他区域（标题、tab 等）高度
                             - res.getDimensionPixelSize(R.dimen.daily_cos_top_panel_height) // 顶部 Margin（每日剩余次数面板高度）
                             - res.getDimensionPixelSize(R.dimen.daily_cos_bottom_bar_height)    // 底部按钮栏高度
                             - res.getDimensionPixelSize(R.dimen.daily_cos_bottom_bar_margin_bottom) // 底部按钮栏 Margin
-                            - (CardSlidePanel.VIEW_COUNT - 2) * slidePanel.getYOffsetStep(); // 卡堆竖直方向总偏移（TODO：这里其实有漏洞，因为缩放后，这个值也应该偏移）
+                            - (CardSlidePanel.VIEW_COUNT - 2) * slidePanel.getYOffsetStep(); // 卡堆内所有卡片竖直方向总偏移（TODO：这里其实有漏洞，因为缩放后，这个值也应该偏移）
 //                    availableCardDeckH = ((RelativeLayout) slidePanel.getParent()).getMeasuredHeight();
                     float cardDeckRatio = 1f * slidePanel.getTopCardW() / slidePanel.getTopCardH();
                     float deckScale;
