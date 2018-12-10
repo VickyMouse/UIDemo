@@ -71,6 +71,8 @@ public class CardSlidePanel extends FrameLayout {
     private WeakReference<Object> savedFirstItemData;
 //    private WeakReference<View> releasedChildren;
 
+    private volatile boolean isHolding = false;
+
     private DataSetObserver mDataObserver = new DataSetObserver() {
         @Override
         public void onChanged() {
@@ -303,6 +305,10 @@ public class CardSlidePanel extends FrameLayout {
         public void onViewReleased(View releasedChild, float xvel, float yvel) {
 //            releasedChildren = new WeakReference<>(releasedChild);
             animToSide((CardItemView) releasedChild, (int) xvel, (int) yvel);
+//            if (cardDeckListener != null) {
+//                cardDeckListener.onTopCardMoved(0, VANISH_TYPE_LEFT);
+//            }
+            isHolding = false;
         }
 
         @Override
@@ -339,6 +345,10 @@ public class CardSlidePanel extends FrameLayout {
                 new PointF(initialTopViewX, initialTopViewY));
         float rate = distance / (float) MAX_SLIDE_DISTANCE_LINKAGE;
         processLinkageViews(changedView, rate);
+        // 更新主界面 UI
+        if (isHolding && cardDeckListener != null) {
+            cardDeckListener.onTopCardMoved(rate, (changeViewLeft - initialTopViewX) > 0 ? VANISH_TYPE_RIGHT : VANISH_TYPE_LEFT);
+        }
     }
 
     /**
@@ -545,7 +555,7 @@ public class CardSlidePanel extends FrameLayout {
                 ViewCompat.postInvalidateOnAnimation(this);
             }
         }
-
+        isHolding = false;
         if (type >= 0 && cardDeckListener != null) {
             cardDeckListener.onCardVanish(isShowing, type);
         }
@@ -589,6 +599,7 @@ public class CardSlidePanel extends FrameLayout {
                 mDragHelper.abort();
             }
             orderViewStack();
+            isHolding = true;
 
             // 保存初次按下时 arrowFlagView 的 Y 坐标
             // action_down 时就让 mDragHelper 开始工作，否则有时候导致异常
@@ -748,6 +759,13 @@ public class CardSlidePanel extends FrameLayout {
         void onCardVanish(int index, int type);
 
         void onCardDeckLoadFinish();
+
+        /**
+         * 卡片飞向两侧回调
+         *
+         * @param ratio 顶部卡片拖动距离：更新 UI 用
+         */
+        void onTopCardMoved(float ratio, int type);
     }
 
     public int getTopCardW() {

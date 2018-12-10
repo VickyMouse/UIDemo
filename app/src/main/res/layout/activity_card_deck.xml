@@ -3,6 +3,7 @@
     xmlns:card="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:clipChildren="false"
     android:background="@drawable/bg_daily_cos_repeat"
     android:paddingTop="@dimen/daily_cos_top_placeholder"
     android:orientation="vertical">
@@ -110,6 +111,7 @@
         android:layout_height="@dimen/daily_cos_bottom_bar_height"
         android:layout_marginBottom="@dimen/daily_cos_bottom_bar_margin_bottom"
         android:layout_alignParentBottom="true"
+        android:clipChildren="false"
         android:orientation="horizontal">
 
         <ImageView
@@ -125,6 +127,7 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="25dp"
             android:orientation="horizontal"
+            android:clipChildren="false"
             android:clickable="true">
 
             <ImageView
@@ -150,6 +153,7 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="25dp"
             android:orientation="horizontal"
+            android:clipChildren="false"
             android:clickable="true">
 
             <ImageView

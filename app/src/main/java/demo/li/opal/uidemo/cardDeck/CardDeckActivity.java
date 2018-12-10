@@ -10,6 +10,11 @@ import android.view.ViewTreeObserver;
 import android.view.Window;
 import android.widget.CheckBox;
 
+import com.facebook.rebound.SimpleSpringListener;
+import com.facebook.rebound.Spring;
+import com.facebook.rebound.SpringConfig;
+import com.facebook.rebound.SpringSystem;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -50,10 +55,18 @@ public class CardDeckActivity extends FragmentActivity implements View.OnClickLi
     private View btnRetake;
     private View btnDiscard;
     private View btnSave;
+    private View icDiscard;
+    private View icSave;
 
     private float availableCardDeckW = -1f, availableCardDeckH = -1f;
 
-    private CardSlidePanel.CardDeckListener cardSwitchListener;
+    private CardSlidePanel.CardDeckListener cardDeckListener;
+
+    SpringConfig springConfig = SpringConfig.fromBouncinessAndSpeed(15, 20);
+    SpringSystem springSystem = SpringSystem.create();
+    // Add a spring to the system.
+    Spring springLeft = springSystem.createSpring().setSpringConfig(springConfig);
+    Spring springRight = springSystem.createSpring().setSpringConfig(springConfig);
 
     private Handler genCardHandler = new Handler() {
         public void handleMessage(android.os.Message msg) {
@@ -96,7 +109,7 @@ public class CardDeckActivity extends FragmentActivity implements View.OnClickLi
     private void initView() {
         slidePanel = findViewById(R.id.image_slide_panel);
         // 对当前卡片的左右滑动监听
-        cardSwitchListener = new CardSlidePanel.CardDeckListener() {
+        cardDeckListener = new CardSlidePanel.CardDeckListener() {
 
             public void onShow(int index) {
                 LogUtils.d("Index Error", "onShow(" + index + " / " + dataList.size() + ")");
@@ -109,6 +122,32 @@ public class CardDeckActivity extends FragmentActivity implements View.OnClickLi
                 // 一堆一堆加载不会
                 LogUtils.d("Index Error", "onCardVanish(" + index + " / " + dataList.size() + ", " + type + ")");
                 LogUtils.d("Card", "正在消失-" + dataList.get(index).getDescription() + " 消失 type=" + type);
+                if (type == CardSlidePanel.VANISH_TYPE_LEFT) {
+                    springLeft.setCurrentValue(1.05);
+                    springLeft.setEndValue(1);
+                } else {
+                    springRight.setCurrentValue(1.05);
+                    springRight.setEndValue(1);
+                }
+            }
+
+            @Override
+            public void onTopCardMoved(float ratio, int type) {
+                LogUtils.d("Card", "顶部卡片拖动：" + ratio);
+                if (icDiscard == null || icSave == null) {
+                    return;
+                }
+                if (type == CardSlidePanel.VANISH_TYPE_LEFT) {
+                    icDiscard.setScaleX(1 + 0.05f * ratio);
+                    icDiscard.setScaleY(1 + 0.05f * ratio);
+                    icSave.setScaleX(1f);
+                    icSave.setScaleY(1f);
+                } else {
+                    icDiscard.setScaleX(1f);
+                    icDiscard.setScaleY(1f);
+                    icSave.setScaleX(1 + 0.05f * ratio);
+                    icSave.setScaleY(1 + 0.05f * ratio);
+                }
             }
 
             @Override
@@ -121,7 +160,7 @@ public class CardDeckActivity extends FragmentActivity implements View.OnClickLi
                 }
             }
         };
-        slidePanel.setCardDeckListener(cardSwitchListener);
+        slidePanel.setCardDeckListener(cardDeckListener);
 
         // 2. 绑定 Adapter
         slidePanel.setAdapter(new CardAdapter() {
@@ -225,10 +264,14 @@ public class CardDeckActivity extends FragmentActivity implements View.OnClickLi
 
         btnRetake = findViewById(R.id.change_photo);
         btnRetake.setOnClickListener(this);
+        // 点击
         btnDiscard = findViewById(R.id.discard_container);
         btnDiscard.setOnClickListener(this);
         btnSave = findViewById(R.id.save_container);
         btnSave.setOnClickListener(this);
+        // 缩放动画
+        icDiscard = findViewById(R.id.btn_discard);
+        icSave = findViewById(R.id.btn_save);
 
         slidePanel.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
             @Override
@@ -240,6 +283,30 @@ public class CardDeckActivity extends FragmentActivity implements View.OnClickLi
                     slidePanel.doBindData();
                     slidePanel.getAdapter().notifyDataSetChanged();
                 }
+            }
+        });
+
+        // Add a listener to observe the motion of the spring.
+        springLeft.addListener(new SimpleSpringListener() {
+            @Override
+            public void onSpringUpdate(Spring spring) {
+                // You can observe the updates in the spring
+                // state by asking its current value in onSpringUpdate.
+                float value = (float) spring.getCurrentValue();
+                icDiscard.setScaleX(value);
+                icDiscard.setScaleY(value);
+            }
+        });
+
+        // Add a listener to observe the motion of the spring.
+        springRight.addListener(new SimpleSpringListener() {
+            @Override
+            public void onSpringUpdate(Spring spring) {
+                // You can observe the updates in the spring
+                // state by asking its current value in onSpringUpdate.
+                float value = (float) spring.getCurrentValue();
+                icSave.setScaleX(value);
+                icSave.setScaleY(value);
             }
         });
     }
