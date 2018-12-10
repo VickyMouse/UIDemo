@@ -3,10 +3,12 @@ package demo.li.opal.uidemo.cardDeck;
 import android.content.res.Resources;
 import android.graphics.Rect;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v4.app.FragmentActivity;
 import android.view.View;
 import android.view.ViewTreeObserver;
 import android.view.Window;
+import android.widget.CheckBox;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,6 +20,8 @@ import demo.li.opal.uidemo.Utils.LogUtils;
 
 public class CardDeckActivity extends FragmentActivity implements View.OnClickListener {
     private static final String TAG = CardDeckActivity.class.getSimpleName();
+    public static final int GEN_1_CARD = 0;
+    public static final int STOP_GEN_CARD = 1;
 
     public static final float CARD_H_RATIO = 0.786f;    // 卡片宽度最多占屏幕宽度的比例
 
@@ -41,6 +45,7 @@ public class CardDeckActivity extends FragmentActivity implements View.OnClickLi
 
     private List<CosCardItemData> dataList = new ArrayList<>();
     private CardSlidePanel slidePanel;
+    private CheckBox autoGenCard;
     private View btnLoadMore;
     private View btnRetake;
     private View btnDiscard;
@@ -49,6 +54,28 @@ public class CardDeckActivity extends FragmentActivity implements View.OnClickLi
     private float availableCardDeckW = -1f, availableCardDeckH = -1f;
 
     private CardSlidePanel.CardDeckListener cardSwitchListener;
+
+    private Handler genCardHandler = new Handler() {
+        public void handleMessage(android.os.Message msg) {
+            switch (msg.what) {
+                case GEN_1_CARD:
+                    // 移除所有的 msg.what 为 0 等消息，保证只有一个循环消息队列再跑
+                    genCardHandler.removeMessages(GEN_1_CARD);
+                    // app 的功能逻辑处理
+                    genOneCard();
+                    // 再次发出 msg，循环更新
+                    genCardHandler.sendEmptyMessageDelayed(GEN_1_CARD, 1000);
+                    break;
+
+                case STOP_GEN_CARD:
+                    // 直接移除，定时器停止
+                    genCardHandler.removeMessages(GEN_1_CARD);
+                    break;
+                default:
+                    break;
+            }
+        }
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,18 +98,22 @@ public class CardDeckActivity extends FragmentActivity implements View.OnClickLi
         // 对当前卡片的左右滑动监听
         cardSwitchListener = new CardSlidePanel.CardDeckListener() {
 
-            @Override
             public void onShow(int index) {
+                LogUtils.d("Index Error", "onShow(" + index + " / " + dataList.size() + ")");
                 LogUtils.d("Card", "正在显示-" + dataList.get(index).getDescription());
             }
 
             @Override
             public void onCardVanish(int index, int type) {
+                // Todo：当一秒生成一张卡片的时候，左右划（同一个方向也会）有时候会造成同一张卡片 Vanish 两次
+                // 一堆一堆加载不会
+                LogUtils.d("Index Error", "onCardVanish(" + index + " / " + dataList.size() + ", " + type + ")");
                 LogUtils.d("Card", "正在消失-" + dataList.get(index).getDescription() + " 消失 type=" + type);
             }
 
             @Override
             public void onCardDeckLoadFinish() {
+                LogUtils.d("Index Error", "onCardDeckLoadFinish()");
                 LogUtils.d(TAG, "onCardDeckLoadFinish()");
                 if (!btnLoadMore.isEnabled()) {
                     LogUtils.d(TAG, "onCardDeckLoadFinish() - enable btn");
@@ -172,6 +203,21 @@ public class CardDeckActivity extends FragmentActivity implements View.OnClickLi
             }
         });
 
+        autoGenCard = findViewById(R.id.auto_gen_card);
+        autoGenCard.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                //is chkIos checked?
+                if (((CheckBox) v).isChecked()) {
+                    genCardHandler.sendEmptyMessage(GEN_1_CARD);
+                } else {
+                    genCardHandler.sendEmptyMessage(STOP_GEN_CARD);
+                }
+
+            }
+        });
+
         // 加载更多数据
         btnLoadMore = findViewById(R.id.load_more);
         btnLoadMore.setEnabled(false);
@@ -230,4 +276,17 @@ public class CardDeckActivity extends FragmentActivity implements View.OnClickLi
                 break;
         }
     }
+
+    public void genOneCard() {
+        int i = (int) (System.currentTimeMillis() % imagePaths.length);
+        CosCardItemData dataItem = new CosCardItemData(imagePaths[i], dataList.size(), "造型设计 by " + names[i]);
+        dataList.add(dataItem);
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                slidePanel.getAdapter().notifyDataSetChanged();
+            }
+        });
+    }
+
 }

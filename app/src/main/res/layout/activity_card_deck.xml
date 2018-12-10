@@ -21,16 +21,32 @@
         card:itemMarginTop="@dimen/daily_cos_top_panel_height"
         card:yOffsetStep="@dimen/daily_cos_card_y_offset" />
 
-    <ImageView
+    <TextView
         android:id="@+id/load_more"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
+        android:layout_width="wrap_content"
+        android:layout_height="30dp"
         android:layout_alignParentBottom="true"
         android:layout_alignParentRight="true"
-        android:layout_gravity="right|center_vertical"
-        android:padding="16dp"
         android:layout_marginBottom="@dimen/daily_cos_bottom_bar_margin_bottom"
-        android:src="@drawable/download" />
+        android:layout_marginRight="5dp"
+        android:gravity="center"
+        android:textColor="@color/black"
+        android:textSize="14sp"
+        android:text="加载更多" />
+
+    <CheckBox
+        android:id="@+id/auto_gen_card"
+        android:layout_width="wrap_content"
+        android:layout_height="30dp"
+        android:layout_above="@id/load_more"
+        android:layout_alignParentRight="true"
+        android:layout_marginBottom="5dp"
+        android:layout_marginRight="5dp"
+        android:gravity="center"
+        android:textColor="@color/black"
+        android:textSize="14sp"
+        android:text="持续生成"
+        android:checked="false"/>
 
     <RelativeLayout
         android:id="@+id/top_panel"

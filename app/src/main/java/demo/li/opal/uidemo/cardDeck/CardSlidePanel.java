@@ -42,7 +42,7 @@ public class CardSlidePanel extends FrameLayout {
     private int allHeight = 0; // 面板的高度
     private int childWith = 0; // 每一个子 View 对应的宽度
 
-//    public static final int CARD_WIDTH_IN_DP = 295, CARD_HEIGHT_IN_DP = 415;
+    //    public static final int CARD_WIDTH_IN_DP = 295, CARD_HEIGHT_IN_DP = 415;
     private int topCardW = 295, topCardH = 415;
 //    private float cardDeckScale = 1f;
 
@@ -69,27 +69,33 @@ public class CardSlidePanel extends FrameLayout {
     public static final int VIEW_COUNT = Math.min(5, (int) Math.floor(1 / SCALE_STEP) + 2);  // 限制一下 VIEW_COUNT 数量，使得 scale 等永远是正值，不然会有很特别的反向增大现象;
     private Rect draggableArea;
     private WeakReference<Object> savedFirstItemData;
+//    private WeakReference<View> releasedChildren;
 
     private DataSetObserver mDataObserver = new DataSetObserver() {
         @Override
         public void onChanged() {
             LogUtils.d(TAG, "DataSetObserver.onChanged()");
-            orderViewStack();
+            LogUtils.d("Index Error", "DataSetObserver.onChanged()");
+//            orderViewStack();
             boolean reset = false;
-            if (adapter.getCount() > 0) {
+            int countNow = adapter.getCount();
+            if (countNow > 0) {
                 Object firstObj = adapter.getItem(0);   // 第一条数据
                 if (null == savedFirstItemData) {
                     // 此前就没有数据，需要保存第一条数据
                     // 这里是异常情况吗？因为 doBindAdapter 会初始化 savedFirstItemData
                     LogUtils.d(TAG, "DataSetObserver.onChanged() - savedFirstItemData == null");
+                    LogUtils.d("Index Error", "DataSetObserver.onChanged() - savedFirstItemData == null");
                     savedFirstItemData = new WeakReference<>(firstObj);
                     isShowing = 0;
                 } else {
                     LogUtils.d(TAG, "DataSetObserver.onChanged() - savedFirstItemData != null");
+                    LogUtils.d("Index Error", "DataSetObserver.onChanged() - savedFirstItemData != null");
                     Object savedObj = savedFirstItemData.get();
                     if (firstObj != savedObj) { // 当前显示的数据不是第一条数据（异常情况）？？
                         // 如果第一条数据不等的话，需要重置
                         LogUtils.d(TAG, "DataSetObserver.onChanged() - firstObj != savedObj");
+                        LogUtils.d("Index Error", "DataSetObserver.onChanged() - firstObj != savedObj");
                         isShowing = 0;
                         reset = true;
                         savedFirstItemData = new WeakReference<>(firstObj);
@@ -97,17 +103,28 @@ public class CardSlidePanel extends FrameLayout {
                 }
             }
 
+//            final boolean isReset = reset;
+//            if (getContext() != null && getContext() instanceof CardDeckActivity) {
+//                ((CardDeckActivity) getContext()).runOnUiThread(new Runnable() {
+//                    @Override
+//                    public void run() {
             int delay = 0;
             for (int i = 0; i < VIEW_COUNT; i++) {
+                LogUtils.d("Index Error", "DataSetObserver.onChanged() - delay(" + isShowing + ", " + i + ")");
                 CardItemView itemView = viewList.get(i);
-                if (isShowing + i < adapter.getCount()) {
-                    if (itemView.getVisibility() == View.VISIBLE) {
+                if (isShowing + i < countNow) {
+                    LogUtils.d("Index Error", "DataSetObserver.onChanged() - delay(" + (isShowing + i) + " < " + countNow + ")");
+                    if (itemView.getVisibility() == View.VISIBLE) { // 数据用完会隐藏卡片，VISIBLE 说明数据没有用完，isShowing 不用加加（OrderViewStack 在主线程做，这里也需要在主线程做，才能有序）
+                        LogUtils.d("Index Error", "DataSetObserver.onChanged() - delay(" + (isShowing + i) + " Visible)");
                         if (!reset) {
+                            LogUtils.d("Index Error", "DataSetObserver.onChanged() - delay() - not Reset, continue");
                             continue;
                         }
                     } else if (i == 0) {
+                        LogUtils.d("Index Error", "DataSetObserver.onChanged() - delay(i == 0 & Invisible)");
                         if (isShowing > 0) {
                             isShowing++;
+                            LogUtils.d("Index Error", "DataSetObserver.onChanged() - delay(isShowing++)");
                         }
                         cardDeckListener.onShow(isShowing);
                     }
@@ -120,6 +137,7 @@ public class CardSlidePanel extends FrameLayout {
                     }
                     adapter.bindView(itemView, isShowing + i);
                 } else {
+                    LogUtils.d("Index Error", "DataSetObserver.onChanged() - delay(" + (isShowing + i) + " >= " + countNow + ")");
                     itemView.setVisibility(View.INVISIBLE);
                 }
             }
@@ -130,7 +148,9 @@ public class CardSlidePanel extends FrameLayout {
                     cardDeckListener.onCardDeckLoadFinish();
                 }
             }, CardItemView.DELAY_INTERVAL * (delay > 0 ? delay : VIEW_COUNT - 2) + CardItemView.ANIM_DURATION);
-
+//                    }
+//                });
+//            }
         }
     };
 
@@ -239,8 +259,10 @@ public class CardSlidePanel extends FrameLayout {
         public boolean tryCaptureView(View child, int pointerId) {
             // 如果数据 List 为空，或者子 View 不可见，则不予处理
             if (adapter == null || adapter.getCount() == 0
+//                    || (releasedViewList != null && releasedViewList.isEmpty() && releasedViewList.contains(child))     // try fix vanish Twice, but not working
                     || child.getVisibility() != View.VISIBLE
                     || child.getScaleX() <= 1.0f - SCALE_STEP) {
+//                    || (releasedChildren != null && child.equals(releasedChildren.get()))) {
                 // 一般来讲，如果拖动的是第三层、或者第四层的 View，则直接禁止
                 // 此处用 getScale 的用法来巧妙回避
                 return false;
@@ -279,6 +301,7 @@ public class CardSlidePanel extends FrameLayout {
 
         @Override
         public void onViewReleased(View releasedChild, float xvel, float yvel) {
+//            releasedChildren = new WeakReference<>(releasedChild);
             animToSide((CardItemView) releasedChild, (int) xvel, (int) yvel);
         }
 
@@ -322,15 +345,18 @@ public class CardSlidePanel extends FrameLayout {
      * 对 View 重新排序
      */
     private void orderViewStack() {
+        LogUtils.d("Index Error", "orderViewStack() - START");
         if (releasedViewList.size() == 0) {
+            LogUtils.d("Index Error", "orderViewStack() - releasedViewList.size() == 0");
             // 是 TouchEvent action down （而没有左右划松手）触发事件的话
             // 如果在左右划松手动画未完成时又点击，会往下走
             return;
         }
+        int countCurrent = adapter.getCount();
         // Todo: 打 log 从来没有进入过这里，是什么情况呢？
         CardItemView changedView = (CardItemView) releasedViewList.get(0);
         if (changedView.getLeft() == initialTopViewX) {
-            LogUtils.d(TAG, "changedView.getLeft() == initialTopViewX");
+            LogUtils.d("Index Error", "orderViewStack() - changedView.getLeft() == initialTopViewX");
             releasedViewList.remove(0);
             return;
         }
@@ -348,27 +374,33 @@ public class CardSlidePanel extends FrameLayout {
         FrameLayout.LayoutParams lp = (FrameLayout.LayoutParams) changedView.getLayoutParams();
         removeViewInLayout(changedView);
         addViewInLayout(changedView, 0, lp, true);  // view 的 index 越小，越在下面
+        LogUtils.d("Index Error", "orderViewStack() - order changed");
 
         // 3. ChangedView 填充新数据，数据用完则隐藏卡片
         int newIndex = isShowing + VIEW_COUNT;
-        if (newIndex < adapter.getCount()) {
+        if (newIndex < countCurrent) {
             adapter.bindView(changedView, newIndex);
+            LogUtils.d("Index Error", "orderViewStack() - bindView(" + newIndex + ")");
         } else {
             changedView.setVisibility(View.INVISIBLE);
+            LogUtils.d("Index Error", "orderViewStack() - set changedView INVISIBLE");
         }
 
         // 4. viewList 中的卡片 view 的位次调整
         viewList.remove(changedView);
         viewList.add(changedView);
         releasedViewList.remove(0);
+        LogUtils.d("Index Error", "orderViewStack() - update view list");
 
         // 5. 更新 showIndex、接口回调
-        if (isShowing + 1 < adapter.getCount()) {
+        if (isShowing + 1 < countCurrent) {
             isShowing++;
+            LogUtils.d("Index Error", "orderViewStack() - isShowing++");
+            if (null != cardDeckListener) {
+                cardDeckListener.onShow(isShowing);
+            }
         }
-        if (null != cardDeckListener) {
-            cardDeckListener.onShow(isShowing);
-        }
+        LogUtils.d("Index Error", "orderViewStack() - END");
     }
 
     /**
@@ -507,6 +539,7 @@ public class CardSlidePanel extends FrameLayout {
         }
 
         if (finalX != 0) {
+//            releasedChildren = new WeakReference<>(animateView);
             releasedViewList.add(animateView);
             if (mDragHelper.smoothSlideViewTo(animateView, finalX, initialTopViewY + allHeight / 2)) {
                 ViewCompat.postInvalidateOnAnimation(this);
@@ -522,7 +555,9 @@ public class CardSlidePanel extends FrameLayout {
     public void computeScroll() {
         if (mDragHelper.continueSettling(true)) {
             ViewCompat.postInvalidateOnAnimation(this);
+            LogUtils.d("Index Error", "computeScroll(Animation)");
         } else {
+            LogUtils.d("Index Error", "computeScroll(settled)");
             // 动画结束
             if (mDragHelper.getViewDragState() == ViewDragHelper.STATE_IDLE) {
                 orderViewStack();
@@ -548,6 +583,8 @@ public class CardSlidePanel extends FrameLayout {
         int action = ev.getActionMasked();
         if (action == MotionEvent.ACTION_DOWN) {
             // ACTION_DOWN 的时候就对 view 重新排序，更新卡堆，即使动画没有做完
+            LogUtils.d("Index Error", "onInterceptTouchEvent() - ACTION_DOWN");
+            // 如果在前一张左右划松手卡片动画未完成时又点击，会取消动画级完成后的回调，直接 orderViewStack() 重排卡堆
             if (mDragHelper.getViewDragState() == ViewDragHelper.STATE_SETTLING) {
                 mDragHelper.abort();
             }
