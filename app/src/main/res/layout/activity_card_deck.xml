@@ -14,14 +14,6 @@
         android:scaleType="fitXY"
         android:src="@drawable/bg_daily_cos_curtain" />
 
-    <demo.li.opal.uidemo.cardDeck.CardSlidePanel
-        android:id="@+id/image_slide_panel"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_alignParentTop="true"
-        card:itemMarginTop="@dimen/daily_cos_top_panel_height"
-        card:yOffsetStep="@dimen/daily_cos_card_y_offset" />
-
     <TextView
         android:id="@+id/load_more"
         android:layout_width="wrap_content"
@@ -55,7 +47,8 @@
         android:layout_height="83dp"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
-        android:background="@drawable/bg_daily_cos_remain_panel">
+        android:background="@drawable/bg_daily_cos_remain_panel"
+        android:visibility="invisible">
 
         <ImageView
             android:id="@+id/wand"
@@ -117,9 +110,10 @@
         <ImageView
             android:id="@+id/change_photo"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:src="@drawable/btn_daily_cos_retake" />
+            android:layout_height="match_parent"
+            android:src="@drawable/btn_daily_cos_retake"
+            android:scaleType="centerInside"
+            android:visibility="invisible"/>
 
         <LinearLayout
             android:id="@+id/discard_container"
@@ -127,6 +121,7 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="25dp"
             android:orientation="horizontal"
+            android:visibility="invisible"
             android:clipChildren="false"
             android:clickable="true">
 
@@ -153,6 +148,7 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="25dp"
             android:orientation="horizontal"
+            android:visibility="invisible"
             android:clipChildren="false"
             android:clickable="true">
 
@@ -173,4 +169,12 @@
                 android:duplicateParentState="true"/>
         </LinearLayout>
     </LinearLayout>
+
+    <demo.li.opal.uidemo.cardDeck.CardSlidePanel
+        android:id="@+id/image_slide_panel"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignParentTop="true"
+        card:itemMarginTop="@dimen/daily_cos_top_panel_height"
+        card:yOffsetStep="@dimen/daily_cos_card_y_offset" />
 </RelativeLayout>

@@ -6,7 +6,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.FragmentActivity;
 import android.view.View;
-import android.view.ViewTreeObserver;
+import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.CheckBox;
 
@@ -22,6 +22,8 @@ import demo.li.opal.uidemo.R;
 import demo.li.opal.uidemo.Utils.DeviceUtils;
 import demo.li.opal.uidemo.Utils.FileUtils;
 import demo.li.opal.uidemo.Utils.LogUtils;
+import demo.li.opal.uidemo.viewanimator.AnimationListener;
+import demo.li.opal.uidemo.viewanimator.ViewAnimator;
 
 public class CardDeckActivity extends FragmentActivity implements View.OnClickListener {
     private static final String TAG = CardDeckActivity.class.getSimpleName();
@@ -58,18 +60,20 @@ public class CardDeckActivity extends FragmentActivity implements View.OnClickLi
     private View icDiscard;
     private View icSave;
     private View icWand;
+    private ViewGroup topPanel;
+
+    private boolean hasDataReturned = false;
 
     private float availableCardDeckW = -1f, availableCardDeckH = -1f;
 
     private CardSlidePanel.CardDeckListener cardDeckListener;
 
-    SpringConfig springConfig1 = SpringConfig.fromBouncinessAndSpeed(20, 39);
-    SpringConfig springConfig2 = SpringConfig.fromBouncinessAndSpeed(20, 39);
+    SpringConfig springConfig = SpringConfig.fromBouncinessAndSpeed(20, 39);
     SpringSystem springSystem = SpringSystem.create();
     // Add a spring to the system.
-    Spring springLeft = springSystem.createSpring().setSpringConfig(springConfig1);
-    Spring springRight = springSystem.createSpring().setSpringConfig(springConfig1);
-    Spring springCount = springSystem.createSpring().setSpringConfig(springConfig2);
+    Spring springLeft = springSystem.createSpring().setSpringConfig(springConfig);
+    Spring springRight = springSystem.createSpring().setSpringConfig(springConfig);
+    Spring springCount = springSystem.createSpring().setSpringConfig(springConfig);
 
     private Handler genCardHandler = new Handler() {
         public void handleMessage(android.os.Message msg) {
@@ -98,6 +102,7 @@ public class CardDeckActivity extends FragmentActivity implements View.OnClickLi
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.activity_card_deck);
+        genLoadingCard();
         initView();
     }
 
@@ -129,6 +134,8 @@ public class CardDeckActivity extends FragmentActivity implements View.OnClickLi
         // 缩放动画
         icDiscard = findViewById(R.id.btn_discard);
         icSave = findViewById(R.id.btn_save);
+
+        topPanel = findViewById(R.id.top_panel);
 
         // 对当前卡片的左右滑动监听
         cardDeckListener = new CardSlidePanel.CardDeckListener() {
@@ -307,6 +314,8 @@ public class CardDeckActivity extends FragmentActivity implements View.OnClickLi
                 }
             }
         });
+        slidePanel.doBindData();
+        slidePanel.getAdapter().notifyDataSetChanged();
 
         autoGenCard = findViewById(R.id.auto_gen_card);
         autoGenCard.setOnClickListener(new View.OnClickListener() {
@@ -323,18 +332,15 @@ public class CardDeckActivity extends FragmentActivity implements View.OnClickLi
             }
         });
 
-        slidePanel.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
-            @Override
-            public void onGlobalLayout() {
-                LogUtils.d(TAG, "onGlobalLayout()");
-
-                if (dataList.size() == 0) {
-                    prepareDataList();
-                    slidePanel.doBindData();
-                    slidePanel.getAdapter().notifyDataSetChanged();
-                }
-            }
-        });
+//        slidePanel.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+//            @Override
+//            public void onGlobalLayout() {
+//                LogUtils.d(TAG, "onGlobalLayout()");
+//
+//                slidePanel.doBindData();
+//                slidePanel.getAdapter().notifyDataSetChanged();
+//            }
+//        });
 
         // Add a listener to observe the motion of the spring.
         springLeft.addListener(new SimpleSpringListener() {
@@ -371,9 +377,23 @@ public class CardDeckActivity extends FragmentActivity implements View.OnClickLi
                 icWand.setScaleY(value);
             }
         });
+
+        slidePanel.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                if (!hasDataReturned) {
+                    prepareDataList();
+//                    slidePanel.doBindData();
+                    slidePanel.getAdapter().notifyDataSetChanged();
+                    hasDataReturned = true;
+                }
+                animShowTopPanel();
+            }
+        }, 2000);
     }
 
     private void prepareDataList() {
+        dataList.clear();
         for (int i = 0; i < 6; i++) {
             CosCardItemData dataItem = new CosCardItemData(imagePaths[i], dataList.size(), "造型设计 by " + names[i]);
             dataList.add(dataItem);
@@ -389,6 +409,9 @@ public class CardDeckActivity extends FragmentActivity implements View.OnClickLi
 
     @Override
     public void onClick(View view) {
+        if (!hasDataReturned) {
+            return;
+        }
         switch (view.getId()) {
             case R.id.load_more:
                 btnLoadMore.setEnabled(false);
@@ -410,12 +433,84 @@ public class CardDeckActivity extends FragmentActivity implements View.OnClickLi
         int i = (int) (System.currentTimeMillis() % imagePaths.length);
         CosCardItemData dataItem = new CosCardItemData(imagePaths[i], dataList.size(), "造型设计 by " + names[i]);
         dataList.add(dataItem);
+        notifyDataChangeOnUIThread();
+    }
+
+    private void notifyDataChangeOnUIThread() {
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
                 slidePanel.getAdapter().notifyDataSetChanged();
             }
         });
+    }
+
+    public void genLoadingCard() {
+        CosCardItemData dataItem = new CosCardItemData("", dataList.size(), "");
+        dataList.add(dataItem);
+    }
+
+    public void animShowTopPanel() {
+        if (topPanel == null) {
+            return;
+        }
+        topPanel.setVisibility(View.VISIBLE);
+        ViewAnimator.animate(topPanel)
+                .duration(500)
+                .translationY(-topPanel.getHeight(), 0)
+                .alpha(0, 1)
+                .decelerate()
+                .onStop(new AnimationListener.Stop() {
+                    @Override
+                    public void onStop() {
+                        animShowBottomBtns();
+                    }
+                })
+                .start();
+    }
+
+    public void animShowBottomBtns() {
+        final int hOffset = getResources().getDimensionPixelSize(R.dimen.daily_cos_card_y_offset);
+        if (btnRetake != null) {
+            btnRetake.setVisibility(View.VISIBLE);
+            ViewAnimator.animate(btnRetake)
+                    .duration(330)
+                    .translationY(btnRetake.getTop() + hOffset, btnRetake.getY())
+                    .alpha(0, 1)
+                    .decelerate()
+                    .start();
+        }
+
+        if (btnDiscard != null) {
+            btnDiscard.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    btnDiscard.setVisibility(View.VISIBLE);
+                    ViewAnimator.animate(btnDiscard)
+                            .duration(330)
+                            .translationY(btnDiscard.getY() + hOffset, btnDiscard.getY())
+                            .alpha(0, 1)
+                            .decelerate()
+                            .start();
+                }
+            }, 180);
+        }
+
+        if (btnSave != null) {
+            btnSave.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    btnSave.setVisibility(View.VISIBLE);
+                    ViewAnimator.animate(btnSave)
+                            .duration(330)
+                            .translationY(btnSave.getY() + hOffset, btnSave.getY())
+                            .alpha(0, 1)
+                            .decelerate()
+                            .start();
+                }
+            }, 360);
+        }
+
     }
 
 }

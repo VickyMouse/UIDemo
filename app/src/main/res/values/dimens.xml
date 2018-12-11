@@ -13,5 +13,6 @@
     <dimen name="daily_cos_card_y_offset">7dp</dimen>
     <dimen name="daily_cos_bottom_bar_height">58dp</dimen>
     <dimen name="daily_cos_bottom_bar_margin_bottom">17dp</dimen>
+    <dimen name="daily_cos_bottom_retake_margin_bottom">16dp</dimen>
 
 </resources>
