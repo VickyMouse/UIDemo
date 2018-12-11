@@ -57,16 +57,19 @@ public class CardDeckActivity extends FragmentActivity implements View.OnClickLi
     private View btnSave;
     private View icDiscard;
     private View icSave;
+    private View icWand;
 
     private float availableCardDeckW = -1f, availableCardDeckH = -1f;
 
     private CardSlidePanel.CardDeckListener cardDeckListener;
 
-    SpringConfig springConfig = SpringConfig.fromBouncinessAndSpeed(15, 20);
+    SpringConfig springConfig1 = SpringConfig.fromBouncinessAndSpeed(20, 39);
+    SpringConfig springConfig2 = SpringConfig.fromBouncinessAndSpeed(20, 39);
     SpringSystem springSystem = SpringSystem.create();
     // Add a spring to the system.
-    Spring springLeft = springSystem.createSpring().setSpringConfig(springConfig);
-    Spring springRight = springSystem.createSpring().setSpringConfig(springConfig);
+    Spring springLeft = springSystem.createSpring().setSpringConfig(springConfig1);
+    Spring springRight = springSystem.createSpring().setSpringConfig(springConfig1);
+    Spring springCount = springSystem.createSpring().setSpringConfig(springConfig2);
 
     private Handler genCardHandler = new Handler() {
         public void handleMessage(android.os.Message msg) {
@@ -108,6 +111,25 @@ public class CardDeckActivity extends FragmentActivity implements View.OnClickLi
 
     private void initView() {
         slidePanel = findViewById(R.id.image_slide_panel);
+
+        icWand = findViewById(R.id.wand);
+
+        // 加载更多数据
+        btnLoadMore = findViewById(R.id.load_more);
+        btnLoadMore.setEnabled(false);
+        btnLoadMore.setOnClickListener(this);
+
+        btnRetake = findViewById(R.id.change_photo);
+        btnRetake.setOnClickListener(this);
+        // 点击
+        btnDiscard = findViewById(R.id.discard_container);
+        btnDiscard.setOnClickListener(this);
+        btnSave = findViewById(R.id.save_container);
+        btnSave.setOnClickListener(this);
+        // 缩放动画
+        icDiscard = findViewById(R.id.btn_discard);
+        icSave = findViewById(R.id.btn_save);
+
         // 对当前卡片的左右滑动监听
         cardDeckListener = new CardSlidePanel.CardDeckListener() {
 
@@ -123,11 +145,55 @@ public class CardDeckActivity extends FragmentActivity implements View.OnClickLi
                 LogUtils.d("Index Error", "onCardVanish(" + index + " / " + dataList.size() + ", " + type + ")");
                 LogUtils.d("Card", "正在消失-" + dataList.get(index).getDescription() + " 消失 type=" + type);
                 if (type == CardSlidePanel.VANISH_TYPE_LEFT) {
-                    springLeft.setCurrentValue(1.05);
-                    springLeft.setEndValue(1);
+                    icDiscard.animate().scaleX(1.05f).scaleY(1.05f).setDuration(100).withEndAction(new Runnable() {
+                        @Override
+                        public void run() {
+                            springLeft.setCurrentValue(1.05);
+                            springLeft.setEndValue(1);
+                        }
+                    }).start();
                 } else {
-                    springRight.setCurrentValue(1.05);
-                    springRight.setEndValue(1);
+                    icSave.animate().scaleX(1.05f).scaleY(1.05f).setDuration(100).withEndAction(new Runnable() {
+                        @Override
+                        public void run() {
+                            springRight.setCurrentValue(1.05);
+                            springRight.setEndValue(1);
+                        }
+                    }).start();
+                }
+                icWand.animate().scaleX(1.1f).scaleY(1.1f).setDuration(130).withEndAction(new Runnable() {
+                    @Override
+                    public void run() {
+                        springCount.setCurrentValue(1.1f);
+                        springCount.setEndValue(1.0f);
+                    }
+                }).start();
+            }
+
+            @Override
+            public void onCardRecover(int index) {
+                // Todo：当一秒生成一张卡片的时候，左右划（同一个方向也会）有时候会造成同一张卡片 Vanish 两次
+                // 一堆一堆加载不会
+                LogUtils.d("Index Error", "onCardRecover(" + index + " / " + dataList.size() + ")");
+                if (icDiscard.getScaleX() != 1f) {
+                    LogUtils.d("Index Error", "onCardRecover(icDiscard)");
+                    icDiscard.animate().scaleX(1.05f).scaleY(1.05f).setDuration(100).withEndAction(new Runnable() {
+                        @Override
+                        public void run() {
+                            springLeft.setCurrentValue(1.05);
+                            springLeft.setEndValue(1);
+                        }
+                    }).start();
+                }
+                if (icSave.getScaleX() != 1f) {
+                    LogUtils.d("Index Error", "onCardRecover(icSave)");
+                    icSave.animate().scaleX(1.05f).scaleY(1.05f).setDuration(100).withEndAction(new Runnable() {
+                        @Override
+                        public void run() {
+                            springRight.setCurrentValue(1.05);
+                            springRight.setEndValue(1);
+                        }
+                    }).start();
                 }
             }
 
@@ -257,22 +323,6 @@ public class CardDeckActivity extends FragmentActivity implements View.OnClickLi
             }
         });
 
-        // 加载更多数据
-        btnLoadMore = findViewById(R.id.load_more);
-        btnLoadMore.setEnabled(false);
-        btnLoadMore.setOnClickListener(this);
-
-        btnRetake = findViewById(R.id.change_photo);
-        btnRetake.setOnClickListener(this);
-        // 点击
-        btnDiscard = findViewById(R.id.discard_container);
-        btnDiscard.setOnClickListener(this);
-        btnSave = findViewById(R.id.save_container);
-        btnSave.setOnClickListener(this);
-        // 缩放动画
-        icDiscard = findViewById(R.id.btn_discard);
-        icSave = findViewById(R.id.btn_save);
-
         slidePanel.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
             @Override
             public void onGlobalLayout() {
@@ -307,6 +357,18 @@ public class CardDeckActivity extends FragmentActivity implements View.OnClickLi
                 float value = (float) spring.getCurrentValue();
                 icSave.setScaleX(value);
                 icSave.setScaleY(value);
+            }
+        });
+
+        // Add a listener to observe the motion of the spring.
+        springCount.addListener(new SimpleSpringListener() {
+            @Override
+            public void onSpringUpdate(Spring spring) {
+                // You can observe the updates in the spring
+                // state by asking its current value in onSpringUpdate.
+                float value = (float) spring.getCurrentValue();
+                icWand.setScaleX(value);
+                icWand.setScaleY(value);
             }
         });
     }

@@ -516,6 +516,9 @@ public class CardSlidePanel extends FrameLayout {
         // 如果没有飞向两侧（y 方向速度远大于 x 方向，或者 x 方向位移没有超出阈值），而是回到了中间，需要谨慎处理
         if (finalX == initialTopViewX) {
             changedView.animTo(initialTopViewX, initialTopViewY);
+            if (cardDeckListener != null) {
+                cardDeckListener.onCardRecover(isShowing);
+            }
         } else {
             // 2. 向两边消失的动画
             releasedViewList.add(changedView);
@@ -758,14 +761,22 @@ public class CardSlidePanel extends FrameLayout {
          */
         void onCardVanish(int index, int type);
 
-        void onCardDeckLoadFinish();
+        /**
+         * 卡片回到中间的回调
+         *
+         * @param index 回到中间的卡片数据 index
+         */
+        void onCardRecover(int index);
 
         /**
-         * 卡片飞向两侧回调
+         * 拖动顶部卡片向两侧偏移回调
          *
          * @param ratio 顶部卡片拖动距离：更新 UI 用
          */
         void onTopCardMoved(float ratio, int type);
+
+        void onCardDeckLoadFinish();
+
     }
 
     public int getTopCardW() {
