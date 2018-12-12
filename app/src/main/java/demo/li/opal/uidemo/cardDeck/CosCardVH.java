@@ -25,10 +25,9 @@ public class CosCardVH extends CardVH<CosCardItemData> {
             R.drawable.cardpat_4
     };
 
-    TextView description, loadingTxt;
-    ImageView topLeftDecor, rightBottomDecor;
-
-    SimpleDraweeView loadingAnim;
+    public TextView description;
+    public ImageView topLeftDecor, rightBottomDecor, loadingTxt;
+    public SimpleDraweeView loadingAnim;
 
     public CosCardVH(View view) {
         super(view);
@@ -42,7 +41,7 @@ public class CosCardVH extends CardVH<CosCardItemData> {
     @Override
     public void bindData(CosCardItemData itemData) {
 //        super.bindData(itemData); // 无需圆角图片
-        if (TextUtils.isEmpty(itemData.imagePath)) {
+        if (TextUtils.isEmpty(itemData.getImagePath())) {
             loadingAnim.setVisibility(View.VISIBLE);
             loadingTxt.setVisibility(View.VISIBLE);
             DraweeController controller = Fresco.newDraweeControllerBuilder()
@@ -51,7 +50,7 @@ public class CosCardVH extends CardVH<CosCardItemData> {
                     .build();
             loadingAnim.setController(controller);
         } else {
-            cardImage.setImageURI(FileUtils.getUri(itemData.imagePath));
+            cardImage.setImageURI(FileUtils.getUri(itemData.getImagePath()));
             loadingAnim.setVisibility(View.GONE);
             loadingTxt.setVisibility(View.GONE);
         }

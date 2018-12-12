@@ -8,7 +8,7 @@ import demo.li.opal.uidemo.Utils.FileUtils;
  * @author opalli on 2018/12/01
  */
 public class CardItemData {
-    String imagePath;
+    private String imagePath;
 
     public CardItemData() {
         this.imagePath = FileUtils.FRESCO_SCHEME_ASSETS + "cards/wall09.jpg";

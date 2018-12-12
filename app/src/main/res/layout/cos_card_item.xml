@@ -39,24 +39,23 @@
             android:id="@+id/card_image_view"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@color/daily_cos_left_count_bg"
+            android:background="@color/daily_cos_card_content_bg"
             fresco:actualImageScaleType="centerCrop" />
 
         <com.facebook.drawee.view.SimpleDraweeView
             android:id="@+id/loading_anim"
             android:layout_width="52dp"
             android:layout_height="65dp"
-            android:layout_gravity="center"
+            android:layout_marginTop="104dp"
+            android:layout_gravity="center_horizontal|top"
             android:visibility="gone"/>
-        <TextView
+        <ImageView
             android:id="@+id/loading_txt"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="bottom|center_horizontal"
-            android:layout_marginBottom="50dp"
-            android:textColor="@color/daily_cos_card_desc"
-            android:textSize="13sp"
-            android:text="正在变身..."
+            android:layout_gravity="top|center_horizontal"
+            android:layout_marginTop="186dp"
+            android:src="@drawable/txt_daily_cos_loading"
             android:visibility="gone"/>
     </FrameLayout>
 
@@ -64,8 +63,8 @@
         android:id="@+id/card_description"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_marginBottom="10dp"
+        android:layout_below="@id/card_content"
+        android:layout_marginTop="-20dp"
         android:layout_centerHorizontal="true"
         android:gravity="center"
         android:text="造型设计 by 谷田达子"

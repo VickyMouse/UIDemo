@@ -11,10 +11,10 @@ import demo.li.opal.uidemo.R;
 
 public class NormalCardVH extends CardVH<NormalCardItemData> {
 
-    View maskView;
-    TextView userName;
-    TextView picCount;
-    TextView likeCount;
+    public View maskView;
+    public TextView userName;
+    public TextView picCount;
+    public TextView likeCount;
 
     public NormalCardVH(View view) {
         super(view);

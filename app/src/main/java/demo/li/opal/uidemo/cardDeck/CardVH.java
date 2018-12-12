@@ -18,7 +18,7 @@ import demo.li.opal.uidemo.Utils.FileUtils;
 
 public class CardVH<T extends CardItemData> {
 
-    SimpleDraweeView cardImage;
+    public SimpleDraweeView cardImage;
 
     public CardVH(View view) {
         cardImage = view.findViewById(R.id.card_image_view);
