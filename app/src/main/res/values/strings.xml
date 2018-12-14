@@ -30,4 +30,12 @@
     <string name="main_func_ops_title_10">大头贴#TTPTPLAYSTICKER#300</string>
     <string name="main_func_ops_title_11">表情包#TTPTGIF#200</string>
     <string name="main_func_ops_title_12">素材中心#TTPTMATERIALS#100</string>
+
+    <string name="daily_cos_hint_net_err">啊哦，你的网络走丢咯</string>
+    <string name="daily_cos_btn_reload">重新加载</string>
+
+    <string name="daily_cos_hint_end_title">今天的造型看完啦</string>
+    <string name="daily_cos_hint_end">明天会有更多新造型，记得回来！</string>
+    <string name="daily_cos_btn_notify">开启通知</string>
+    <string name="daily_cos_btn_notify_hint">当有新造型时第一时间通知你</string>
 </resources>

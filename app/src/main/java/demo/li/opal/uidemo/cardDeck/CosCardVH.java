@@ -1,13 +1,8 @@
 package demo.li.opal.uidemo.cardDeck;
 
-import android.text.TextUtils;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
-
-import com.facebook.drawee.backends.pipeline.Fresco;
-import com.facebook.drawee.interfaces.DraweeController;
-import com.facebook.drawee.view.SimpleDraweeView;
 
 import demo.li.opal.uidemo.R;
 import demo.li.opal.uidemo.Utils.FileUtils;
@@ -26,38 +21,29 @@ public class CosCardVH extends CardVH<CosCardItemData> {
     };
 
     public TextView description;
-    public ImageView topLeftDecor, rightBottomDecor, loadingTxt;
-    public SimpleDraweeView loadingAnim;
+    public ImageView topLeftDecor, rightBottomDecor;
+    public ImageView discardHint, saveHint;
 
     public CosCardVH(View view) {
         super(view);
         description = view.findViewById(R.id.card_description);
-        loadingTxt = view.findViewById(R.id.loading_txt);
         topLeftDecor = view.findViewById(R.id.top_left_decor);
         rightBottomDecor = view.findViewById(R.id.right_bottom_decor);
-        loadingAnim = view.findViewById(R.id.loading_anim);
+        discardHint = view.findViewById(R.id.discard_hint);
+        saveHint = view.findViewById(R.id.save_hint);
     }
 
     @Override
     public void bindData(CosCardItemData itemData) {
 //        super.bindData(itemData); // 无需圆角图片
-        if (TextUtils.isEmpty(itemData.getImagePath())) {
-            loadingAnim.setVisibility(View.VISIBLE);
-            loadingTxt.setVisibility(View.VISIBLE);
-            DraweeController controller = Fresco.newDraweeControllerBuilder()
-                    .setUri(FileUtils.getUriByRes(R.drawable.anim_daily_cos_loading))
-                    .setAutoPlayAnimations(true)
-                    .build();
-            loadingAnim.setController(controller);
-        } else {
-            cardImage.setImageURI(FileUtils.getUri(itemData.getImagePath()));
-            loadingAnim.setVisibility(View.GONE);
-            loadingTxt.setVisibility(View.GONE);
-        }
+        cardImage.setImageURI(FileUtils.getUri(itemData.getImagePath()));
+
         int decorIndex = itemData.index % cornerDecorPath.length;
         topLeftDecor.setImageResource(cornerDecorPath[decorIndex]);
         rightBottomDecor.setImageResource(cornerDecorPath[decorIndex]);
         description.setText(itemData.description);
 
+        discardHint.setImageAlpha(0);
+        saveHint.setImageAlpha(0);
     }
 }

@@ -334,7 +334,20 @@ public class CardSlidePanel extends FrameLayout {
         int changeViewLeft = changedView.getLeft();
         int changeViewTop = changedView.getTop();
         // 计算卡片倾斜角度，只和 x 方向的偏移量有关
-        changedView.setRotation(MAX_ROTATE_ANGLE * (changeViewLeft - initialTopViewX) / MAX_SLIDE_DISTANCE_LINKAGE);
+        float xOffsetRatio = 1f * (changeViewLeft - initialTopViewX) / MAX_SLIDE_DISTANCE_LINKAGE;
+        changedView.setRotation(MAX_ROTATE_ANGLE * xOffsetRatio);
+        Object tag = changedView.getTag(); // ViewHolder 的指针
+        if (tag != null) {
+            CosCardVH vh = (CosCardVH) tag;
+            int alpha = (int) (xOffsetRatio * 255);
+            if (xOffsetRatio > 0) {
+                vh.discardHint.setImageAlpha(0);
+                vh.saveHint.setImageAlpha(Math.min(alpha, 255));
+            } else {
+                vh.discardHint.setImageAlpha(Math.min(-alpha, 255));
+                vh.saveHint.setImageAlpha(0);
+            }
+        }
 
         // 这里需要计算两个方向的位移吗？即使计算两个方向，不应该使用勾股定理吗？
 //        int distance = Math.abs(changeViewTop - initialTopViewY)    // 第一张卡片 Y 轴移动的距离
@@ -813,5 +826,12 @@ public class CardSlidePanel extends FrameLayout {
 
     public int getYOffsetStep() {
         return yOffsetStep;
+    }
+
+    public boolean isCardDeckEmpty() {
+        if (viewList == null || viewList.isEmpty() || viewList.get(0).getVisibility() != VISIBLE) {
+            return true;
+        }
+        return false;
     }
 }

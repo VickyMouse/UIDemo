@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/daily_cos_hint_container"
+    android:layout_width="@dimen/daily_cos_card_width"
+    android:layout_height="@dimen/daily_cos_card_height"
+    android:background="@drawable/bg_daily_cos_card"
+    android:paddingBottom="55dp"
+    android:paddingLeft="30dp"
+    android:paddingRight="30dp"
+    android:paddingTop="45dp"
+    android:visibility="gone">
+
+    <FrameLayout
+        android:id="@+id/card_content"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/light_gray"
+        android:foreground="@drawable/fg_daily_cos_card">
+
+        <LinearLayout
+            android:id="@+id/hint_network"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:visibility="gone">
+
+            <ImageView
+                android:id="@+id/pic_network"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="45dp"
+                android:src="@drawable/ic_daily_cos_net_err" />
+
+            <TextView
+                android:id="@+id/txt_network"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="11dp"
+                android:text="@string/daily_cos_hint_net_err"
+                android:textColor="@color/daily_cos_hint_txt"
+                android:textSize="13sp" />
+
+            <TextView
+                android:id="@+id/btn_reload"
+                android:layout_width="120dp"
+                android:layout_height="38dp"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="16dp"
+                android:background="@drawable/bg_daily_cos_hint_btn"
+                android:gravity="center"
+                android:text="@string/daily_cos_btn_reload"
+                android:textColor="@color/white"
+                android:textSize="14sp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/hint_end"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:visibility="gone">
+
+            <ImageView
+                android:id="@+id/pic_end"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="19dp"
+                android:src="@drawable/ic_daily_cos_end" />
+
+            <TextView
+                android:id="@+id/txt_end_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="9dp"
+                android:text="@string/daily_cos_hint_end_title"
+                android:textColor="@color/daily_cos_hint_title"
+                android:textSize="16sp" />
+
+            <TextView
+                android:id="@+id/txt_end"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="10dp"
+                android:text="@string/daily_cos_hint_end"
+                android:textColor="@color/daily_cos_hint_txt"
+                android:textSize="12sp" />
+
+            <TextView
+                android:id="@+id/btn_notify"
+                android:layout_width="118dp"
+                android:layout_height="38dp"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="40dp"
+                android:background="@drawable/bg_daily_cos_hint_btn"
+                android:gravity="center"
+                android:text="@string/daily_cos_btn_notify"
+                android:textColor="@color/white"
+                android:textSize="14sp" />
+
+            <TextView
+                android:id="@+id/notify_hint"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="12dp"
+                android:alpha="0.6"
+                android:text="@string/daily_cos_hint_end"
+                android:textColor="@color/daily_cos_hint_txt"
+                android:textSize="11sp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/hint_fetching"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <com.facebook.drawee.view.SimpleDraweeView
+                android:id="@+id/pic_fetching"
+                android:layout_width="52dp"
+                android:layout_height="65dp"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="104dp"
+                android:src="@drawable/anim_daily_cos_loading" />
+
+            <ImageView
+                android:id="@+id/txt_fetching"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="17dp"
+                android:src="@drawable/txt_daily_cos_loading" />
+        </LinearLayout>
+    </FrameLayout>
+</RelativeLayout>

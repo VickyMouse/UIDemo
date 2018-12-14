@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<shape xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- 内部颜色 -->
+    <solid android:color="@color/daily_cos_hint_btn_bg" />
+    <!-- 圆角的幅度 -->
+    <corners
+        android:bottomLeftRadius="19dp"
+        android:bottomRightRadius="19dp"
+        android:topLeftRadius="19dp"
+        android:topRightRadius="19dp" />
+</shape>

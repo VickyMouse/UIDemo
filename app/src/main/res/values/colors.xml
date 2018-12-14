@@ -69,4 +69,7 @@
     <color name="daily_cos_card_content_bg">#f4eaf1</color>
     <color name="daily_cos_left_count_bg">#ffc8da</color>
     <color name="daily_cos_left_count_txt">#f25f8f</color>
+    <color name="daily_cos_hint_txt">#a17f96</color>
+    <color name="daily_cos_hint_title">#885c7a</color>
+    <color name="daily_cos_hint_btn_bg">#f0487f</color>
 </resources>

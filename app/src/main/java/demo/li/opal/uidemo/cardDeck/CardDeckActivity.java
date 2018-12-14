@@ -9,7 +9,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.CheckBox;
+import android.widget.RelativeLayout;
 
+import com.facebook.drawee.backends.pipeline.Fresco;
+import com.facebook.drawee.interfaces.DraweeController;
+import com.facebook.drawee.view.SimpleDraweeView;
 import com.facebook.rebound.SimpleSpringListener;
 import com.facebook.rebound.Spring;
 import com.facebook.rebound.SpringConfig;
@@ -61,6 +65,8 @@ public class CardDeckActivity extends FragmentActivity implements View.OnClickLi
     private View icSave;
     private View icWand;
     private ViewGroup topPanel;
+    private RelativeLayout hintPanel;
+    private ViewGroup hintNet, hintEnd, hintLoading;
 
     private boolean hasDataReturned = false;
 
@@ -102,8 +108,8 @@ public class CardDeckActivity extends FragmentActivity implements View.OnClickLi
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.activity_card_deck);
-        genLoadingCard();
         initView();
+        showLoadingHint();
     }
 
     @Override
@@ -136,6 +142,7 @@ public class CardDeckActivity extends FragmentActivity implements View.OnClickLi
         icSave = findViewById(R.id.btn_save);
 
         topPanel = findViewById(R.id.top_panel);
+        initHintPanel();
 
         // 对当前卡片的左右滑动监听
         cardDeckListener = new CardSlidePanel.CardDeckListener() {
@@ -175,6 +182,9 @@ public class CardDeckActivity extends FragmentActivity implements View.OnClickLi
                         springCount.setEndValue(1.0f);
                     }
                 }).start();
+                if (isLastCard(index)) {
+                    showEndHint();
+                }
             }
 
             @Override
@@ -311,6 +321,7 @@ public class CardDeckActivity extends FragmentActivity implements View.OnClickLi
                     slidePanel.setScaleY(deckScale);
                     // 竖直方向上居中显示
                     slidePanel.setItemMarginTop(slidePanel.getItemMarginTop() + (int) ((availableCardDeckH - slidePanel.getTopCardH()) / 2));
+                    updateHintPanelDimen((int) (slidePanel.getTopCardW() * deckScale), (int) (slidePanel.getTopCardH() * deckScale));
                 }
             }
         });
@@ -387,13 +398,94 @@ public class CardDeckActivity extends FragmentActivity implements View.OnClickLi
                     slidePanel.getAdapter().notifyDataSetChanged();
                     hasDataReturned = true;
                 }
+                animHide(hintPanel);
                 animShowTopPanel();
             }
         }, 2000);
     }
 
+    private void initHintPanel() {
+        hintPanel = findViewById(R.id.daily_cos_hint_container);
+        hintNet = hintPanel.findViewById(R.id.hint_network);
+        hintEnd = hintPanel.findViewById(R.id.hint_end);
+        hintLoading = hintPanel.findViewById(R.id.hint_fetching);
+        DraweeController controller = Fresco.newDraweeControllerBuilder()
+                .setUri(FileUtils.getUriByRes(R.drawable.anim_daily_cos_loading))
+                .setAutoPlayAnimations(true)
+                .build();
+        SimpleDraweeView loadingAnim = hintLoading.findViewById(R.id.pic_fetching);
+        if (loadingAnim != null) {
+            loadingAnim.setController(controller);
+        }
+    }
+
+    private void updateHintPanelDimen(int w, int h) {
+        RelativeLayout.LayoutParams lp = (RelativeLayout.LayoutParams) hintPanel.getLayoutParams();
+        lp.width = w;
+        lp.height = h;
+        lp.addRule(RelativeLayout.CENTER_IN_PARENT);
+    }
+
+    public void showNetHint() {
+        animShow(hintPanel);
+        show(hintNet);
+        hide(hintEnd);
+        hide(hintLoading);
+    }
+
+    public void showEndHint() {
+        animShow(hintPanel);
+        hide(hintNet);
+        show(hintEnd);
+        hide(hintLoading);
+    }
+
+    public void showLoadingHint() {
+        animShow(hintPanel);
+        hide(hintNet);
+        hide(hintEnd);
+        show(hintLoading);
+    }
+
+    public void animShow(View v) {
+        if (v != null && v.getVisibility() != View.VISIBLE) {
+            v.setVisibility(View.VISIBLE);
+            ViewAnimator.animate(v)
+                    .alpha(0, 1)
+                    .duration(300)
+                    .start();
+        }
+    }
+
+    public void animHide(final View v) {
+        if (v != null && v.getVisibility() == View.VISIBLE) {
+            ViewAnimator.animate(v)
+                    .alpha(1, 0)
+                    .duration(300)
+                    .onStop(new AnimationListener.Stop() {
+                        @Override
+                        public void onStop() {
+                            v.setVisibility(View.INVISIBLE);
+                        }
+                    })
+                    .start();
+        }
+    }
+
+    public void show(View v) {
+        if (v != null && v.getVisibility() != View.VISIBLE) {
+            v.setVisibility(View.VISIBLE);
+        }
+    }
+
+    public void hide(View v) {
+        if (v != null && v.getVisibility() == View.VISIBLE) {
+            v.setVisibility(View.INVISIBLE);
+        }
+    }
+
     private void prepareDataList() {
-        dataList.clear();
+//        dataList.clear();
         for (int i = 0; i < 6; i++) {
             CosCardItemData dataItem = new CosCardItemData(imagePaths[i], dataList.size(), "造型设计 by " + names[i]);
             dataList.add(dataItem);
@@ -443,11 +535,6 @@ public class CardDeckActivity extends FragmentActivity implements View.OnClickLi
                 slidePanel.getAdapter().notifyDataSetChanged();
             }
         });
-    }
-
-    public void genLoadingCard() {
-        CosCardItemData dataItem = new CosCardItemData("", dataList.size(), "");
-        dataList.add(dataItem);
     }
 
     public void animShowTopPanel() {
@@ -510,7 +597,12 @@ public class CardDeckActivity extends FragmentActivity implements View.OnClickLi
                 }
             }, 360);
         }
-
     }
 
+    public boolean isLastCard(int index) {
+        if (index == dataList.size() - 1) {
+            return true;
+        }
+        return false;
+    }
 }
