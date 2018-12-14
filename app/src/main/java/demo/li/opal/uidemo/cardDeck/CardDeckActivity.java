@@ -321,7 +321,9 @@ public class CardDeckActivity extends FragmentActivity implements View.OnClickLi
                     slidePanel.setScaleY(deckScale);
                     // 竖直方向上居中显示
                     slidePanel.setItemMarginTop(slidePanel.getItemMarginTop() + (int) ((availableCardDeckH - slidePanel.getTopCardH()) / 2));
-                    updateHintPanelDimen((int) (slidePanel.getTopCardW() * deckScale), (int) (slidePanel.getTopCardH() * deckScale));
+                    updateHintPanelDimen((int) (slidePanel.getTopCardW() * deckScale),
+                            (int) (slidePanel.getTopCardH() * deckScale),
+                            slidePanel.getItemMarginTop() - slidePanel.getYOffsetStep());
                 }
             }
         });
@@ -419,11 +421,12 @@ public class CardDeckActivity extends FragmentActivity implements View.OnClickLi
         }
     }
 
-    private void updateHintPanelDimen(int w, int h) {
+    private void updateHintPanelDimen(int w, int h, int marginTop) {
         RelativeLayout.LayoutParams lp = (RelativeLayout.LayoutParams) hintPanel.getLayoutParams();
         lp.width = w;
         lp.height = h;
-        lp.addRule(RelativeLayout.CENTER_IN_PARENT);
+        lp.addRule(RelativeLayout.CENTER_HORIZONTAL);
+        lp.topMargin = marginTop;
     }
 
     public void showNetHint() {
@@ -507,6 +510,7 @@ public class CardDeckActivity extends FragmentActivity implements View.OnClickLi
         switch (view.getId()) {
             case R.id.load_more:
                 btnLoadMore.setEnabled(false);
+                animHide(hintPanel);
                 appendDataList();
                 slidePanel.getAdapter().notifyDataSetChanged();
                 break;
@@ -522,6 +526,7 @@ public class CardDeckActivity extends FragmentActivity implements View.OnClickLi
     }
 
     public void genOneCard() {
+        animHide(hintPanel);
         int i = (int) (System.currentTimeMillis() % imagePaths.length);
         CosCardItemData dataItem = new CosCardItemData(imagePaths[i], dataList.size(), "造型设计 by " + names[i]);
         dataList.add(dataItem);
