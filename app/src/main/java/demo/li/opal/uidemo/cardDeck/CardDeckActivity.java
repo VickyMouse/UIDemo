@@ -515,6 +515,8 @@ public class CardDeckActivity extends FragmentActivity implements View.OnClickLi
                 slidePanel.getAdapter().notifyDataSetChanged();
                 break;
             case R.id.change_photo:
+//                slidePanel.doGuideAnim();
+                slidePanel.startGuideAnim();
                 break;
             case R.id.discard_container:
                 slidePanel.vanishOnBtnClick(CardSlidePanel.VANISH_TYPE_LEFT);
@@ -610,4 +612,5 @@ public class CardDeckActivity extends FragmentActivity implements View.OnClickLi
         }
         return false;
     }
+
 }

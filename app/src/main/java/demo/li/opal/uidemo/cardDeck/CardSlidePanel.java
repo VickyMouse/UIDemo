@@ -15,13 +15,20 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 
+import com.facebook.rebound.SimpleSpringListener;
+import com.facebook.rebound.Spring;
+import com.facebook.rebound.SpringConfig;
+import com.facebook.rebound.SpringSystem;
+
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.List;
 
+import demo.li.opal.uidemo.GlobalContext;
 import demo.li.opal.uidemo.R;
 import demo.li.opal.uidemo.Utils.DeviceUtils;
 import demo.li.opal.uidemo.Utils.LogUtils;
+import demo.li.opal.uidemo.viewanimator.ViewAnimator;
 
 /**
  * 卡片滑动面板，主要逻辑实现类
@@ -49,7 +56,7 @@ public class CardSlidePanel extends FrameLayout {
     private static final float SCALE_STEP = 0.1f; // view 叠加缩放的步长
     private static final float LINKAGE_SCALE_STEP = SCALE_STEP * 1.1f; // LINKAGE_SCALE_STEP 不是 SCALE_STEP，是为了越往后的卡片受顶部卡片的移动的影响越小，可以换成更大的值就能观察到影响
     private static final int MAX_SLIDE_DISTANCE_LINKAGE = 500; // 水平距离+垂直距离
-    private final static float MAX_ROTATE_ANGLE = 10;   // 前后两张卡片的角度差
+    private final static float MAX_ROTATE_ANGLE = 15;   // 前后两张卡片的角度差
 
     private int itemMarginTop = 10; // 卡片距离顶部的偏移量
     private int bottomMarginTop = 40; // 底部按钮与卡片的 margin 值
@@ -326,7 +333,11 @@ public class CardSlidePanel extends FrameLayout {
     public void onViewPosChanged(CardItemView changedView) {
         // 此处对 index 做保护处理
         int index = viewList.indexOf(changedView);
-        if (index + 2 > viewList.size()) {  // index > VIEW_COUNT - 1 - 1，即最后一张卡片，牌堆中只有一张卡片了，没有下面的卡片需要微调
+        LogUtils.d(TAG, "onViewPosChanged(" + index + ")");
+        if (index == 0 && index + 2 > viewList.size()) {
+            // 只处理第一张卡片移动造成的更新，其余卡片通过 processLinkageViews() 更新 UI，不过第一个判断条件不加也不要紧，目前只有第一张卡片会回调这里
+            // index > VIEW_COUNT - 1 - 1，即最后一张卡片，牌堆中只有一张卡片了，没有下面的卡片需要微调
+            LogUtils.d(TAG, "onViewPosChanged(" + index + ") return!!!");
             return;
         }
 
@@ -339,7 +350,7 @@ public class CardSlidePanel extends FrameLayout {
         Object tag = changedView.getTag(); // ViewHolder 的指针
         if (tag != null) {
             CosCardVH vh = (CosCardVH) tag;
-            int alpha = (int) (xOffsetRatio * 255);
+            int alpha = (int) (xOffsetRatio * 2 * 255);
             if (xOffsetRatio > 0) {
                 vh.discardHint.setImageAlpha(0);
                 vh.saveHint.setImageAlpha(Math.min(alpha, 255));
@@ -348,6 +359,7 @@ public class CardSlidePanel extends FrameLayout {
                 vh.saveHint.setImageAlpha(0);
             }
         }
+
 
         // 这里需要计算两个方向的位移吗？即使计算两个方向，不应该使用勾股定理吗？
 //        int distance = Math.abs(changeViewTop - initialTopViewY)    // 第一张卡片 Y 轴移动的距离
@@ -833,5 +845,96 @@ public class CardSlidePanel extends FrameLayout {
             return true;
         }
         return false;
+    }
+
+    public void doGuideAnim() {
+        if (isCardDeckEmpty()) {
+            return;
+        }
+
+        final CardItemView card = viewList.get(0);
+        final int distance = DeviceUtils.dip2px(GlobalContext.getContext(), 40);
+
+        ViewAnimator.animate(card)
+                .duration(500)
+                .translationX(0, -distance)
+                .rotation(0, -8)
+                .start();
+
+        ViewAnimator.animate(card)
+                .duration(330)
+                .translationX(-distance, 0)
+                .rotation(-8, 0)
+                .startDelay(1500)
+                .start();
+
+        ViewAnimator.animate(card)
+                .duration(500)
+                .translationX(0, distance)
+                .rotation(0, 8)
+                .startDelay(1900)
+                .start();
+
+        ViewAnimator.animate(card)
+                .duration(330)
+                .translationX(distance, 0)
+                .rotation(8, 0)
+                .startDelay(3400)
+                .start();
+    }
+
+
+    public void startGuideAnim() {
+        if (isCardDeckEmpty()) {
+            return;
+        }
+
+        final CardItemView card = viewList.get(0);
+
+        SpringConfig springConfig = SpringConfig.fromBouncinessAndSpeed(0, 5);
+        SpringSystem mSpringSystem = SpringSystem.create();
+        final Spring guideX;
+        guideX = mSpringSystem.createSpring().setSpringConfig(springConfig);
+
+        guideX.addListener(new SimpleSpringListener() {
+            @Override
+            public void onSpringUpdate(Spring spring) {
+                int xPos = (int) spring.getCurrentValue();
+                card.setScreenX(xPos);
+                onViewPosChanged(card);
+            }
+        });
+
+        final int distance = DeviceUtils.dip2px(GlobalContext.getContext(), 40);
+        // 向左滑
+        guideX.setCurrentValue(initialTopViewX);
+        guideX.setEndValue(initialTopViewX - distance);
+
+        // 复位
+        postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                guideX.setCurrentValue(card.getLeft());
+                guideX.setEndValue(initialTopViewX);
+            }
+        }, 1500);
+
+        // 向右滑
+        postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                guideX.setCurrentValue(initialTopViewX);
+                guideX.setEndValue(initialTopViewX + distance);
+            }
+        }, 1900);
+
+        // 复位
+        postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                guideX.setCurrentValue(card.getLeft());
+                guideX.setEndValue(initialTopViewX);
+            }
+        }, 3400);
     }
 }

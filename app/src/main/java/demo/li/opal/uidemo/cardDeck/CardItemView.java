@@ -60,7 +60,6 @@ public class CardItemView extends FrameLayout {
             public void onSpringUpdate(Spring spring) {
                 int yPos = (int) spring.getCurrentValue();
                 setScreenY(yPos);
-                parentView.onViewPosChanged(CardItemView.this);
             }
         });
     }
