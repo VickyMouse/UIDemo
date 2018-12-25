@@ -284,6 +284,8 @@ public class CardDeckActivity extends FragmentActivity implements View.OnClickLi
                 int right = view.getRight() - contentView.getPaddingRight();
                 int top = view.getTop() + contentView.getPaddingTop();
                 int bottom = view.getBottom() - contentView.getPaddingBottom();
+                LogUtils.d(TAG, "obtainDraggableArea("  + left + ", " + top + ", " + right + ", " + bottom + ")");
+                LogUtils.d(TAG, "obtainArea("  + availableCardDeckW + ", " + availableCardDeckH + ", " + DeviceUtils.getScreenWidth(CardDeckActivity.this) + ", " + DeviceUtils.getScreenHeight(CardDeckActivity.this) + ")");
                 return new Rect(left, top, right, bottom);
             }
 

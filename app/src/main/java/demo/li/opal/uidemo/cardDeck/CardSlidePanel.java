@@ -293,12 +293,14 @@ public class CardSlidePanel extends FrameLayout {
             boolean shouldCapture = true;
             if (null != draggableArea) {
                 shouldCapture = draggableArea.contains(downPoint.x, downPoint.y);
+                LogUtils.d(TAG, "tryCaptureView - draggableArea("  + draggableArea.left + ", " + draggableArea.top + ", " + draggableArea.right + ", " + draggableArea.bottom + ")");
+                LogUtils.d(TAG, "tryCaptureView - downPoint("  + downPoint.x + ", " + downPoint.y + ")");
             }
 
             // 4. 如果确定要滑动，就让 touch 事件交给自己消费
-            if (shouldCapture) {
+//            if (shouldCapture) {
                 getParent().requestDisallowInterceptTouchEvent(shouldCapture);
-            }
+//            }
             return shouldCapture;
         }
 
@@ -618,34 +620,38 @@ public class CardSlidePanel extends FrameLayout {
     @Override
     public boolean onInterceptTouchEvent(MotionEvent ev) {
         boolean shouldIntercept = mDragHelper.shouldInterceptTouchEvent(ev);
-        int action = ev.getActionMasked();
-        if (action == MotionEvent.ACTION_DOWN) {
-            // ACTION_DOWN 的时候就对 view 重新排序，更新卡堆，即使动画没有做完
-            LogUtils.d("Index Error", "onInterceptTouchEvent() - ACTION_DOWN");
-            // 如果在前一张左右划松手卡片动画未完成时又点击，会取消动画级完成后的回调，直接 orderViewStack() 重排卡堆
-            if (mDragHelper.getViewDragState() == ViewDragHelper.STATE_SETTLING) {
-                mDragHelper.abort();
-            }
-            orderViewStack();
-            isHolding = true;
-
-            // 保存初次按下时 arrowFlagView 的 Y 坐标
-            // action_down 时就让 mDragHelper 开始工作，否则有时候导致异常
-            mDragHelper.processTouchEvent(ev);
-        }
+        LogUtils.d(TAG, "onInterceptTouchEvent(" + shouldIntercept + ")");
         return shouldIntercept;
     }
 
     @Override
     public boolean onTouchEvent(MotionEvent e) {
+        LogUtils.d(TAG, "onTouchEvent()");
         try {
+            int action = e.getActionMasked();
+            if (action == MotionEvent.ACTION_DOWN) {
+                // ACTION_DOWN 的时候就对 view 重新排序，更新卡堆，即使动画没有做完
+                LogUtils.d("Index Error", "onInterceptTouchEvent() - ACTION_DOWN");
+                // 如果在前一张左右划松手卡片动画未完成时又点击，会取消动画级完成后的回调，直接 orderViewStack() 重排卡堆
+                if (mDragHelper.getViewDragState() == ViewDragHelper.STATE_SETTLING) {
+                    mDragHelper.abort();
+                }
+                orderViewStack();
+                isHolding = true;
+//                // 保存初次按下时 arrowFlagView 的 Y 坐标
+//                // action_down 时就让 mDragHelper 开始工作，否则有时候导致异常
+//                mDragHelper.processTouchEvent(e);
+            }
             // 统一交给 mDragHelper 处理，由 DragHelperCallback 实现拖动效果
             // 该行代码可能会抛异常，正式发布时请将这行代码加上 try catch
             mDragHelper.processTouchEvent(e);
+            LogUtils.d(TAG, "onTouchEvent() - dragState = " + mDragHelper.getViewDragState());
         } catch (Exception ex) {
             ex.printStackTrace();
         }
-        return true;
+        // 只有在卡片被点击（Touch）后，state 才变为 Dragging（tryCaptureView 返回 true）
+        // 这里作 drag state 的判断，保证了点到卡堆（CardSlidePanel）下面的按钮时，事件不会被卡堆消耗掉
+        return mDragHelper.getViewDragState() == ViewDragHelper.STATE_DRAGGING;
     }
 
 //    @Override
