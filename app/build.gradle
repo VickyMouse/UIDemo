@@ -63,7 +63,12 @@ dependencies {
         exclude group: 'com.parse.bolts',
                 module: 'bolts-tasks'
     }
+    implementation('com.facebook.fresco:animated-webp:1.3.0') {
+        exclude group: 'com.parse.bolts',
+                module: 'bolts-tasks'
+    }
     implementation('com.facebook.fresco:fresco:1.3.0')
+    implementation('com.facebook.fresco:webpsupport:1.3.0')
     implementation files('libs/jce-json-1.0.0-SNAPSHOT.jar')
     api 'com.facebook.rebound:rebound:0.3.8'
     implementation 'com.qzone.oskplayer:player:1.5.4-oskplayer-SNAPSHOT'

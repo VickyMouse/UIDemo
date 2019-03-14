@@ -17,6 +17,8 @@ public class MainActivity extends AppCompatActivity implements OnClickListener {
     private View btn2NestedRecycler;
     private View btn2SwipeCard;
     private View btn2CardDeck;
+    private View btn2Webp;
+    private View btn2Grid;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,6 +36,12 @@ public class MainActivity extends AppCompatActivity implements OnClickListener {
 
         btn2CardDeck = findViewById(R.id.card_deck);
         btn2CardDeck.setOnClickListener(this);
+
+        btn2Webp = findViewById(R.id.webp);
+        btn2Webp.setOnClickListener(this);
+
+        btn2Grid = findViewById(R.id.grid);
+        btn2Grid.setOnClickListener(this);
     }
 
     @Override
@@ -54,6 +62,14 @@ public class MainActivity extends AppCompatActivity implements OnClickListener {
             case R.id.card_deck:
                 Intent iCD = new Intent(MainActivity.this, CardDeckActivity.class);
                 startActivity(iCD);
+                break;
+            case R.id.webp:
+                Intent iWebP = new Intent(MainActivity.this, WebPActivity.class);
+                startActivity(iWebP);
+                break;
+            case R.id.grid:
+                Intent iGrid = new Intent(MainActivity.this, GridActivity.class);
+                startActivity(iGrid);
                 break;
         }
     }

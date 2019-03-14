@@ -1,0 +1,29 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/item_container"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/black_alpha_30">
+
+    <com.facebook.drawee.view.SimpleDraweeView
+        android:id="@+id/main_button_image"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="center" />
+
+    <TextView
+        android:id="@+id/main_button_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal|bottom"
+        android:gravity="center"
+        android:paddingBottom="10dp"
+        android:textColor="@color/black"
+        android:textSize="12sp"
+        android:background="@color/pink"/>
+    <ImageView
+        android:id="@+id/main_button_indicator"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="top|right"
+        android:background="@color/light_gray"/>
+</FrameLayout>

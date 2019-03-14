@@ -1,4 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <item type="id" name="mask" />
+
+    <item type="id" name="btn_filter" />
+    <item type="id" name="btn_editor" />
+    <item type="id" name="btn_beauty" />
+    <item type="id" name="btn_collage" />
+    <item type="id" name="btn_batch" />
+    <item type="id" name="btn_emoji" />
+    <item type="id" name="btn_buckle" />
+    <item type="id" name="btn_zone" />
+    <item type="id" name="btn_material" />
+    <item type="id" name="btn_cosmetics" />
+    <item type="id" name="btn_camera" />
+    <item type="id" name="btn_gif" />
+    <item type="id" name="btn_cosfun" />
+    <item type="id" name="btn_video" />
+    <item type="id" name="btn_video_tpl" />
+    <item type="id" name="btn_play_sticker" />
 </resources>

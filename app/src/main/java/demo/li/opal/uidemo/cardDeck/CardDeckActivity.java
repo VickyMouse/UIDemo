@@ -518,7 +518,7 @@ public class CardDeckActivity extends FragmentActivity implements View.OnClickLi
                 break;
             case R.id.change_photo:
 //                slidePanel.doGuideAnim();
-                slidePanel.startGuideAnim();
+                slidePanel.doGuideAnim();
                 break;
             case R.id.discard_container:
                 slidePanel.vanishOnBtnClick(CardSlidePanel.VANISH_TYPE_LEFT);

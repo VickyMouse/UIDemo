@@ -336,7 +336,7 @@ public class CardSlidePanel extends FrameLayout {
         // 此处对 index 做保护处理
         int index = viewList.indexOf(changedView);
         LogUtils.d(TAG, "onViewPosChanged(" + index + ")");
-        if (index == 0 && index + 2 > viewList.size()) {
+        if (index != 0 && index + 2 > viewList.size()) {
             // 只处理第一张卡片移动造成的更新，其余卡片通过 processLinkageViews() 更新 UI，不过第一个判断条件不加也不要紧，目前只有第一张卡片会回调这里
             // index > VIEW_COUNT - 1 - 1，即最后一张卡片，牌堆中只有一张卡片了，没有下面的卡片需要微调
             LogUtils.d(TAG, "onViewPosChanged(" + index + ") return!!!");
@@ -890,57 +890,57 @@ public class CardSlidePanel extends FrameLayout {
     }
 
 
-    public void startGuideAnim() {
-        if (isCardDeckEmpty()) {
-            return;
-        }
-
-        final CardItemView card = viewList.get(0);
-
-        SpringConfig springConfig = SpringConfig.fromBouncinessAndSpeed(0, 5);
-        SpringSystem mSpringSystem = SpringSystem.create();
-        final Spring guideX;
-        guideX = mSpringSystem.createSpring().setSpringConfig(springConfig);
-
-        guideX.addListener(new SimpleSpringListener() {
-            @Override
-            public void onSpringUpdate(Spring spring) {
-                int xPos = (int) spring.getCurrentValue();
-                card.setScreenX(xPos);
-                onViewPosChanged(card);
-            }
-        });
-
-        final int distance = DeviceUtils.dip2px(GlobalContext.getContext(), 40);
-        // 向左滑
-        guideX.setCurrentValue(initialTopViewX);
-        guideX.setEndValue(initialTopViewX - distance);
-
-        // 复位
-        postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                guideX.setCurrentValue(card.getLeft());
-                guideX.setEndValue(initialTopViewX);
-            }
-        }, 1500);
-
-        // 向右滑
-        postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                guideX.setCurrentValue(initialTopViewX);
-                guideX.setEndValue(initialTopViewX + distance);
-            }
-        }, 1900);
-
-        // 复位
-        postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                guideX.setCurrentValue(card.getLeft());
-                guideX.setEndValue(initialTopViewX);
-            }
-        }, 3400);
-    }
+//    public void startGuideAnim() {
+//        if (isCardDeckEmpty()) {
+//            return;
+//        }
+//
+//        final CardItemView card = viewList.get(0);
+//
+//        SpringConfig springConfig = SpringConfig.fromBouncinessAndSpeed(0, 5);
+//        SpringSystem mSpringSystem = SpringSystem.create();
+//        final Spring guideX;
+//        guideX = mSpringSystem.createSpring().setSpringConfig(springConfig);
+//
+//        guideX.addListener(new SimpleSpringListener() {
+//            @Override
+//            public void onSpringUpdate(Spring spring) {
+//                int xPos = (int) spring.getCurrentValue();
+//                card.setScreenX(xPos);
+//                onViewPosChanged(card);
+//            }
+//        });
+//
+//        final int distance = DeviceUtils.dip2px(GlobalContext.getContext(), 40);
+//        // 向左滑
+//        guideX.setCurrentValue(initialTopViewX);
+//        guideX.setEndValue(initialTopViewX - distance);
+//
+//        // 复位
+//        postDelayed(new Runnable() {
+//            @Override
+//            public void run() {
+//                guideX.setCurrentValue(card.getLeft());
+//                guideX.setEndValue(initialTopViewX);
+//            }
+//        }, 1500);
+//
+//        // 向右滑
+//        postDelayed(new Runnable() {
+//            @Override
+//            public void run() {
+//                guideX.setCurrentValue(initialTopViewX);
+//                guideX.setEndValue(initialTopViewX + distance);
+//            }
+//        }, 1900);
+//
+//        // 复位
+//        postDelayed(new Runnable() {
+//            @Override
+//            public void run() {
+//                guideX.setCurrentValue(card.getLeft());
+//                guideX.setEndValue(initialTopViewX);
+//            }
+//        }, 3400);
+//    }
 }

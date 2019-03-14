@@ -42,6 +42,14 @@
             android:name=".cardDeck.CardDeckActivity"
             android:exported="false"
             android:screenOrientation="portrait" />
+        <activity
+            android:name=".WebPActivity"
+            android:exported="false"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".GridActivity"
+            android:exported="false"
+            android:screenOrientation="portrait" />
     </application>
 
 </manifest>

@@ -103,7 +103,7 @@ public class FeedsListController {
         mAdapter = new FeedsAdapter(mActivity, mData);
         mRecyclerView.setAdapter(mAdapter);
 //        mRecyclerView.addOnScrollListener(this);
-        mRecyclerView.setNestedScrollingEnabled(false);
+        mRecyclerView.setNestedScrollingEnabled(true);
         ((SimpleItemAnimator) mRecyclerView.getItemAnimator()).setSupportsChangeAnimations(false);
 
         restoreCachedFeeds();

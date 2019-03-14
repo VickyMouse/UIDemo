@@ -38,4 +38,23 @@
     <string name="daily_cos_hint_end">明天会有更多新造型，记得回来！</string>
     <string name="daily_cos_btn_notify">开启通知</string>
     <string name="daily_cos_btn_notify_hint">当有新造型时第一时间通知你</string>
+
+
+    <string name="editor">装饰美化</string>
+    <string name="makeup">美容美妆</string>
+    <string name="collage">故事拼图</string>
+    <string name="batch_editor">趣味多图</string>
+    <string name="beauty_camera">自拍相机</string>
+    <string name="deprecated_beauty_camera">美容相机</string>
+    <string name="watermark_camera">水印相机</string>
+    <string name="gif_camera">GIF表情包</string>
+    <string name="camera_video">动效</string>
+    <string name="guide">P图部落</string>
+    <string name="cartoon">卡通人像</string>
+    <string name="cosmeticfun">疯狂变脸</string>
+    <string name="buckle">魔法抠图</string>
+    <string name="play_sticker">大头贴</string>
+    <string name="video_template">趣动视频</string>
+    <string name="emoji">萌偶</string>
+    <string name="video">动感MV</string>
 </resources>
