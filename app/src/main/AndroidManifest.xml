@@ -16,7 +16,8 @@
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:theme="@style/AppTheme">
-        <activity android:name=".MainActivity"
+        <activity
+            android:name=".MainActivity"
             android:theme="@style/Demo.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -30,14 +31,14 @@
             android:theme="@style/Demo.NoActionBar" />
         <activity
             android:name=".nestedRecycler.NestedRecyclerActivity"
-            android:theme="@style/Demo.NoActionBar"
             android:exported="false"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"
+            android:theme="@style/Demo.NoActionBar" />
         <activity
             android:name=".swipeCard.SwipeCardActivity"
-            android:theme="@style/Demo.NoActionBar"
             android:exported="false"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"
+            android:theme="@style/Demo.NoActionBar" />
         <activity
             android:name=".cardDeck.CardDeckActivity"
             android:exported="false"
@@ -50,6 +51,21 @@
             android:name=".GridActivity"
             android:exported="false"
             android:screenOrientation="portrait" />
+        <activity
+            android:name=".UnityActivity"
+            android:exported="false"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="com.opalli.StarGazing.UnityPlayerActivity"
+            android:hardwareAccelerated="false"
+            android:launchMode="singleTask">
+            <meta-data
+                android:name="unityplayer.UnityActivity"
+                android:value="true" />
+            <meta-data
+                android:name="android.notch_support"
+                android:value="true" />
+        </activity>
     </application>
 
 </manifest>

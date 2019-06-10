@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@android:color/holo_blue_light"
+    android:gravity="center_horizontal"
+    android:orientation="vertical" >
+
+    <!-- 3D视图区域 -->
+
+    <LinearLayout
+        android:id="@+id/u3d_layout"
+        android:layout_width="match_parent"
+        android:layout_height="300dp"
+        android:background="@color/transparent"
+        android:orientation="vertical" >
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/up_btn"
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:padding="10dp"
+        android:text="上" />
+
+    <LinearLayout
+        android:id="@+id/horizontal_btns"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal" >
+        <Button
+            android:id="@+id/left_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_marginTop="20dp"
+            android:padding="10dp"
+            android:text="左" />
+
+        <Button
+            android:id="@+id/right_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_marginTop="20dp"
+            android:padding="10dp"
+            android:text="右" />
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/down_btn"
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:padding="10dp"
+        android:text="下" />
+
+    <Button
+        android:id="@+id/u3d_fullscreen_btn"
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:padding="10dp"
+        android:text="全屏" />
+
+</LinearLayout>

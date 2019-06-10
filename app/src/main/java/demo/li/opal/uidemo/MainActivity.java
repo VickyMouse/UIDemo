@@ -19,6 +19,7 @@ public class MainActivity extends AppCompatActivity implements OnClickListener {
     private View btn2CardDeck;
     private View btn2Webp;
     private View btn2Grid;
+    private View btn2Unity;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,6 +43,9 @@ public class MainActivity extends AppCompatActivity implements OnClickListener {
 
         btn2Grid = findViewById(R.id.grid);
         btn2Grid.setOnClickListener(this);
+
+        btn2Unity = findViewById(R.id.unity);
+        btn2Unity.setOnClickListener(this);
     }
 
     @Override
@@ -70,6 +74,10 @@ public class MainActivity extends AppCompatActivity implements OnClickListener {
             case R.id.grid:
                 Intent iGrid = new Intent(MainActivity.this, GridActivity.class);
                 startActivity(iGrid);
+                break;
+            case R.id.unity:
+                Intent iUnity = new Intent(MainActivity.this, UnityActivity.class);
+                startActivity(iUnity);
                 break;
         }
     }
