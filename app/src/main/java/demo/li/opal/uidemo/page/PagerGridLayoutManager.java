@@ -27,16 +27,17 @@ import android.graphics.PointF;
 import android.graphics.Rect;
 import android.support.annotation.IntDef;
 import android.support.annotation.IntRange;
-import android.support.v7.widget.LinearSmoothScroller;
-import android.support.v7.widget.RecyclerView;
 import android.util.SparseArray;
 import android.view.View;
 import android.view.ViewGroup;
 
+import androidx.recyclerview.widget.LinearSmoothScroller;
+import androidx.recyclerview.widget.RecyclerView;
+
 import demo.li.opal.uidemo.Utils.LogUtils;
 
-import static android.support.v7.widget.RecyclerView.SCROLL_STATE_IDLE;
 import static android.view.View.MeasureSpec.EXACTLY;
+import static androidx.recyclerview.widget.RecyclerView.SCROLL_STATE_IDLE;
 
 
 /**

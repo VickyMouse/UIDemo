@@ -51,7 +51,7 @@
                                 android:focusable="false"
                                 android:scaleType="fitXY" />
 
-                            <demo.li.opal.uidemo.Views.IndicatorLinearLayout
+                            <demo.li.opal.uidemo.views.IndicatorLinearLayout
                                 android:id="@+id/main_empty_indicator"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
@@ -62,14 +62,14 @@
                                 android:orientation="horizontal" />
                         </FrameLayout>
 
-                        <android.support.v7.widget.RecyclerView
+                        <androidx.recyclerview.widget.RecyclerView
                             android:id="@+id/main_center_ops"
                             android:layout_width="match_parent"
                             android:layout_height="300dp"
                             android:layout_below="@id/main_empty_top_root"
                             android:layout_marginTop="13dp" />
 
-                        <demo.li.opal.uidemo.Views.IndicatorLinearLayout
+                        <demo.li.opal.uidemo.views.IndicatorLinearLayout
                             android:id="@+id/main_center_indicator"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
@@ -114,7 +114,7 @@
                             android:textSize="25sp" />
                     </RelativeLayout>
 
-                    <android.support.v7.widget.RecyclerView
+                    <androidx.recyclerview.widget.RecyclerView
                         android:id="@+id/hot_tags"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -124,7 +124,7 @@
                         android:paddingLeft="15dp" />
                 </RelativeLayout>
 
-                <android.support.v7.widget.RecyclerView
+                <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/feeds_list"
                     android:layout_width="match_parent"
                     android:layout_height="600dp"

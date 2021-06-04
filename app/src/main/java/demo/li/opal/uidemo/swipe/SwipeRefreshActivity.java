@@ -1,7 +1,8 @@
 package demo.li.opal.uidemo.swipe;
 
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import demo.li.opal.uidemo.R;
 import demo.li.opal.uidemo.swipe.FeedsSwipeRefreshLayout;

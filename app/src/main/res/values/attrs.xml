@@ -11,4 +11,100 @@
         <attr name="yOffsetStep" format="dimension" />
         <attr name="widthHeightRate" format="float" />
     </declare-styleable>
+
+    <attr name="icon_color" format="color|reference" />
+    <attr name="icon_size" format="dimension" />
+    <attr name="icon_start_color" format="color|reference" />
+    <attr name="icon_top_color" format="color|reference" />
+    <attr name="icon_end_color" format="color|reference" />
+    <attr name="icon_bottom_color" format="color|reference" />
+    <attr name="icon_start_size" format="dimension" />
+    <attr name="icon_top_size" format="dimension" />
+    <attr name="icon_end_size" format="dimension" />
+    <attr name="icon_bottom_size" format="dimension" />
+
+    <declare-styleable name="IconImageView">
+        <attr name="icon_color" />
+        <attr name="icon_size" />
+    </declare-styleable>
+
+    <declare-styleable name="IconTextView">
+        <attr name="icon_start_color" />
+        <attr name="icon_top_color" />
+        <attr name="icon_end_color" />
+        <attr name="icon_bottom_color" />
+        <attr name="icon_start_size" />
+        <attr name="icon_top_size" />
+        <attr name="icon_end_size" />
+        <attr name="icon_bottom_size" />
+    </declare-styleable>
+
+
+    <!-- 背景色 -->
+    <attr name="bg_color" format="color" />
+    <!-- press状态背景色 -->
+    <attr name="bg_pressColor" format="color" />
+    <!-- checked状态背景色 -->
+    <attr name="bg_checkedColor" format="color" />
+    <!-- 起始色 -->
+    <attr name="bg_startColor" format="color" />
+    <!-- 结束色 -->
+    <attr name="bg_endColor" format="color" />
+    <!-- press状态起始色 -->
+    <attr name="bg_pressStartColor" format="color" />
+    <!-- press状态结束色 -->
+    <attr name="bg_pressEndColor" format="color" />
+    <!-- checked状态起始色 -->
+    <attr name="bg_checkedStartColor" format="color" />
+    <!-- checked状态结束色 -->
+    <attr name="bg_checkedEndColor" format="color" />
+    <!-- 渐变方向，默认是t2b，从上至下的渐变 -->
+    <attr name="bg_colorOrientation">
+        <enum name="l2r" value="1" />
+        <enum name="t2b" value="2" />
+        <enum name="tl2br" value="3" />
+        <enum name="br2tl" value="4" />
+        <enum name="tr2bl" value="5" />
+        <enum name="bl2tr" value="6" />
+    </attr>
+    <!-- 边框颜色-->
+    <attr name="bg_strokeColor" format="color" />
+    <!-- 圆角边框颜色press -->
+    <attr name="bg_strokePressColor" format="color" />
+    <!-- 圆角边框checked状态下的颜色 -->
+    <attr name="bg_strokeCheckedColor" format="color" />
+    <!-- 边框尺寸-->
+    <attr name="bg_strokeWidth" format="dimension" />
+    <!-- 圆角弧度,单位dp-->
+    <attr name="bg_cornerRadius" format="dimension" />
+    <!-- 圆角弧度,单位dp,TopLeft-->
+    <attr name="bg_cornerRadius_TL" format="dimension" />
+    <!-- 圆角弧度,单位dp,TopRight-->
+    <attr name="bg_cornerRadius_TR" format="dimension" />
+    <!-- 圆角弧度,单位dp,BottomLeft-->
+    <attr name="bg_cornerRadius_BL" format="dimension" />
+    <!-- 圆角弧度,单位dp,BottomRight-->
+    <attr name="bg_cornerRadius_BR" format="dimension" />
+
+    <declare-styleable name="BackgroundDrawable">
+        <attr name="bg_color" />
+        <attr name="bg_pressColor" />
+        <attr name="bg_checkedColor" />
+        <attr name="bg_startColor" />
+        <attr name="bg_endColor" />
+        <attr name="bg_pressStartColor" />
+        <attr name="bg_pressEndColor" />
+        <attr name="bg_checkedStartColor" />
+        <attr name="bg_checkedEndColor" />
+        <attr name="bg_colorOrientation" />
+        <attr name="bg_strokeColor" />
+        <attr name="bg_strokePressColor" />
+        <attr name="bg_strokeCheckedColor" />
+        <attr name="bg_strokeWidth" />
+        <attr name="bg_cornerRadius" />
+        <attr name="bg_cornerRadius_TL" />
+        <attr name="bg_cornerRadius_TR" />
+        <attr name="bg_cornerRadius_BL" />
+        <attr name="bg_cornerRadius_BR" />
+    </declare-styleable>
 </resources>

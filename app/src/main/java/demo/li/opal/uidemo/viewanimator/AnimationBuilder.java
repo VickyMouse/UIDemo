@@ -7,13 +7,14 @@ import android.animation.ValueAnimator;
 import android.graphics.Path;
 import android.graphics.PathMeasure;
 import android.support.annotation.IntRange;
-import android.support.v4.view.ViewCompat;
 import android.view.View;
 import android.view.animation.AccelerateInterpolator;
 import android.view.animation.CycleInterpolator;
 import android.view.animation.DecelerateInterpolator;
 import android.view.animation.Interpolator;
 import android.widget.TextView;
+
+import androidx.core.view.ViewCompat;
 
 import java.util.ArrayList;
 import java.util.List;

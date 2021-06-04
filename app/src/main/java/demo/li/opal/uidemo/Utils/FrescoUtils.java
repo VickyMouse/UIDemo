@@ -6,8 +6,9 @@ package demo.li.opal.uidemo.Utils;
 import android.graphics.Bitmap;
 import android.graphics.drawable.Animatable;
 import android.net.Uri;
-import android.support.v4.content.FileProvider;
 import android.text.TextUtils;
+
+import androidx.core.content.FileProvider;
 
 import com.facebook.common.util.UriUtil;
 import com.facebook.drawee.backends.pipeline.Fresco;

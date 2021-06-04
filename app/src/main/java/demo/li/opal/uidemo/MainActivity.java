@@ -1,13 +1,14 @@
 package demo.li.opal.uidemo;
 
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
 
+import androidx.appcompat.app.AppCompatActivity;
+
 import demo.li.opal.uidemo.cardDeck.CardDeckActivity;
-import demo.li.opal.uidemo.nestedRecycler.NestedRecyclerActivity;
+//import demo.li.opal.uidemo.nestedRecycler.NestedRecyclerActivity;
 import demo.li.opal.uidemo.swipe.SwipeRefreshActivity;
 import demo.li.opal.uidemo.swipeCard.SwipeCardActivity;
 
@@ -20,6 +21,7 @@ public class MainActivity extends AppCompatActivity implements OnClickListener {
     private View btn2Webp;
     private View btn2Grid;
     private View btn2Unity;
+    private View btn2Nav;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,6 +48,9 @@ public class MainActivity extends AppCompatActivity implements OnClickListener {
 
         btn2Unity = findViewById(R.id.unity);
         btn2Unity.setOnClickListener(this);
+
+        btn2Nav = findViewById(R.id.nav_bar);
+        btn2Nav.setOnClickListener(this);
     }
 
     @Override
@@ -56,8 +61,8 @@ public class MainActivity extends AppCompatActivity implements OnClickListener {
                 startActivity(iSR);
                 break;
             case R.id.nested_recycler:
-                Intent iNR = new Intent(MainActivity.this, NestedRecyclerActivity.class);
-                startActivity(iNR);
+//                Intent iNR = new Intent(MainActivity.this, NestedRecyclerActivity.class);
+//                startActivity(iNR);
                 break;
             case R.id.swipe_card:
                 Intent iSC = new Intent(MainActivity.this, SwipeCardActivity.class);
@@ -78,6 +83,10 @@ public class MainActivity extends AppCompatActivity implements OnClickListener {
             case R.id.unity:
                 Intent iUnity = new Intent(MainActivity.this, UnityActivity.class);
                 startActivity(iUnity);
+                break;
+            case R.id.nav_bar:
+                Intent iNav = new Intent(MainActivity.this, NavigationActivity.class);
+                startActivity(iNav);
                 break;
         }
     }

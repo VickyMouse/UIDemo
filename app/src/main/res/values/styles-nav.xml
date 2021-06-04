@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <!-- 黑色主题的导航栏 -->
+    <style name="DarkNavigation" tools:ignore="ResourceName">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">60dp</item>
+        <item name="nv_showViews">leftIcon|rightIcon</item>
+        <item name="nv_theme">dark</item>
+    </style>
+
+    <!-- 白色主题的导航栏 -->
+    <style name="LightNavigation" parent="DarkNavigation" tools:ignore="ResourceName">
+        <item name="nv_theme">light</item>
+    </style>
+</resources>

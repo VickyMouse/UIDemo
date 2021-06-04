@@ -1,13 +1,13 @@
 package demo.li.opal.uidemo;
 
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.facebook.drawee.view.SimpleDraweeView;
 
 import demo.li.opal.uidemo.R;
 import demo.li.opal.uidemo.Utils.FrescoUtils;
-import demo.li.opal.uidemo.swipe.FeedsSwipeRefreshLayout;
 
 public class WebPActivity extends AppCompatActivity {
 

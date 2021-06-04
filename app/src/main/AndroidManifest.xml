@@ -66,6 +66,11 @@
                 android:name="android.notch_support"
                 android:value="true" />
         </activity>
+
+        <activity
+            android:name=".NavigationActivity"
+            android:exported="false"
+            android:screenOrientation="portrait" />
     </application>
 
 </manifest>

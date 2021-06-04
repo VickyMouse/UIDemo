@@ -1,4 +1,4 @@
-package demo.li.opal.uidemo.Views;
+package demo.li.opal.uidemo.views;
 
 import android.content.Context;
 import android.content.res.TypedArray;

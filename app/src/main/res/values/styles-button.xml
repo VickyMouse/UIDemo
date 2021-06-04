@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- 通用小button的style -->
+    <style name="SmallButton">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">44dp</item>
+        <item name="android:gravity">center</item>
+        <item name="android:includeFontPadding">false</item>
+        <item name="android:textSize">@dimen/L2</item>
+        <item name="android:fontFamily">FZLanTingHeiS-DB1-GB</item>
+    </style>
+
+    <!-- 通用大button的style -->
+    <style name="BigButton" parent="SmallButton">
+        <item name="android:layout_height">56dp</item>
+        <item name="android:textSize">@dimen/L1</item>
+    </style>
+
+    <!-- 通用小圆形button的style -->
+    <style name="SmallCircleButton">
+        <item name="android:layout_width">56dp</item>
+        <item name="android:layout_height">56dp</item>
+        <item name="icon_size">28dp</item>
+        <item name="icon_color">@color/white</item>
+    </style>
+
+    <!-- 通用大圆形button的style -->
+    <style name="BigCircleButton">
+        <item name="android:layout_width">88dp</item>
+        <item name="android:layout_height">88dp</item>
+        <item name="icon_size">44dp</item>
+        <item name="icon_color">@color/white</item>
+    </style>
+
+    <!-- switch默认style -->
+    <style name="SwitchButton">
+        <item name="android:layout_width">70dp</item>
+        <item name="android:layout_height">40dp</item>
+    </style>
+</resources>

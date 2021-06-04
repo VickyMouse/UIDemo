@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <demo.li.opal.uidemo.views.NavigationBar
+        android:id="@+id/nav"
+        style="@style/DarkNavigation"
+        app:nv_title="Navigation Bar"
+        app:nv_right_icon="@drawable/icon_bell"
+        app:nv_showViews="title|rightIcon|leftIcon" />
+</FrameLayout>

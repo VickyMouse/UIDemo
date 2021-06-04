@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="NavigationBar">
+        <!-- 设置需要显示的view leftIcon|title|rightIcon -->
+        <attr name="nv_showViews">
+            <!-- 左侧按钮 -->
+            <flag name="leftIcon" value="0x01" />
+            <flag name="title" value="0x02" />
+            <flag name="rightIcon" value="0x04" />
+            <flag name="rightButton" value="0x08" />
+        </attr>
+        <!-- 主题色 -->
+        <attr name="nv_theme" format="enum">
+            <enum name="dark" value="1" />
+            <enum name="light" value="2" />
+        </attr>
+        <!-- title -->
+        <attr name="nv_title" format="string" />
+        <!-- rightButton text -->
+        <attr name="nv_rightButtonText" format="string" />
+        <!-- left icon -->
+        <attr name="nv_left_icon" format="reference" />
+        <!-- right icon -->
+        <attr name="nv_right_icon" format="reference" />
+    </declare-styleable>
+
+    <!-- 导航栏相关view的id -->
+    <item name="nav_left_icon" type="id"/>
+    <item name="nav_title" type="id"  />
+    <item name="nav_right_icon" type="id"  />
+    <item name="nav_right_button" type="id"  />
+</resources>
