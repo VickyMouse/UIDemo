@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="TuitionCard">
+        <!-- 状态 -->
+        <attr name="tc_state" format="enum">
+            <enum name="no_class" value="0" />
+            <enum name="class_not_started" value="1" />
+            <enum name="class_started" value="2" />
+        </attr>
+        <attr name="tc_title" format="string" />
+        <attr name="tc_desc" format="string" />
+        <attr name="tc_timetable" format="string" />
+        <attr name="tc_btn_text" format="string" />
+    </declare-styleable>
+
+    <!-- 家教卡片相关 view 的 id -->
+    <item name="tc_title" type="id"/>
+    <item name="tc_desc" type="id"  />
+    <item name="tc_timetable" type="id"  />
+    <item name="tc_button" type="id"  />
+</resources>
